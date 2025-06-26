@@ -1,0 +1,97 @@
+package com.example.productList
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.model.Product
+import androidx.compose.ui.tooling.preview.Preview
+
+@Composable
+fun ProductListScreen(
+    productList: List<Product>,
+    addToCart: (Int) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(
+            items = productList,
+            key = { it.id }
+        )  { product ->
+            ProductItem(
+                id = product.id,
+                title = product.name,
+                price = product.price,
+                quantity = product.quantity,
+                glutenFree = product.glutenFree,
+                imageUrl = product.imageUrl,
+                category = product.category,
+                addToCart = addToCart
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductListPreview() {
+    val fakeItems = listOf(
+        Product(
+            id = 1,
+            name = "Falafel",
+            description = "Falafel con salsa tahini",
+            price = 11.0,
+            includesDrink = false,
+            quantity = 10,
+            glutenFree = true,
+            imageUrl = "https://www.aceitesdeolivadeespana.com/wp-content/uploads/2021/01/receta-falafel.jpg",
+            category = "fast_food"
+        ),
+        Product(
+            id = 2,
+            name = "Empanadas",
+            description = "Carne, jamón y queso, humita",
+            price = 12.0,
+            includesDrink = false,
+            quantity = 2,
+            glutenFree = false,
+            imageUrl = "https://www.redmutual.com.ar/wp-content/uploads/2024/05/empanadas-1200x751.jpg",
+            category = "fast_food"
+        ),
+        Product(
+            id = 3,
+            name = "Sushi Vegano",
+            description = "Rolls de palta y pepino",
+            price = 18.0,
+            includesDrink = true,
+            quantity = 5,
+            glutenFree = true,
+            imageUrl = "https://i.blogs.es/982e96/sushi-vegano-receta/1366_2000.jpg",
+            category = "international_food"
+        ),
+        Product(
+            id = 4,
+            name = "Tacos",
+            description = "Tacos mexicanos de pollo",
+            price = 15.0,
+            includesDrink = false,
+            quantity = 4,
+            glutenFree = false,
+            imageUrl = "https://cdn7.kiwilimon.com/recetaimagen/37041/640x426/39083.jpg.webp",
+            category = "fast_food"
+        )
+    )
+
+    ProductListScreen(
+        productList = fakeItems,
+        addToCart = {}
+    )
+}

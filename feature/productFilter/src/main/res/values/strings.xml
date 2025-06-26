@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FilterProducts</string>
+    <string name="search_placeholder">Search your favorite food</string>
+    <string name="filter_by">Filter by:</string>
+    <string name="category_filter">Category</string>
+    <string name="dietary_preferences_filter">Dietary Preferences</string>
+</resources>
