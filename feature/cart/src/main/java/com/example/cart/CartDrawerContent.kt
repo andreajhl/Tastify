@@ -27,16 +27,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.model.Product
+import com.example.productList.ProductListContract
 import com.example.productList.ProductListViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartDrawerContent(
     toggleShowCart: () -> Unit,
     cartItems: List<Product>,
-    cartViewModel: CartViewModel,
-    productListViewModel: ProductListViewModel
+    cartViewModel: CartContract,
+    productListViewModel: ProductListContract
 ) {
     val enableAddButton = { productId: Int ->
         val available = productListViewModel.getProduct(productId)?.quantity ?: 0
@@ -135,15 +139,29 @@ fun CartDrawerContentPreview() {
         Product(2, "Ensalada", "", 1200.0, true, 1, true, true, "", "healthy_food")
     )
 
-    val fakeCartViewModel = object : CartViewModel() {
+    val fakeCartViewModel = object : CartContract {
+        override val cart: StateFlow<CartState> = MutableStateFlow(
+            CartState(items = mockProducts.associateBy { it.id })
+        )
+
+        override fun addToCart(product: Product, quantity: Int) {}
+        override fun subtractToCart(productId: Int, quantity: Int) {}
         override fun clearCart() {}
+        override fun removeItemCart(productId: Int, callback: (Int) -> Unit) {}
         override fun getTotalPrice(): Double = mockProducts.sumOf { it.price * it.quantity }
+        override fun getTotalItems(): Int = mockProducts.sumOf { it.quantity }
     }
 
-    val fakeProductListViewModel = object : ProductListViewModel() {
-        override fun getProduct(productId: Int): Product? = mockProducts.find { it.id == productId }
-        override fun subtractProduct(productId: Int, quantity: Int) {}
-        override fun addProduct(productId: Int, quantity: Int) {}
+    val fakeProductListViewModel = object : ProductListContract {
+        override val productList: StateFlow<List<Product>> =
+            MutableStateFlow(mockProducts)
+
+        override fun subtractProduct(id: Int, count: Int) {}
+        override fun addProduct(id: Int, count: Int) {}
+        override fun getProduct(id: Int): Product? = mockProducts.find { it.id == id }
+        override fun searchProduct(search: String) {}
+        override fun getProductByCategory(categories: List<String>) {}
+        override fun getProductByDietary(dietary: List<String>) {}
     }
 
     MaterialTheme {

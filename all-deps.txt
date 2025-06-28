@@ -1,0 +1,9 @@
+Starting a Gradle Daemon, 1 busy Daemon could not be reused, use --status for details
+
+> Task :app:dependencies
+
+------------------------------------------------------------
+Project ':app'
+------------------------------------------------------------
+
+_agp_internal_javaPreCompileDebugAndroidTest_kaptClasspath

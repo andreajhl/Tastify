@@ -1,9 +1,9 @@
 package com.example.data
 
 import com.example.model.Product
+import javax.inject.Inject
 
-
-object ProductRepository {
+class ProductRepository @Inject constructor() {
     fun getMockedProducts(): List<Product> {
         return listOf(
             Product(

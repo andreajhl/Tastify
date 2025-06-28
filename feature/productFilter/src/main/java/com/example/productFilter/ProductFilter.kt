@@ -27,14 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.productList.ProductListViewModel
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.theme.ui.theme.MainColor
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(FlowPreview::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ProductFilter() {
-    val productListViewModel: ProductListViewModel = viewModel()
-    val productFilterViewModel: ProductFilterViewModel = viewModel()
+    val productListViewModel: ProductListViewModel = hiltViewModel()
+    val productFilterViewModel: ProductFilterViewModel = hiltViewModel()
 
     var showFilter by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

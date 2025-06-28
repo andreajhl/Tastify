@@ -6,19 +6,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.common.InputField
 import com.example.session.SessionManager
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterBottomSheet(
-    viewModel: RegisterViewModel,
+    registerViewModel: RegisterContract,
     onDismiss: () -> Unit,
     onRegisterSuccess: () -> Unit
 ) {
-    val state by viewModel.register.collectAsState()
-    val errors by viewModel.errorMsg.collectAsState()
+    val state by registerViewModel.register.collectAsState()
+    val errors by registerViewModel.errorMsg.collectAsState()
     val context = LocalContext.current
     val session = remember { SessionManager(context) }
 
@@ -45,8 +48,8 @@ fun RegisterBottomSheet(
                 InputField(
                     label = "Nombre completo",
                     value = state.fullName,
-                    onValueChange = { viewModel.updateRegisterField("fullName", it) },
-                    onBlur = { viewModel.validateFullName() },
+                    onValueChange = { registerViewModel.updateRegisterField("fullName", it) },
+                    onBlur = { registerViewModel.validateFullName() },
                     error = errors.fullName
                 )
 
@@ -55,8 +58,8 @@ fun RegisterBottomSheet(
                 InputField(
                     label = "Email",
                     value = state.email,
-                    onValueChange = { viewModel.updateRegisterField("email", it) },
-                    onBlur = { viewModel.validateEmail() },
+                    onValueChange = { registerViewModel.updateRegisterField("email", it) },
+                    onBlur = { registerViewModel.validateEmail() },
                     error = errors.email
                 )
 
@@ -65,8 +68,8 @@ fun RegisterBottomSheet(
                 InputField(
                     label = "Contraseña",
                     value = state.password,
-                    onValueChange = { viewModel.updateRegisterField("password", it) },
-                    onBlur = { viewModel.validatePassword() },
+                    onValueChange = { registerViewModel.updateRegisterField("password", it) },
+                    onBlur = { registerViewModel.validatePassword() },
                     error = errors.password,
                     visualTransformation = PasswordVisualTransformation()
                 )
@@ -76,15 +79,15 @@ fun RegisterBottomSheet(
                 InputField(
                     label = "Repetir contraseña",
                     value = state.repeatPassword,
-                    onValueChange = { viewModel.updateRegisterField("repeatPassword", it) },
-                    onBlur = { viewModel.validateRepeatPassword() },
+                    onValueChange = { registerViewModel.updateRegisterField("repeatPassword", it) },
+                    onBlur = { registerViewModel.validateRepeatPassword() },
                     error = errors.repeatPassword,
                     visualTransformation = PasswordVisualTransformation()
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                val isValid = viewModel.isValidateData()
+                val isValid = registerViewModel.isValidateData()
 
                 Button(
                     onClick = {
@@ -101,4 +104,45 @@ fun RegisterBottomSheet(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterBottomSheetPreview() {
+    class FakeRegisterViewModel : RegisterContract {
+        private val _register = MutableStateFlow(
+            RegisterState(
+                fullName = "Andrea Hernández",
+                email = "andrea@example.com",
+                password = "123456",
+                repeatPassword = "123456"
+            )
+        )
+        private val _errorMsg = MutableStateFlow(RegisterErrorState())
+
+        override val register: StateFlow<RegisterState> get() = _register
+        override val errorMsg: StateFlow<RegisterErrorState> get() = _errorMsg
+
+        override fun updateRegisterField(key: String, value: String) {
+            _register.value = when (key) {
+                "fullName" -> _register.value.copy(fullName = value)
+                "email" -> _register.value.copy(email = value)
+                "password" -> _register.value.copy(password = value)
+                "repeatPassword" -> _register.value.copy(repeatPassword = value)
+                else -> _register.value
+            }
+        }
+
+        override fun validateFullName(): Boolean = true
+        override fun validateEmail(): Boolean = true
+        override fun validatePassword(): Boolean = true
+        override fun validateRepeatPassword(): Boolean = true
+        override fun isValidateData(): Boolean = true
+    }
+
+    RegisterBottomSheet(
+        registerViewModel = FakeRegisterViewModel(),
+        onDismiss = {},
+        onRegisterSuccess = {}
+    )
 }

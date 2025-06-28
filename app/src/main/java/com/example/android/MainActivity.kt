@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.login.LoginScreen
 import com.example.login.LoginViewModel
@@ -22,7 +23,9 @@ import com.example.register.RegisterBottomSheet
 import com.example.register.RegisterViewModel
 import com.example.session.SessionManager
 import com.example.theme.ui.theme.AppAndroidTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +40,13 @@ class MainActivity : ComponentActivity() {
                         var showRegister by remember { mutableStateOf(false) }
                         var isLogged by remember { mutableStateOf(session.isLogged()) }
 
-                        val loginViewModel: LoginViewModel = viewModel()
-                        val registerViewModel: RegisterViewModel = viewModel()
+                        val loginViewModel: LoginViewModel = hiltViewModel()
+                        val registerViewModel: RegisterViewModel = hiltViewModel()
 
                         if (!isLogged) {
                             if (showRegister) {
                                 RegisterBottomSheet(
-                                    viewModel = registerViewModel,
+                                    registerViewModel = registerViewModel,
                                     onDismiss = { showRegister = false },
                                     onRegisterSuccess = {
                                         session.setLogged(true)
@@ -54,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
                             LoginScreen(
                                 isLogged = isLogged,
-                                viewModel = loginViewModel,
+                                loginViewModel = loginViewModel,
                                 onShowRegister = { showRegister = true },
                                 onLoginSuccess = {
                                     session.setLogged(true)

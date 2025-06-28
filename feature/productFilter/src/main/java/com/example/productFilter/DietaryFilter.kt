@@ -9,17 +9,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.common.ToggleButtonGroup
 import com.example.common.ToggleOption
-import com.example.productList.Dietary
+import com.example.data.Dietary
 
 @Composable
-fun DietaryFilter(
-    productFilterViewModel: ProductFilterViewModel
-) {
+fun DietaryFilter(productFilterViewModel: ProductFilterContract) {
     val dietaryFilters by productFilterViewModel.dietaryFilters.collectAsState()
     val dietaryMap = Dietary.getAllLabels()
 
     val options = dietaryMap.map { (value, label) ->
-        ToggleOption(value = value, label = label)
+        ToggleOption(value = value, label = stringResource(label))
     }
 
     Text(
@@ -35,17 +33,5 @@ fun DietaryFilter(
                 productFilterViewModel.updateDietaryFilter(key, value)
             }
         }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DietaryFilterPreview() {
-    val fakeProductFilterViewModel = object : ProductFilterViewModel() {
-       override fun updateDietaryFilter(key: String, isActive: Boolean) {}
-    }
-
-    DietaryFilter(
-        productFilterViewModel = fakeProductFilterViewModel
     )
 }

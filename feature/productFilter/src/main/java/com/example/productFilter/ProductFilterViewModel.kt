@@ -1,12 +1,22 @@
 package com.example.productFilter
 
 import androidx.lifecycle.ViewModel
-import com.example.productList.Category
-import com.example.productList.Dietary
+import com.example.data.Category
+import com.example.data.Dietary
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-open class ProductFilterViewModel : ViewModel() {
+interface ProductFilterContract {
+    val dietaryFilters: StateFlow<Map<String, Boolean>>
+    val categoryFilters: StateFlow<Map<String, Boolean>>
+    fun updateDietaryFilter(key: String, isActive: Boolean)
+    fun updateCategoryFilter(key: String, isActive: Boolean)
+}
+
+@HiltViewModel
+class ProductFilterViewModel @Inject constructor() : ViewModel(), ProductFilterContract {
 
     val dietaryKeys: List<String> = Dietary.getKeys()
     val categoryKeys: List<String> = Category.getKeys()
@@ -15,18 +25,18 @@ open class ProductFilterViewModel : ViewModel() {
     private val initialCategoryFilters = categoryKeys.associateWith { false }
 
     private val _dietaryFilters = MutableStateFlow(initialDietaryFilters)
-    val dietaryFilters: StateFlow<Map<String, Boolean>> = _dietaryFilters
+    override val dietaryFilters: StateFlow<Map<String, Boolean>> = _dietaryFilters
 
     private val _categoryFilters = MutableStateFlow(initialCategoryFilters)
-    val categoryFilters: StateFlow<Map<String, Boolean>> = _categoryFilters
+    override val categoryFilters: StateFlow<Map<String, Boolean>> = _categoryFilters
 
-    open fun updateDietaryFilter(key: String, isActive: Boolean) {
+    override fun updateDietaryFilter(key: String, isActive: Boolean) {
         _dietaryFilters.value = _dietaryFilters.value.toMutableMap().apply {
             this[key] = isActive
         }
     }
 
-    open fun updateCategoryFilter(key: String, isActive: Boolean) {
+     override fun updateCategoryFilter(key: String, isActive: Boolean) {
         _categoryFilters.value = _categoryFilters.value.toMutableMap().apply {
             this[key] = isActive
         }

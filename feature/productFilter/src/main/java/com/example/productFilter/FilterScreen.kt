@@ -13,12 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterScreen(
-    productFilterViewModel: ProductFilterViewModel
-) {
+fun FilterScreen(productFilterViewModel: ProductFilterContract) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,11 +42,12 @@ fun FilterScreen(
 @Preview(showBackground = true)
 @Composable
 fun FilterScreenPreview() {
-    val fakeProductFilterViewModel = object : ProductFilterViewModel() {
+    val mock = object : ProductFilterContract {
+        override val dietaryFilters = MutableStateFlow(mapOf("vegan" to true))
+        override val categoryFilters = MutableStateFlow(mapOf("fast_food" to true))
         override fun updateDietaryFilter(key: String, isActive: Boolean) {}
+        override fun updateCategoryFilter(key: String, isActive: Boolean) {}
     }
 
-    FilterScreen(
-        productFilterViewModel = fakeProductFilterViewModel
-    )
+    FilterScreen(productFilterViewModel = mock)
 }

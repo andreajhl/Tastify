@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.data.Category
+import com.example.data.Dietary
 import com.example.theme.ui.theme.MainColor
 
 @Composable
@@ -73,7 +76,7 @@ fun ProductItem(
             if (glutenFree) {
                 Image(
                     painter = painterResource(R.drawable.gluten_free),
-                    contentDescription = Dietary.getLabel("gluten_free"),
+                    contentDescription = stringResource(Dietary.getLabel("gluten_free")),
                     modifier = Modifier
                         .size(24.dp)
                         .offset(12.dp, 12.dp)
@@ -108,7 +111,7 @@ fun ProductItem(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = Category.getLabel(category),
+                text = stringResource(Category.getLabel(category)) ,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
