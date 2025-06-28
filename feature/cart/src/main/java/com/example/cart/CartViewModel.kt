@@ -1,48 +1,62 @@
 package com.example.cart
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.model.Product
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+
+interface CartContract {
+    val cart: StateFlow<CartState>
+    fun addToCart(product: Product, quantity: Int)
+    fun subtractToCart(productId: Int, quantity: Int)
+    fun clearCart()
+    fun removeItemCart(productId: Int, callback: (Int) -> Unit)
+    fun getTotalPrice(): Double
+    fun getTotalItems(): Int
+}
 
 data class CartState(
     val items: Map<Int, Product> = emptyMap(),
 )
 
-open class CartViewModel: ViewModel() {
-    private val _cart = MutableStateFlow(CartState())
-    val cart: StateFlow<CartState> get() = _cart
+@HiltViewModel
+class CartViewModel @Inject constructor() : ViewModel(), CartContract {
 
-    open fun addToCart(product: Product, quantity: Int) {
+    private val _cart = MutableStateFlow(CartState())
+    override val cart: StateFlow<CartState> get() = _cart
+
+    override fun addToCart(product: Product, quantity: Int) {
         val updatedCart = _cart.value.items.toMutableMap()
         val currentProduct = updatedCart[product.id]
 
         if (currentProduct != null) {
             val newQuantity = currentProduct.quantity + quantity
             updatedCart[product.id] = currentProduct.copy(quantity = newQuantity)
-        } else updatedCart[product.id] = product.copy(quantity = quantity)
+        } else {
+            updatedCart[product.id] = product.copy(quantity = quantity)
+        }
 
         _cart.value = _cart.value.copy(items = updatedCart)
     }
 
-    open fun subtractToCart(productId: Int, quantity: Int) {
+    override fun subtractToCart(productId: Int, quantity: Int) {
         val updatedCart = _cart.value.items.toMutableMap()
         val currentProduct = updatedCart[productId] ?: return
 
         val newQty = currentProduct.quantity - quantity
-
         if (newQty <= 0) updatedCart.remove(productId)
         else updatedCart[productId] = currentProduct.copy(quantity = newQty)
 
         _cart.value = _cart.value.copy(items = updatedCart)
     }
 
-    open fun clearCart() {
+    override fun clearCart() {
         _cart.value = _cart.value.copy(items = emptyMap())
     }
 
-    fun removeItemCart(productId: Int, callback: (Int) -> Unit) {
+    override fun removeItemCart(productId: Int, callback: (Int) -> Unit) {
         val updatedCart = _cart.value.items.toMutableMap()
         val removedItem = updatedCart.remove(productId)
 
@@ -53,11 +67,11 @@ open class CartViewModel: ViewModel() {
         }
     }
 
-    open fun getTotalPrice(): Double {
+    override fun getTotalPrice(): Double {
         return _cart.value.items.values.sumOf { it.price * it.quantity }
     }
 
-    fun getTotalItems(): Int {
+    override fun getTotalItems(): Int {
         return _cart.value.items.values.sumOf { it.quantity }
     }
 }
