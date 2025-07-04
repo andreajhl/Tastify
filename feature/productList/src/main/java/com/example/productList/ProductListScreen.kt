@@ -10,12 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.model.Product
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.db.entities.ProductEntity
 
 @Composable
 fun ProductListScreen(
-    productList: List<Product>,
+    productList: List<ProductEntity>,
     addToCart: (Int) -> Unit
 ) {
+    if (productList.isEmpty()) {
+        ProductListSkeleton()
+        return
+    }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -44,49 +50,53 @@ fun ProductListScreen(
 @Composable
 fun ProductListPreview() {
     val fakeItems = listOf(
-        Product(
+        ProductEntity(
             id = 1,
             name = "Falafel",
             description = "Falafel con salsa tahini",
             price = 11.0,
-            includesDrink = false,
-            quantity = 10,
-            glutenFree = true,
+            category = "fast_food",
             imageUrl = "https://www.aceitesdeolivadeespana.com/wp-content/uploads/2021/01/receta-falafel.jpg",
-            category = "fast_food"
+            quantity = 10,
+            hasDrink = false,
+            glutenFree = true,
+            vegetarian = true,
         ),
-        Product(
+        ProductEntity(
             id = 2,
             name = "Empanadas",
             description = "Carne, jamón y queso, humita",
             price = 12.0,
-            includesDrink = false,
-            quantity = 2,
-            glutenFree = false,
+            category = "fast_food",
             imageUrl = "https://www.redmutual.com.ar/wp-content/uploads/2024/05/empanadas-1200x751.jpg",
-            category = "fast_food"
+            quantity = 2,
+            hasDrink = false,
+            glutenFree = false,
+            vegetarian = false,
         ),
-        Product(
+        ProductEntity(
             id = 3,
             name = "Sushi Vegano",
             description = "Rolls de palta y pepino",
             price = 18.0,
-            includesDrink = true,
-            quantity = 5,
-            glutenFree = true,
+            category = "international_food",
             imageUrl = "https://i.blogs.es/982e96/sushi-vegano-receta/1366_2000.jpg",
-            category = "international_food"
+            quantity = 5,
+            hasDrink = true,
+            glutenFree = true,
+            vegetarian = true,
         ),
-        Product(
+        ProductEntity(
             id = 4,
             name = "Tacos",
             description = "Tacos mexicanos de pollo",
             price = 15.0,
-            includesDrink = false,
-            quantity = 4,
-            glutenFree = false,
+            category = "fast_food",
             imageUrl = "https://cdn7.kiwilimon.com/recetaimagen/37041/640x426/39083.jpg.webp",
-            category = "fast_food"
+            quantity = 4,
+            hasDrink = false,
+            glutenFree = false,
+            vegetarian = false,
         )
     )
 

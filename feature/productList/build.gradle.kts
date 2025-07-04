@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.foundation)
     implementation(platform(libs.androidx.compose.bom))
-
+    implementation(libs.accompanist.placeholder.material)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -106,6 +106,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":library:utils"))
     implementation(project(":core:model"))
+    implementation(project(":core:db"))
     implementation(project(":core:theme"))
     implementation(project(":feature:common"))
 }

@@ -94,6 +94,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":library:utils"))
     implementation(project(":core:model"))
+    implementation(project(":core:db"))
     implementation(project(":core:theme"))
     implementation(project(":feature:productList"))
     implementation(project(":feature:common"))

@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -15,20 +20,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap.Companion.Square
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.common.InputField
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.theme.ui.theme.MainColor
 
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginContract,
     onLoginSuccess: () -> Unit,
     onShowRegister: () -> Unit,
     isLogged: Boolean
 ) {
+    val loginViewModel: LoginViewModel = hiltViewModel()
+
     val loginState by loginViewModel.login.collectAsState()
     val errorState by loginViewModel.errorMsg.collectAsState()
 
@@ -45,7 +53,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         InputField(
-            label = "Email",
+            label = stringResource(R.string.email_label),
             value = loginState.email,
             onValueChange = { loginViewModel.updateLoginField("email", it) },
             onBlur = { loginViewModel.validateEmail() },
@@ -55,7 +63,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         InputField(
-            label = "Password",
+            label = stringResource(R.string.password_label),
             value = loginState.password,
             onValueChange = { loginViewModel.updateLoginField("password", it) },
             onBlur = { loginViewModel.validatePassword() },
@@ -65,21 +73,29 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button (
+        Button(
             onClick = { onLoginSuccess() },
             enabled = isFormValid,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(45.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MainColor)
         ) {
-            Text("Iniciar sesión")
+            Text(stringResource(
+                R.string.sign_in_label),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextButton (
+        TextButton(
             onClick = onShowRegister,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.textButtonColors(
+                contentColor = MainColor
+            )
         ) {
-            Text("¿No tenés cuenta? Registrate")
+            Text(stringResource(R.string.not_found_account_label))
         }
     }
 }
@@ -87,28 +103,7 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    class FakeLoginViewModel : LoginContract {
-        private val _login = MutableStateFlow(LoginState(email = "test@example.com", password = "123456"))
-        private val _errorMsg = MutableStateFlow(LoginErrorState())
-
-        override val login: StateFlow<LoginState> get() = _login
-        override val errorMsg: StateFlow<LoginErrorState> get() = _errorMsg
-
-        override fun updateLoginField(key: String, value: String) {
-            _login.value = when (key) {
-                "email" -> _login.value.copy(email = value)
-                "password" -> _login.value.copy(password = value)
-                else -> _login.value
-            }
-        }
-
-        override fun validateEmail(): Boolean = true
-        override fun validatePassword(): Boolean = true
-        override fun isValidateData(): Boolean = true
-    }
-
     LoginScreen(
-        loginViewModel = FakeLoginViewModel(),
         onLoginSuccess = {},
         onShowRegister = {},
         isLogged = false

@@ -30,27 +30,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.theme.ui.theme.MainColor
 import kotlinx.coroutines.FlowPreview
+import kotlin.String
 
-@OptIn(FlowPreview::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductFilter() {
-    val productListViewModel: ProductListViewModel = hiltViewModel()
-    val productFilterViewModel: ProductFilterViewModel = hiltViewModel()
-
+fun ProductFilter(
+    dietaryMap: Map<String, Int>,
+    categoryMap: Map<String, Int>,
+    dietaryFilters: Map<String, Boolean>,
+    categoryFilters: Map<String, Boolean>,
+    onSearchChange: (String) -> Unit,
+    onFilterChange: (type: String, updated: Map<String, Boolean>) -> Unit,
+    onToggleSearch: (type: String, selectedValues: Map<String, Boolean>) -> Unit,
+) {
     var showFilter by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     fun toggleShowFilters() { showFilter = !showFilter }
 
-    val dietaryFilters by productFilterViewModel.dietaryFilters.collectAsState()
-    val categoryFilters by productFilterViewModel.categoryFilters.collectAsState()
-
     LaunchedEffect(dietaryFilters, categoryFilters) {
-        val selectedCategories = categoryFilters.filterValues { it }.keys.toList()
-        val selectedDietary = dietaryFilters.filterValues { it }.keys.toList()
-
-        productListViewModel.getProductByCategory(selectedCategories)
-        productListViewModel.getProductByDietary(selectedDietary)
+        onToggleSearch("category", dietaryFilters)
+        onToggleSearch("dietary", categoryFilters)
     }
 
     Row(
@@ -76,16 +76,48 @@ fun ProductFilter() {
                 onDismissRequest = { toggleShowFilters() },
                 sheetState = sheetState
             ) {
-                FilterScreen(productFilterViewModel = productFilterViewModel)
+
+                FilterModalScreen(
+                    dietaryMap = dietaryMap,
+                    categoryMap = categoryMap,
+                    dietaryFilters = dietaryFilters,
+                    categoryFilters = categoryFilters,
+                    onFilterChange = onFilterChange
+                )
             }
         }
 
-        InputSearchScreen(onChange = { productListViewModel.searchProduct(it) })
+        InputSearchScreen(onChange = onSearchChange)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ProductFilterPreview() {
-    ProductFilter()
+    val dietaryMap = mapOf(
+        "vegetarian" to android.R.string.untitled,
+        "gluten_free" to android.R.string.untitled
+    )
+    val categoryMap = mapOf(
+        "pizza" to android.R.string.untitled,
+        "burger" to android.R.string.untitled
+    )
+    val dietaryFilters = mapOf(
+        "vegetarian" to false,
+        "gluten_free" to true
+    )
+    val categoryFilters = mapOf(
+        "pizza" to true,
+        "burger" to false
+    )
+
+    ProductFilter(
+        dietaryMap = dietaryMap,
+        categoryMap = categoryMap,
+        dietaryFilters = dietaryFilters,
+        categoryFilters = categoryFilters,
+        onSearchChange = {},
+        onFilterChange = { _, _ -> },
+        onToggleSearch = { _, _ -> }
+    )
 }

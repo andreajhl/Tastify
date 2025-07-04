@@ -91,14 +91,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Módulos del proyecto
-    implementation(project(":feature:login"))
-    implementation(project(":feature:register"))
-    implementation(project(":feature:productList"))
-    implementation(project(":feature:common"))
-    implementation(project(":feature:navbar"))
-    implementation(project(":feature:cart"))
-    implementation(project(":feature:productFilter"))
-    implementation(project(":core:session"))
+    implementation(project(":feature:menu"))
     implementation(project(":core:theme"))
     implementation(project(":core:model"))
 }

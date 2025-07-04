@@ -1,5 +1,6 @@
 package com.example.register
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -11,7 +12,8 @@ interface RegisterContract {
     val errorMsg: StateFlow<RegisterErrorState>
 
     fun updateRegisterField(key: String, value: String)
-    fun validateFullName(): Boolean
+    fun validateName(): Boolean
+    fun validateLastName(): Boolean
     fun validateEmail(): Boolean
     fun validatePassword(): Boolean
     fun validateRepeatPassword(): Boolean
@@ -19,17 +21,19 @@ interface RegisterContract {
 }
 
 data class RegisterState(
-    val fullName: String = "",
+    val name: String = "",
+    val lastName: String = "",
     val email: String = "",
     val password: String = "",
     val repeatPassword: String = "",
 )
 
 data class RegisterErrorState(
-    val fullName: String = "",
-    val email: String = "",
-    val password: String = "",
-    val repeatPassword: String = "",
+    val name: Boolean? = null,
+    val lastName: Boolean? = null,
+    val email: Boolean? = null,
+    val password: Boolean? = null,
+    val repeatPassword: Boolean? = null
 )
 
 @HiltViewModel
@@ -44,7 +48,8 @@ class RegisterViewModel @Inject constructor(): ViewModel(), RegisterContract {
     override fun updateRegisterField(key: String, value: String) {
         val current = _register.value
         val updated = when (key) {
-            "fullName" -> current.copy(fullName = value)
+            "name" -> current.copy(name = value)
+            "lastName" -> current.copy(lastName = value)
             "email" -> current.copy(email = value)
             "password" -> current.copy(password = value)
             "repeatPassword" -> current.copy(repeatPassword = value)
@@ -53,45 +58,57 @@ class RegisterViewModel @Inject constructor(): ViewModel(), RegisterContract {
         _register.value = updated
     }
 
-    override fun validateFullName(): Boolean {
-        val fullName = _register.value.fullName.trim()
+    override fun validateName(): Boolean {
+        val fullName = _register.value.name.trim()
         val isValid = fullName.length >= 2
-        _errorMsg.value = _errorMsg.value.copy(
-            fullName = if (!isValid) "Name must be at least 2 characters" else ""
-        )
+
+        _errorMsg.value = _errorMsg.value.copy(name = isValid)
+
+        return isValid
+    }
+
+    override fun validateLastName(): Boolean {
+        val fullName = _register.value.lastName.trim()
+        val isValid = fullName.length >= 2
+
+        _errorMsg.value = _errorMsg.value.copy(lastName = isValid)
+
         return isValid
     }
 
     override fun validateEmail(): Boolean {
         val email = _register.value.email
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+
         val isValid = emailRegex.matches(email)
-        _errorMsg.value = _errorMsg.value.copy(
-            email = if (!isValid) "Invalid email" else ""
-        )
+
+        _errorMsg.value = _errorMsg.value.copy(email = isValid)
+
         return isValid
     }
 
     override fun validatePassword(): Boolean {
         val password = _register.value.password
         val passwordRegex = "^(?=.*\\d).{6,}$".toRegex()
+
         val isValid = passwordRegex.matches(password)
-        _errorMsg.value = _errorMsg.value.copy(
-            password = if (!isValid) "Password must be at least 6 characters and contain a number" else ""
-        )
+
+        _errorMsg.value = _errorMsg.value.copy(password = isValid)
+
         return isValid
     }
 
     override fun validateRepeatPassword(): Boolean {
         val isValid = _register.value.password == _register.value.repeatPassword
-        _errorMsg.value = _errorMsg.value.copy(
-            repeatPassword = if (!isValid) "Passwords do not match" else ""
-        )
+
+        _errorMsg.value = _errorMsg.value.copy(repeatPassword = isValid)
+
         return isValid
     }
 
     override fun isValidateData(): Boolean {
-        return validateFullName() &&
+        return validateName() &&
+                validateLastName() &&
                 validateEmail() &&
                 validatePassword() &&
                 validateRepeatPassword()

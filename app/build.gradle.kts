@@ -38,6 +38,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -65,7 +66,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.javapoet)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -78,5 +78,6 @@ dependencies {
     implementation(project(":feature:orchestrator"))
     implementation(project(":core:session"))
     implementation(project(":core:model"))
+    implementation(project(":core:network"))
     implementation(project(":core:theme"))
 }

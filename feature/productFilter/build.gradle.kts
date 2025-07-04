@@ -100,6 +100,7 @@ dependencies {
     implementation(project(":library:utils"))
     implementation(project(":core:model"))
     implementation(project(":core:theme"))
+    implementation(project(":core:db"))
     implementation(project(":feature:productList"))
     implementation(project(":feature:common"))
 }

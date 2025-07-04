@@ -1,7 +1,7 @@
 package com.example.cart
 
 import androidx.lifecycle.ViewModel
-import com.example.model.Product
+import com.example.db.entities.ProductEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,16 +9,18 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface CartContract {
     val cart: StateFlow<CartState>
-    fun addToCart(product: Product, quantity: Int)
+    fun addToCart(product: ProductEntity, quantity: Int)
     fun subtractToCart(productId: Int, quantity: Int)
     fun clearCart()
     fun removeItemCart(productId: Int, callback: (Int) -> Unit)
     fun getTotalPrice(): Double
     fun getTotalItems(): Int
+    fun toggleShowCart()
 }
 
 data class CartState(
-    val items: Map<Int, Product> = emptyMap(),
+    val items: Map<Int, ProductEntity> = emptyMap(),
+    val showCart: Boolean = false,
 )
 
 @HiltViewModel
@@ -27,7 +29,7 @@ class CartViewModel @Inject constructor() : ViewModel(), CartContract {
     private val _cart = MutableStateFlow(CartState())
     override val cart: StateFlow<CartState> get() = _cart
 
-    override fun addToCart(product: Product, quantity: Int) {
+    override fun addToCart(product: ProductEntity, quantity: Int) {
         val updatedCart = _cart.value.items.toMutableMap()
         val currentProduct = updatedCart[product.id]
 
@@ -73,5 +75,10 @@ class CartViewModel @Inject constructor() : ViewModel(), CartContract {
 
     override fun getTotalItems(): Int {
         return _cart.value.items.values.sumOf { it.quantity }
+    }
+
+    override fun toggleShowCart() {
+        val newValue = !_cart.value.showCart
+        _cart.value = _cart.value.copy(showCart = newValue)
     }
 }

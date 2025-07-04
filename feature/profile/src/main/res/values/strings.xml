@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">Profile</string>
+    <string name="input_name">Names</string>
+    <string name="input_last_name">Last names</string>
+    <string name="input_adress">Address</string>
+    <string name="input_height">Height</string>
+    <string name="input_apartment">Apartment</string>
+    <string name="input_floor">Floor</string>
+    <string name="input_phone">Phone Number</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_menu">Menu</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="edit_picture">Edit picture</string>
 </resources>

@@ -23,11 +23,12 @@ data class CarouselItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Carousel(
-    carouselItems: List<CarouselItem>
 ) {
-    if (carouselItems.isEmpty()) return
-
-    val items = remember { carouselItems }
+    val carouselItems = listOf(
+        CarouselItem(0, R.drawable.promotion_banner, "promotion banner"),
+        CarouselItem(1, R.drawable.membership_banner, "membership banner"),
+        CarouselItem(2, R.drawable.supermarket_banner, "supermarket banner"),
+    )
 
     HorizontalUncontainedCarousel(
         state = rememberCarouselState { Int.MAX_VALUE },
@@ -38,7 +39,7 @@ fun Carousel(
         itemSpacing = 8.dp,
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) { i ->
-        val item = items[i % items.size]
+        val item = carouselItems[i % carouselItems.size]
 
         Image(
             modifier = Modifier
@@ -72,5 +73,5 @@ fun CarouselPreview() {
         ),
     )
 
-    Carousel(carouselItems = items)
+    Carousel()
 }

@@ -1,8 +1,9 @@
 plugins {
-    kotlin("kapt")
-    alias(libs.plugins.hilt)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -42,6 +43,15 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Cloudinary
+    implementation(libs.cloudinary.android.core)
+    implementation(libs.okhttp)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.retrofit)
+
     // Compose
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -58,5 +68,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(project(":core:model"))
+    implementation(project(":core:db"))
 
 }

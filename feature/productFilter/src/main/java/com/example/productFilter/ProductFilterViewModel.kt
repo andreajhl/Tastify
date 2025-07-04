@@ -3,6 +3,8 @@ package com.example.productFilter
 import androidx.lifecycle.ViewModel
 import com.example.data.Category
 import com.example.data.Dietary
+import com.example.db.entities.ProductEntity
+import com.example.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,11 +15,13 @@ interface ProductFilterContract {
     val categoryFilters: StateFlow<Map<String, Boolean>>
     fun updateDietaryFilter(key: String, isActive: Boolean)
     fun updateCategoryFilter(key: String, isActive: Boolean)
+    fun updateAllDietaryFilters(newFilters: Map<String, Boolean>)
+    fun updateAllCategoryFilters(newFilters: Map<String, Boolean>)
+    fun updateFilters(type: String, newFilters: Map<String, Boolean>)
 }
 
 @HiltViewModel
-class ProductFilterViewModel @Inject constructor() : ViewModel(), ProductFilterContract {
-
+class ProductFilterViewModel@Inject constructor() : ViewModel(), ProductFilterContract {
     val dietaryKeys: List<String> = Dietary.getKeys()
     val categoryKeys: List<String> = Category.getKeys()
 
@@ -42,11 +46,19 @@ class ProductFilterViewModel @Inject constructor() : ViewModel(), ProductFilterC
         }
     }
 
-    fun updateAllDietaryFilters(newFilters: Map<String, Boolean>) {
+    override fun updateAllDietaryFilters(newFilters: Map<String, Boolean>) {
         _dietaryFilters.value = newFilters
     }
 
-    fun updateAllCategoryFilters(newFilters: Map<String, Boolean>) {
+    override fun updateAllCategoryFilters(newFilters: Map<String, Boolean>) {
         _categoryFilters.value = newFilters
+    }
+
+    override fun updateFilters(type: String, newFilters: Map<String, Boolean>) {
+        when (type) {
+            "category" -> this.updateAllDietaryFilters(newFilters)
+            "dietary" -> this.updateAllCategoryFilters(newFilters)
+            else -> null
+        }
     }
 }
