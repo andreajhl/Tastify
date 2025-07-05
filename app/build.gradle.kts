@@ -72,12 +72,12 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-
+    // Módulos del proyecto
+    implementation(project(":core:theme"))
+    implementation(project(":core:model"))
+    implementation(project(":core:session"))
+    implementation(project(":core:network"))
     implementation(project(":feature:login"))
     implementation(project(":feature:register"))
     implementation(project(":feature:orchestrator"))
-    implementation(project(":core:session"))
-    implementation(project(":core:model"))
-    implementation(project(":core:network"))
-    implementation(project(":core:theme"))
 }

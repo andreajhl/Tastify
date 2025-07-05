@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
+import com.example.db.entities.OrderEntity
 import com.example.db.entities.ProductEntity
 
 @Dao
@@ -16,4 +18,7 @@ interface ProductDao {
 
     @Query("DELETE FROM products")
     suspend fun clearProducts()
+
+    @Update
+    suspend fun updateProduct(product: ProductEntity)
 }
