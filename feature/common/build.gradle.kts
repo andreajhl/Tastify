@@ -33,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -93,6 +96,5 @@ dependencies {
     // Módulos del proyecto
     implementation(project(":data"))
     implementation(project(":library:utils"))
-    implementation(project(":core:model"))
     implementation(project(":core:theme"))
 }
