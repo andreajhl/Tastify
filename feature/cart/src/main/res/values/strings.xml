@@ -3,4 +3,5 @@
     <string name="cart_title">Cart Shopping</string>
     <string name="cart_button">Close cart</string>
     <string name="cart_total_price">Total:</string>
+    <string name="cart_pay">Pay Order</string>
 </resources>

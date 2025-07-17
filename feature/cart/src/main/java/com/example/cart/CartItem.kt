@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,7 +43,7 @@ import com.example.theme.ui.theme.DisableTextColor
 import com.example.theme.ui.theme.MainColor
 
 @Composable
-fun CartItemScreen (
+fun CartItem (
     name: String,
     imageUrl: String,
     quantity: Int,
@@ -71,7 +70,6 @@ fun CartItemScreen (
         enableDismissFromStartToEnd = false,
         modifier = Modifier
             .height(72.dp)
-            .padding(vertical = 8.dp)
             .shadow(if (swipeState.dismissDirection == EndToStart) 4.dp else 0.dp),
         backgroundContent = {
             Box(
@@ -194,7 +192,7 @@ fun CartItemScreen (
 @Preview(showBackground = true)
 @Composable
 fun CartItemPreview() {
-    CartItemScreen(
+    CartItem(
         name = "Falafel",
         price = 1100.0,
         quantity = 10,
