@@ -8,6 +8,7 @@ import com.example.db.daos.ProductDao
 import com.example.db.daos.UserDao
 import com.example.db.entities.CartItemEntity
 import com.example.db.entities.OrderEntity
+import com.example.db.entities.OrderItemEntity
 import com.example.db.entities.ProductEntity
 import com.example.db.entities.UserEntity
 
@@ -16,7 +17,8 @@ import com.example.db.entities.UserEntity
         UserEntity::class,
         ProductEntity::class,
         CartItemEntity::class,
-        OrderEntity::class
+        OrderEntity::class,
+        OrderItemEntity::class
     ],
     version = 1,
     exportSchema = false

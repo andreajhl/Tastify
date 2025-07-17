@@ -3,6 +3,7 @@ package com.example.db
 import android.content.Context
 import androidx.room.Room
 import com.example.db.daos.CartDao
+import com.example.db.daos.OrderDao
 import com.example.db.daos.ProductDao
 import dagger.Module
 import dagger.Provides
@@ -20,8 +21,16 @@ object DatabaseModule {
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
             appContext, AppDatabase::class.java, "peya-database"
-        ).fallbackToDestructiveMigration(true).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .fallbackToDestructiveMigrationOnDowngrade(true)
+            .build()
 
+    }
+
+    @Provides
+    fun provideOrderDao(db: AppDatabase): OrderDao {
+        return db.orderDao()
     }
 
     @Provides

@@ -6,16 +6,13 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "orders")
 data class OrderEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "id")
-    val id: Int = 0,
-
-    @ColumnInfo(name = "userId")
-    val userId: Int,
-
-    @ColumnInfo(name = "active")
-    val active: Boolean = true,
+    val id: String,
 
     @ColumnInfo(name = "total")
-    val total: Double
+    val total: Double,
+
+    @ColumnInfo(name = "timestamp")
+    val timestamp: Long
 )
