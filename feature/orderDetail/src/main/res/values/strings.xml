@@ -1,0 +1,4 @@
+<resources>
+    <string name="order_detail_title">Order Summary</string>
+    <string name="order_detail_comeback">return to Order History</string>
+</resources>
