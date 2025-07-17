@@ -76,5 +76,6 @@ dependencies {
 
 // Módulos del proyecto
     implementation(project(":core:db"))
+    implementation(project(":core:session"))
     implementation(project(":data:"))
 }
