@@ -12,9 +12,9 @@ interface ProductsApi {
     @GET("foods")
     suspend fun getProducts(): Response<List<ProductDto>>
 
-    @PUT("foods")
+    @PUT("foods/{id}")
     suspend fun updateProduct(
-        @Path("id") id: Int,
-        @Body request: Response<ProductUpdateDto>
-    ): List<ProductDto>
+        @Path("id") id: String,
+        @Body request: ProductUpdateDto
+    ): Response<ProductDto>
 }

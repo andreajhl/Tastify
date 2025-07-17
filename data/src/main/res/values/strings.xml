@@ -4,6 +4,6 @@
     <string name="healthy_food">Healthy</string>
     <string name="international_food">International</string>
     <string name="gluten_free">Gluten free</string>
-    <string name="vegetarian">Vegan</string>
+    <string name="vegetarian">vegetarian</string>
     <string name="unknown">N/A</string>
 </resources>

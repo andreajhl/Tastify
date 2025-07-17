@@ -1,9 +1,6 @@
 package com.example.data.remote.dtos.order
 
-import java.util.Date
-
-data class OrderDto(
-    val id: String,
+data class OrderCreateDto(
     val userId: String,
     val items: List<OrderItemDto>,
     val total: Double,

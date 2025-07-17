@@ -1,9 +1,10 @@
 package com.example.data.remote.dtos.user
 
 data class UserDto(
+    val id: String,
     val email: String,
-    val fullName: String,
-    val encryptedPassword: String,
+    val name: String?,
+    val lastName: String?,
     val userImageUrl: String?,
     val address: String?,
     val streetNumber: Int?,

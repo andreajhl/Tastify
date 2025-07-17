@@ -15,7 +15,7 @@ import java.io.FileOutputStream
 import javax.inject.*
 
 class CloudinaryService @Inject constructor() {
-    private val cloudName = "dc34in6bn"
+    private val cloudName = "drioaxhhw"
     private val uploadPreset = "unsigned_android"
     private val uploadUrl = "https://api.cloudinary.com/v1_1/$cloudName/image/upload"
     private val client = OkHttpClient()

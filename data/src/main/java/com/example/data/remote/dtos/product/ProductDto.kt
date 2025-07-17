@@ -1,6 +1,7 @@
 package com.example.data.remote.dtos.product
 
 data class ProductDto(
+    val id: String,
     val name: String,
     val description: String,
     val price: Double,
