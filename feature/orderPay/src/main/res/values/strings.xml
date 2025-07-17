@@ -1,0 +1,19 @@
+<resources>
+    <string name="order_pay_title">Order Pay</string>
+    <string name="order_pay_comeback">return to Cart Shopping</string>
+    <string name="owner_label">Owner name</string>
+    <string name="owner_placeholder_label">Name Lastname</string>
+    <string name="expiry_label">Expiry</string>
+    <string name="expiry_placeholder_label">MM/AA</string>
+    <string name="security_code_label">CVV</string>
+    <string name="security_code_placeholder_label">***</string>
+    <string name="card_number_input_label">Card Number</string>
+    <string name="card_number_error_label">Invalid card number</string>
+    <string name="owner_input_label">Owner Name</string>
+    <string name="owner_error_label">Invalid name</string>
+    <string name="expiry_input_label">Expiry Date</string>
+    <string name="expiry_error_label">Invalid date</string>
+    <string name="security_code_input_label">CVV</string>
+    <string name="security_code_error_label">Invalid code</string>
+    <string name="pay_label">Complete purchase</string>
+</resources>
