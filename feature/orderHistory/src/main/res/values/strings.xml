@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">history</string>
+    <string name="order_history_title">Order History</string>
+    <string name="order_history_menu">Menu</string>
+    <string name="order_card_title">Order #%1$s</string>
+    <string name="order_card_price">Price</string>
+    <string name="order_card_items">Items</string>
+    <string name="order_card_date">Date</string>
 </resources>
