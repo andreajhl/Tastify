@@ -3,7 +3,6 @@ package com.example.productList
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,7 +22,7 @@ import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 
 @Composable
-fun ProductItemSkeleton() {
+fun ProductCardSkeleton() {
     val shimmer = PlaceholderHighlight.shimmer(
         highlightColor = Color.White.copy(alpha = 0.6f)
     )
@@ -85,5 +84,5 @@ fun ProductItemSkeleton() {
 @Preview(showBackground = true)
 @Composable
 fun ProductItemSkeletonPreview() {
-    ProductItemSkeleton()
+    ProductCardSkeleton()
 }

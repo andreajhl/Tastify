@@ -8,14 +8,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.model.Product
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.db.entities.ProductEntity
 
 @Composable
 fun ProductListScreen(
     productList: List<ProductEntity>,
-    addToCart: (Int) -> Unit
+    addToCart: (String) -> Unit
 ) {
     if (productList.isEmpty()) {
         ProductListSkeleton()
@@ -32,7 +31,7 @@ fun ProductListScreen(
             items = productList,
             key = { it.id }
         )  { product ->
-            ProductItem(
+            ProductCard(
                 id = product.id,
                 title = product.name,
                 price = product.price,
@@ -51,7 +50,7 @@ fun ProductListScreen(
 fun ProductListPreview() {
     val fakeItems = listOf(
         ProductEntity(
-            id = 1,
+            id = "1",
             name = "Falafel",
             description = "Falafel con salsa tahini",
             price = 11.0,
@@ -63,7 +62,7 @@ fun ProductListPreview() {
             vegetarian = true,
         ),
         ProductEntity(
-            id = 2,
+            id = "2",
             name = "Empanadas",
             description = "Carne, jamón y queso, humita",
             price = 12.0,
@@ -75,7 +74,7 @@ fun ProductListPreview() {
             vegetarian = false,
         ),
         ProductEntity(
-            id = 3,
+            id = "3",
             name = "Sushi Vegano",
             description = "Rolls de palta y pepino",
             price = 18.0,
@@ -87,7 +86,7 @@ fun ProductListPreview() {
             vegetarian = true,
         ),
         ProductEntity(
-            id = 4,
+            id = "4",
             name = "Tacos",
             description = "Tacos mexicanos de pollo",
             price = 15.0,

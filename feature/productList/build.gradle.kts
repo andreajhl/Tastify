@@ -105,7 +105,6 @@ dependencies {
     // Módulos del proyecto
     implementation(project(":data"))
     implementation(project(":library:utils"))
-    implementation(project(":core:model"))
     implementation(project(":core:db"))
     implementation(project(":core:theme"))
     implementation(project(":feature:common"))

@@ -39,15 +39,15 @@ import com.example.data.Dietary
 import com.example.theme.ui.theme.MainColor
 
 @Composable
-fun ProductItem(
-    id: Int,
+fun ProductCard(
+    id: String,
     title: String,
     price: Double,
     quantity: Int = 0,
     glutenFree: Boolean = false,
     imageUrl: String,
     category: String,
-    addToCart: (Int) -> Unit,
+    addToCart: (String) -> Unit,
 ) {
     val enable = quantity > 0
 
@@ -148,8 +148,8 @@ fun ProductItem(
 @Composable
 fun ProductCardScreenPreview() {
     Box(modifier = Modifier.padding(50.dp).height(300.dp)){
-        ProductItem(
-            id = 1,
+        ProductCard(
+            id = "1",
             title = "Hamburguesa Doble",
             price = 12.99,
             quantity = 0,
@@ -159,8 +159,8 @@ fun ProductCardScreenPreview() {
             addToCart = {}
         )
 
-        ProductItem(
-            id = 1,
+        ProductCard(
+            id = "1",
             title = "Hamburguesa Doble",
             price = 12.99,
             quantity = 0,

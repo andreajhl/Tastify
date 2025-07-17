@@ -3,6 +3,7 @@ package com.example.productList
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.remote.dtos.product.ProductUpdateDto
 import com.example.data.remote.repository.product.ProductRepository
 import com.example.db.entities.ProductEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class RequestState(
+data class ProductListState(
     val isLoading: Boolean = true,
     val isSuccess: Boolean = false,
     val isError: Boolean = false
@@ -19,38 +20,37 @@ data class RequestState(
 
 interface ProductListContract {
     val productList: StateFlow<List<ProductEntity>>
-    val state: MutableStateFlow<RequestState>
+    val productListState: MutableStateFlow<ProductListState>
 
-    fun subtractProduct(id: Int, count: Int)
-    fun addProduct(id: Int, count: Int)
-    fun getProduct(id: Int): ProductEntity?
+    fun subtractProduct(id: String, count: Int)
+    fun addProduct(id: String, count: Int)
+    fun getProduct(id: String): ProductEntity?
     fun searchProduct(search: String)
-    fun getProductByCategory(categories: List<String>)
-    fun getProductByDietary(dietary: List<String>)
-    fun filterProducts(type: String, filters: Map<String, Boolean>)
+    fun filterProducts(categoryFilters: Map<String, Boolean>, dietaryFilters: Map<String, Boolean>)
+    fun getProducts()
 }
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
-    private val repo: ProductRepository
-) : ViewModel(), ProductListContract {
-
+    private val productService: ProductRepository
+): ViewModel(), ProductListContract {
     private val _allProducts = MutableStateFlow<List<ProductEntity>>(emptyList())
     private val _productList = MutableStateFlow<List<ProductEntity>>(emptyList())
     override val productList = _productList
 
-    private val _state = MutableStateFlow(RequestState())
-    override val state = _state
+    private val _productListState = MutableStateFlow(ProductListState())
+    override val productListState = _productListState
 
-    fun getProducts() {
+    override fun getProducts() {
         viewModelScope.launch {
-            _state.value = RequestState(isLoading = true)
+            _productListState.value = ProductListState(isLoading = true)
 
             try {
-                val local = repo.getAll()
+                val local = productService.getAll()
 
                 if (local.isEmpty()) {
-                    val remote = repo.getAllRemote()
+                    val remote = productService.getAllRemote()
+
                     _allProducts.value = remote
                     _productList.value = remote
                 } else {
@@ -58,32 +58,40 @@ class ProductListViewModel @Inject constructor(
                     _productList.value = local
                 }
 
-                _state.value = _state.value.copy(isSuccess = true)
+                _productListState.value = _productListState.value.copy(isSuccess = true)
             } catch (e: Exception) {
-                _state.value = _state.value.copy(isError = true)
+                Log.e("ProductList", "Exception: ${e.message}")
+                _productListState.value = _productListState.value.copy(isError = true)
             } finally {
-                _state.value = _state.value.copy(isLoading = false)
+                _productListState.value = _productListState.value.copy(isLoading = false)
             }
         }
     }
 
-    override fun subtractProduct(id: Int, count: Int) {
-        _productList.value = _productList.value.map { product ->
+    override fun subtractProduct(id: String, count: Int) {
+        val updatedProducts = _productList.value.map { product ->
             if (product.id == id) {
-                product.copy(quantity = (product.quantity - count).coerceAtLeast(0))
+                val newQuantity = (product.quantity - count).coerceAtLeast(0)
+                product.copy(quantity = newQuantity)
             } else product
+
+
         }
+        _productList.value = updatedProducts
     }
 
-    override fun addProduct(id: Int, count: Int) {
-        _productList.value = _productList.value.map { product ->
+    override fun addProduct(id: String, count: Int) {
+        val updatedProducts = _productList.value.map { product ->
             if (product.id == id) {
                 product.copy(quantity = product.quantity + count)
             } else product
+
+
         }
+        _productList.value = updatedProducts
     }
 
-    override fun getProduct(id: Int): ProductEntity? {
+    override fun getProduct(id: String): ProductEntity? {
         return _productList.value.find { it.id == id }
     }
 
@@ -97,31 +105,25 @@ class ProductListViewModel @Inject constructor(
         }
     }
 
-    override fun getProductByCategory(categories: List<String>) {
-        _productList.value = _allProducts.value.filter { product ->
-            product.category in categories
-        }
-    }
+    override fun filterProducts(
+        categoryFilters: Map<String, Boolean>,
+        dietaryFilters: Map<String, Boolean>
+    ) {
+        val selectedCategories = categoryFilters.filterValues { it }.keys
+        val selectedDietary = dietaryFilters.filterValues { it }.keys
 
-    override fun getProductByDietary(dietary: List<String>) {
         _productList.value = _allProducts.value.filter { product ->
-            dietary.all { restriction ->
+            val categoryMatches = selectedCategories.isEmpty() || selectedCategories.contains(product.category)
+
+            val dietaryMatches = selectedDietary.isEmpty() || selectedDietary.any { restriction ->
                 when (restriction) {
                     "gluten_free" -> product.glutenFree
                     "vegetarian" -> product.vegetarian
-                    else -> true
+                    else -> false
                 }
             }
-        }
-    }
 
-    override fun filterProducts(type: String, filters: Map<String, Boolean>) {
-        val selectedFilters = filters.filterValues { it }.keys.toList()
-
-        when (type) {
-            "category" -> this.getProductByCategory(selectedFilters)
-            "dietary" -> this.getProductByDietary(selectedFilters)
-            else -> null
+            categoryMatches && dietaryMatches
         }
     }
 }

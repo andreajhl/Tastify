@@ -24,7 +24,7 @@ fun ProductListSkeleton() {
             items = skeletonList,
             key = { it }
         ) {
-            ProductItemSkeleton()
+            ProductCardSkeleton()
         }
     }
 }
