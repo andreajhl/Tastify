@@ -1,5 +1,6 @@
 package com.example.register
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -7,14 +8,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.common.InputField
-import com.example.session.SessionManager
 import com.example.theme.ui.theme.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,16 +24,23 @@ fun RegisterBottomSheet(
 ) {
     val registerViewModel: RegisterViewModel = hiltViewModel()
 
-    val state by registerViewModel.register.collectAsState()
-    val errors by registerViewModel.errorMsg.collectAsState()
+    val errorState by registerViewModel.errorMsg.collectAsState()
+    val registerState by registerViewModel.registerState.collectAsState()
+    val registerData by registerViewModel.registerData.collectAsState()
 
-    val context = LocalContext.current
-
-    val session = remember { SessionManager(context) }
     var showSheet by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val isValid = registerViewModel.isValidateData()
+    val isFormValid by remember(registerData, errorState) {
+        derivedStateOf { registerViewModel.isValidateData() }
+    }
+
+    LaunchedEffect(registerState.isSuccess) {
+        if (registerState.isSuccess == true) {
+            showSheet = false
+            onRegisterSuccess()
+        }
+    }
 
     if (showSheet) {
         ModalBottomSheet(
@@ -60,55 +66,52 @@ fun RegisterBottomSheet(
                 ) {
                     InputField(
                         label = stringResource(R.string.input_name),
-                        value = state.name,
+                        value = registerData.name,
                         onValueChange = { registerViewModel.updateRegisterField("name", it) },
                         onBlur = { registerViewModel.validateName() },
-                        error = if(errors.name == true) stringResource(R.string.input_name_error) else ""
+                        error = if(errorState.name == true) stringResource(R.string.input_name_error) else ""
                     )
 
                     InputField(
                         label = stringResource(R.string.input_last_name),
-                        value = state.lastName,
+                        value = registerData.lastName,
                         onValueChange = { registerViewModel.updateRegisterField("lastName", it) },
                         onBlur = { registerViewModel.validateLastName() },
-                        error = if(errors.lastName == true) stringResource(R.string.input_last_name_error) else ""
+                        error = if(errorState.lastName == true) stringResource(R.string.input_last_name_error) else ""
                     )
 
                     InputField(
                         label = stringResource(R.string.input_email),
-                        value = state.email,
+                        value = registerData.email,
                         onValueChange = { registerViewModel.updateRegisterField("email", it) },
                         onBlur = { registerViewModel.validateEmail() },
-                        error = if(errors.email == true) stringResource(R.string.input_email_error) else ""
+                        error = if(errorState.email == true) stringResource(R.string.input_email_error) else ""
                     )
 
                     InputField(
                         label = stringResource(R.string.input_password),
-                        value = state.password,
+                        value = registerData.password,
                         onValueChange = { registerViewModel.updateRegisterField("password", it) },
                         onBlur = { registerViewModel.validatePassword() },
                         visualTransformation = PasswordVisualTransformation(),
-                        error = if(errors.password == true) stringResource(R.string.input_password_error) else ""
+                        error = if(errorState.password == true) stringResource(R.string.input_password_error) else ""
                     )
 
                     InputField(
                         label = stringResource(R.string.input_repeat_password),
-                        value = state.repeatPassword,
+                        value = registerData.repeatPassword,
                         onValueChange = { registerViewModel.updateRegisterField("repeatPassword", it) },
                         onBlur = { registerViewModel.validateRepeatPassword() },
                         visualTransformation = PasswordVisualTransformation(),
-                        error = if(errors.repeatPassword == true) stringResource(R.string.input_repeat_password_error) else ""
+                        error = if(errorState.repeatPassword == true) stringResource(R.string.input_repeat_password_error) else ""
                     )
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = {
-                        session.setLogged(true)
-                        onRegisterSuccess()
-                    },
-                    enabled = isValid,
+                    onClick = { registerViewModel.executeRegister() },
+                    enabled = isFormValid && !registerState.isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(45.dp),

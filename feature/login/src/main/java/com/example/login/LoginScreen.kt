@@ -18,7 +18,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap.Companion.Square
 import androidx.compose.ui.res.stringResource
@@ -26,25 +28,30 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.common.InputField
 import com.example.theme.ui.theme.MainColor
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit,
     onShowRegister: () -> Unit,
-    isLogged: Boolean
+    onLoginSuccess: () -> Unit
 ) {
     val loginViewModel: LoginViewModel = hiltViewModel()
 
-    val loginState by loginViewModel.login.collectAsState()
     val errorState by loginViewModel.errorMsg.collectAsState()
+    val loginData by loginViewModel.loginData.collectAsState()
+    val loginState by loginViewModel.loginState.collectAsState()
 
-    LaunchedEffect (isLogged) {
-        if (isLogged) onLoginSuccess()
+    val isFormValid by remember(loginData, errorState) {
+        derivedStateOf { loginViewModel.isValidateData() }
     }
 
-    val isFormValid = loginViewModel.isValidateData()
+    LaunchedEffect(loginState.isSuccess) {
+        if (loginState.isSuccess == true) {
+            onLoginSuccess()
+        }
+    }
 
     Column (
         modifier = Modifier
@@ -54,7 +61,7 @@ fun LoginScreen(
     ) {
         InputField(
             label = stringResource(R.string.email_label),
-            value = loginState.email,
+            value = loginData.email,
             onValueChange = { loginViewModel.updateLoginField("email", it) },
             onBlur = { loginViewModel.validateEmail() },
             error = errorState.email
@@ -64,7 +71,7 @@ fun LoginScreen(
 
         InputField(
             label = stringResource(R.string.password_label),
-            value = loginState.password,
+            value = loginData.password,
             onValueChange = { loginViewModel.updateLoginField("password", it) },
             onBlur = { loginViewModel.validatePassword() },
             error = errorState.password,
@@ -74,16 +81,16 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { onLoginSuccess() },
-            enabled = isFormValid,
+            onClick = { loginViewModel.executeLogin() },
+            enabled = isFormValid && !loginState.isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(45.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MainColor)
         ) {
-            Text(stringResource(
-                R.string.sign_in_label),
+            Text(
+                text = stringResource(R.string.sign_in_label),
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -104,8 +111,7 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     LoginScreen(
-        onLoginSuccess = {},
         onShowRegister = {},
-        isLogged = false
+        onLoginSuccess = {}
     )
 }

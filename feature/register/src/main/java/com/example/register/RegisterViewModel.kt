@@ -1,14 +1,22 @@
 package com.example.register
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.data.remote.dtos.auth.RegisterDto
+import com.example.data.remote.repository.auth.AuthRepository
+import com.example.library.utils.hashPasswordSHA256
+import com.example.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 interface RegisterContract {
-    val register: StateFlow<RegisterState>
-    val errorMsg: StateFlow<RegisterErrorState>
+    val registerState: StateFlow<RegisterState>
+    val registerData: StateFlow<RegisterDataState>
+    val errorMsg: StateFlow<RegisterDataErrorState>
 
     fun updateRegisterField(key: String, value: String)
     fun validateName(): Boolean
@@ -17,9 +25,10 @@ interface RegisterContract {
     fun validatePassword(): Boolean
     fun validateRepeatPassword(): Boolean
     fun isValidateData(): Boolean
+    fun executeRegister()
 }
 
-data class RegisterState(
+data class RegisterDataState(
     val name: String = "",
     val lastName: String = "",
     val email: String = "",
@@ -27,7 +36,13 @@ data class RegisterState(
     val repeatPassword: String = "",
 )
 
-data class RegisterErrorState(
+data class RegisterState(
+    val isLoading: Boolean = false,
+    val isSuccess: Boolean? = null,
+    val isError: Boolean? = null
+)
+
+data class RegisterDataErrorState(
     val name: Boolean? = null,
     val lastName: Boolean? = null,
     val email: Boolean? = null,
@@ -36,16 +51,20 @@ data class RegisterErrorState(
 )
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(): ViewModel(), RegisterContract {
+class RegisterViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val sessionManager: SessionManager
+) : ViewModel(), RegisterContract {
+    private val _registerState = MutableStateFlow(RegisterState())
+    private val _registerData = MutableStateFlow(RegisterDataState())
+    private val _errorMsg = MutableStateFlow(RegisterDataErrorState())
 
-    private val _register = MutableStateFlow(RegisterState())
-    private val _errorMsg = MutableStateFlow(RegisterErrorState())
-
-    override val register: StateFlow<RegisterState> get() = _register
-    override val errorMsg: StateFlow<RegisterErrorState> get() = _errorMsg
+    override val registerState: StateFlow<RegisterState> get() = _registerState
+    override val registerData: StateFlow<RegisterDataState> get() = _registerData
+    override val errorMsg: StateFlow<RegisterDataErrorState> get() = _errorMsg
 
     override fun updateRegisterField(key: String, value: String) {
-        val current = _register.value
+        val current = _registerData.value
         val updated = when (key) {
             "name" -> current.copy(name = value)
             "lastName" -> current.copy(lastName = value)
@@ -54,53 +73,53 @@ class RegisterViewModel @Inject constructor(): ViewModel(), RegisterContract {
             "repeatPassword" -> current.copy(repeatPassword = value)
             else -> current
         }
-        _register.value = updated
+        _registerData.value = updated
     }
 
     override fun validateName(): Boolean {
-        val fullName = _register.value.name.trim()
+        val fullName = _registerData.value.name.trim()
         val isValid = fullName.length >= 2
 
-        _errorMsg.value = _errorMsg.value.copy(name = isValid)
+        _errorMsg.value = _errorMsg.value.copy(name = !isValid)
 
         return isValid
     }
 
     override fun validateLastName(): Boolean {
-        val fullName = _register.value.lastName.trim()
+        val fullName = _registerData.value.lastName.trim()
         val isValid = fullName.length >= 2
 
-        _errorMsg.value = _errorMsg.value.copy(lastName = isValid)
+        _errorMsg.value = _errorMsg.value.copy(lastName = !isValid)
 
         return isValid
     }
 
     override fun validateEmail(): Boolean {
-        val email = _register.value.email
+        val email = _registerData.value.email
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
 
         val isValid = emailRegex.matches(email)
 
-        _errorMsg.value = _errorMsg.value.copy(email = isValid)
+        _errorMsg.value = _errorMsg.value.copy(email = !isValid)
 
         return isValid
     }
 
     override fun validatePassword(): Boolean {
-        val password = _register.value.password
+        val password = _registerData.value.password
         val passwordRegex = "^(?=.*\\d).{6,}$".toRegex()
 
         val isValid = passwordRegex.matches(password)
 
-        _errorMsg.value = _errorMsg.value.copy(password = isValid)
+        _errorMsg.value = _errorMsg.value.copy(password = !isValid)
 
         return isValid
     }
 
     override fun validateRepeatPassword(): Boolean {
-        val isValid = _register.value.password == _register.value.repeatPassword
+        val isValid = _registerData.value.password == _registerData.value.repeatPassword
 
-        _errorMsg.value = _errorMsg.value.copy(repeatPassword = isValid)
+        _errorMsg.value = _errorMsg.value.copy(repeatPassword = !isValid)
 
         return isValid
     }
@@ -111,5 +130,42 @@ class RegisterViewModel @Inject constructor(): ViewModel(), RegisterContract {
                 validateEmail() &&
                 validatePassword() &&
                 validateRepeatPassword()
+    }
+
+    override fun executeRegister() {
+        if (!isValidateData()) return
+
+        viewModelScope.launch {
+            _registerState.value = _registerState.value.copy(isLoading = true)
+
+            try {
+                val request = RegisterDto(
+                    name = _registerData.value.name,
+                    lastName = _registerData.value.lastName,
+                    email = _registerData.value.email,
+                    encryptedPassword = hashPasswordSHA256(_registerData.value.password)
+                )
+
+                val response = authRepository.register(request)
+
+                if (response.isSuccessful && response.body() != null) {
+                    val userId = response.body()!!.id
+                    val email = response.body()!!.email
+
+                    sessionManager.setUserId(userId)
+                    sessionManager.setUserEmail(email)
+                    sessionManager.setLogged(true)
+                    _registerState.value = _registerState.value.copy(isSuccess = true)
+                } else {
+                    Log.e("Register", "Error: ${response.code()} - ${response.message()}")
+                }
+
+            } catch (e: Exception) {
+                Log.e("Register", "Exception: ${e.message}")
+                _registerState.value = _registerState.value.copy(isError = true)
+            } finally {
+                _registerState.value = _registerState.value.copy(isLoading = false)
+            }
+        }
     }
 }
