@@ -5,11 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,9 +31,13 @@ import com.example.common.InputField
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile(onOpenDrawer: () -> Unit) {
+fun ProfileScreen(onOpenDrawer: () -> Unit) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
     val profileState by profileViewModel.profile.collectAsState()
+
+    LaunchedEffect(Unit) {
+        profileViewModel.loadProfile()
+    }
 
     Scaffold(
         topBar = {
@@ -46,7 +51,10 @@ fun Profile(onOpenDrawer: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = onOpenDrawer) {
-                        Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.profile_menu))
+                        Icon(
+                            Icons.Default.Menu,
+                            contentDescription = stringResource(R.string.profile_menu)
+                        )
                     }
                 },
                 actions = {
@@ -75,8 +83,9 @@ fun Profile(onOpenDrawer: () -> Unit) {
                     .size(100.dp),
                 contentAlignment = Alignment.BottomEnd
             ) {
+
                 AsyncImage(
-                    model = "https://i.imgur.com/GF7vZtT.png",
+                    model = profileState.profileImageUri.ifEmpty { "https://i.imgur.com/GF7vZtT.png" },
                     contentDescription = stringResource(R.string.profile_picture),
                     modifier = Modifier
                         .size(100.dp)
@@ -84,20 +93,11 @@ fun Profile(onOpenDrawer: () -> Unit) {
                     contentScale = ContentScale.Crop
                 )
 
-                IconButton(
-                    onClick = {  },
-                    modifier = Modifier
-                        .size(28.dp)
-                        .background(Color.DarkGray.copy(alpha = 0.7f), shape = CircleShape)
-                        .padding(4.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.camera_icon),
-                        contentDescription = stringResource(R.string.edit_picture),
-                        modifier = Modifier.size(16.dp),
-                        colorFilter = ColorFilter.tint(Color.White)
-                    )
-                }
+                ProfileImageButton(
+                    onImageSelected = { uri ->
+                        profileViewModel.updateProfilePicture(uri)
+                    }
+                )
             }
 
             InputField(
@@ -142,9 +142,9 @@ fun Profile(onOpenDrawer: () -> Unit) {
                 )
 
                 InputField(
-                    label = stringResource(R.string.input_apartment),
-                    value = profileState.apartment,
-                    onValueChange = { profileViewModel.updateLoginField("apartment", it) },
+                    label = stringResource(R.string.input_floor),
+                    value = profileState.floor,
+                    onValueChange = { profileViewModel.updateLoginField("floor", it) },
                     onBlur = {},
                     error = "",
                     enabled = profileViewModel.isEditing,
@@ -152,9 +152,9 @@ fun Profile(onOpenDrawer: () -> Unit) {
                 )
 
                 InputField(
-                    label = stringResource(R.string.input_floor),
-                    value = profileState.floor,
-                    onValueChange = { profileViewModel.updateLoginField("floor", it) },
+                    label = stringResource(R.string.input_apartment),
+                    value = profileState.apartment,
+                    onValueChange = { profileViewModel.updateLoginField("apartment", it) },
                     onBlur = {},
                     error = "",
                     enabled = profileViewModel.isEditing,
@@ -177,5 +177,5 @@ fun Profile(onOpenDrawer: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    Profile(onOpenDrawer = {})
+    ProfileScreen(onOpenDrawer = {})
 }
