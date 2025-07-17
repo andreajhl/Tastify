@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android"
+    namespace = "com.example.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.android"
+        applicationId = "com.example.app"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -74,10 +74,14 @@ dependencies {
 
     // Módulos del proyecto
     implementation(project(":core:theme"))
-    implementation(project(":core:model"))
     implementation(project(":core:session"))
     implementation(project(":core:network"))
-    implementation(project(":feature:login"))
-    implementation(project(":feature:register"))
-    implementation(project(":feature:orchestrator"))
+    implementation(project(":core:navigation"))
+    implementation(project(":feature:authentication"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:profile"))
+    implementation(project(":feature:orderHistory"))
+    implementation(project(":feature:orderPay"))
+    implementation(project(":feature:menu"))
+    implementation(project(":feature:orderDetail"))
 }
