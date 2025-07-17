@@ -3,8 +3,6 @@ package com.example.productFilter
 import androidx.lifecycle.ViewModel
 import com.example.data.Category
 import com.example.data.Dietary
-import com.example.db.entities.ProductEntity
-import com.example.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -56,9 +54,8 @@ class ProductFilterViewModel@Inject constructor() : ViewModel(), ProductFilterCo
 
     override fun updateFilters(type: String, newFilters: Map<String, Boolean>) {
         when (type) {
-            "category" -> this.updateAllDietaryFilters(newFilters)
-            "dietary" -> this.updateAllCategoryFilters(newFilters)
-            else -> null
+            "category" -> this.updateAllCategoryFilters(newFilters)
+            "dietary" -> this.updateAllDietaryFilters(newFilters)
         }
     }
 }

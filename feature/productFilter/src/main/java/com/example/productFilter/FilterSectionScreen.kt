@@ -1,14 +1,12 @@
 package com.example.productFilter
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
+import android.R
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.common.ToggleButtonGroup
 import com.example.common.ToggleOption
 
@@ -27,7 +25,7 @@ fun FilterSectionScreen(
     ToggleButtonGroup(
         options = options,
         selectedMap = appliedFilters,
-        onChange = { onSelectOption }
+        onChange = { updatedMap -> onSelectOption(updatedMap) }
     )
 }
 
@@ -43,10 +41,12 @@ fun FilterSectionScreenPreview() {
         "gluten_free" to false
     )
 
-    FilterSectionScreen(
-        titleId = android.R.string.untitled,
-        options = options,
-        appliedFilters = selectedMap,
-        onSelectOption = {}
-    )
+    Column {
+        FilterSectionScreen(
+            titleId = R.string.untitled,
+            options = options,
+            appliedFilters = selectedMap,
+            onSelectOption = {}
+        )
+    }
 }

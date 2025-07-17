@@ -28,14 +28,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
 @Composable
-fun InputSearchScreen(
+fun InputSearch(
     onChange: (String) -> Unit
 ) {
     var search by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(search) {
         snapshotFlow { search }
-            .debounce(500L)
+            .debounce(300L)
             .collectLatest { debouncedSearch ->
                 onChange(debouncedSearch)
             }
@@ -72,6 +72,6 @@ fun InputSearchScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun InputSearchScreenPreview() {
-    InputSearchScreen(onChange = {})
+fun InputSearchPreview() {
+    InputSearch(onChange = {})
 }

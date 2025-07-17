@@ -1,5 +1,6 @@
 package com.example.productFilter
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.common.ToggleOption
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.collections.component1
 import kotlin.collections.component2
 
@@ -50,14 +50,18 @@ fun FilterModalScreen(
             titleId = R.string.dietary_preferences_filter,
             options = dietaryOptions,
             appliedFilters = dietaryFilters,
-            onSelectOption = { selected ->  onFilterChange("dietary", selected)  }
+            onSelectOption = { selected ->
+                onFilterChange("dietary", selected)
+            }
         )
 
         FilterSectionScreen(
             titleId = R.string.category_filter,
             options = categoryOptions,
             appliedFilters = categoryFilters,
-            onSelectOption = { selected ->  onFilterChange("category", selected)  }
+            onSelectOption = { selected ->
+                onFilterChange("category", selected)
+            }
         )
     }
 }

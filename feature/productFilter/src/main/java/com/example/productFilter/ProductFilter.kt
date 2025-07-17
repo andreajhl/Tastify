@@ -1,5 +1,6 @@
 package com.example.productFilter
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +14,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,12 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.productList.ProductListViewModel
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.theme.ui.theme.MainColor
-import kotlinx.coroutines.FlowPreview
 import kotlin.String
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,17 +37,11 @@ fun ProductFilter(
     categoryFilters: Map<String, Boolean>,
     onSearchChange: (String) -> Unit,
     onFilterChange: (type: String, updated: Map<String, Boolean>) -> Unit,
-    onToggleSearch: (type: String, selectedValues: Map<String, Boolean>) -> Unit,
 ) {
     var showFilter by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     fun toggleShowFilters() { showFilter = !showFilter }
-
-    LaunchedEffect(dietaryFilters, categoryFilters) {
-        onToggleSearch("category", dietaryFilters)
-        onToggleSearch("dietary", categoryFilters)
-    }
 
     Row(
         modifier = Modifier.height(50.dp),
@@ -87,7 +77,7 @@ fun ProductFilter(
             }
         }
 
-        InputSearchScreen(onChange = onSearchChange)
+        InputSearch(onChange = onSearchChange)
     }
 }
 
@@ -118,6 +108,5 @@ fun ProductFilterPreview() {
         categoryFilters = categoryFilters,
         onSearchChange = {},
         onFilterChange = { _, _ -> },
-        onToggleSearch = { _, _ -> }
     )
 }
