@@ -97,11 +97,10 @@ dependencies {
 
     // Módulos del proyecto
     implementation(project(":data"))
-    implementation(project(":core:model"))
-    implementation(project(":core:theme"))
     implementation(project(":core:db"))
-    implementation(project(":feature:productList"))
-    implementation(project(":feature:productFilter"))
+    implementation(project(":core:theme"))
     implementation(project(":feature:cart"))
     implementation(project(":feature:common"))
+    implementation(project(":feature:productList"))
+    implementation(project(":feature:productFilter"))
 }

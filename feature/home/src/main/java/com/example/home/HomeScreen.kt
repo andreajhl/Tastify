@@ -1,6 +1,7 @@
 package com.example.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,13 +33,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.cart.CartDrawerContent
 import com.example.cart.CartViewModel
 import com.example.common.Carousel
-import com.example.common.CarouselItem
 import com.example.data.Category
 import com.example.data.Dietary
-import com.example.db.entities.ProductEntity
 import com.example.productFilter.ProductFilter
 import com.example.productFilter.ProductFilterViewModel
 import com.example.productList.ProductListScreen
@@ -47,7 +48,10 @@ import com.example.productList.ProductListViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(onOpenDrawer: () -> Unit) {
+fun HomeScreen(
+    onOpenDrawer: () -> Unit,
+    navController: NavHostController
+) {
     val cartViewModel: CartViewModel = hiltViewModel()
     val productListViewModel: ProductListViewModel = hiltViewModel()
     val productFilterViewModel: ProductFilterViewModel = hiltViewModel()
@@ -62,6 +66,11 @@ fun Home(onOpenDrawer: () -> Unit) {
 
     LaunchedEffect(Unit) {
         productListViewModel.getProducts()
+        cartViewModel.getCart()
+    }
+
+    LaunchedEffect(dietaryFilters.value, categoryFilters.value) {
+        productListViewModel.filterProducts(categoryFilters.value, dietaryFilters.value)
     }
 
     Scaffold(
@@ -124,7 +133,6 @@ fun Home(onOpenDrawer: () -> Unit) {
                     categoryMap = Category.getAllLabels(),
                     onSearchChange = { query -> productListViewModel.searchProduct(query) },
                     onFilterChange = { type, updated -> productFilterViewModel.updateFilters(type, updated) },
-                    onToggleSearch = { type, selectedValues -> productListViewModel.filterProducts(type, selectedValues) },
                 )
 
                 ProductListScreen(
@@ -148,6 +156,7 @@ fun Home(onOpenDrawer: () -> Unit) {
                     totalPrice = cartViewModel.getTotalPrice(),
                     cartItems = cartState.items.values.toList(),
                     toggleShowCart = { cartViewModel.toggleShowCart() },
+                    goToPay = { navController.navigate("order_payment") },
                     addToCart = { product, quantity -> cartViewModel.addToCart(product, quantity) },
                     getProductStock = { productId -> productListViewModel.getProduct(productId)?.quantity ?: 0},
                     removeItemCart = { productId, callback -> cartViewModel.removeItemCart(productId, callback) },
@@ -163,5 +172,10 @@ fun Home(onOpenDrawer: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-    Home(onOpenDrawer = {})
+    val fakeNavController = rememberNavController()
+
+    HomeScreen(
+        onOpenDrawer = {},
+        navController = fakeNavController
+    )
 }
