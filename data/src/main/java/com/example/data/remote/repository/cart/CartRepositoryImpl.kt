@@ -22,11 +22,12 @@ class CartRepositoryImpl @Inject constructor(
 
         _cartState.value = CartState(
             items = itemsMap,
-            showCart = _cartState.value.showCart
+            showCart = _cartState.value.showCart,
+            totalPrice = this.getTotalPrice()
         )
     }
 
-    override fun getTotalPrice(): Double {
+    private fun getTotalPrice(): Double {
         return _cartState.value.items.values.sumOf { it.price * it.quantity }
     }
 
@@ -94,7 +95,8 @@ class CartRepositoryImpl @Inject constructor(
         cartDao.clear()
         _cartState.value = CartState(
             items = emptyMap(),
-            showCart = false
+            showCart = false,
+            totalPrice = 0.0
         )
     }
 
