@@ -46,7 +46,7 @@ fun FilterModalScreen(
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )
 
-        FilterSectionScreen(
+        FilterSection(
             titleId = R.string.dietary_preferences_filter,
             options = dietaryOptions,
             appliedFilters = dietaryFilters,
@@ -55,7 +55,7 @@ fun FilterModalScreen(
             }
         )
 
-        FilterSectionScreen(
+        FilterSection(
             titleId = R.string.category_filter,
             options = categoryOptions,
             appliedFilters = categoryFilters,

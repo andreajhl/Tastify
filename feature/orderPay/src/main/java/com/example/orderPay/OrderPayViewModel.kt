@@ -140,7 +140,7 @@ class OrderPayViewModel @Inject constructor(
                     OrderCreateDto(
                         userId = sessionManager.getUserId()!!,
                         items = orderItems,
-                        total = cartRepository.getTotalPrice(),
+                        total = cartRepository.cartState.value.totalPrice,
                         timestamp = System.currentTimeMillis()
                     )
                 )

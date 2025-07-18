@@ -1,5 +1,6 @@
 package com.example.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,15 +22,22 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.StrokeCap.Companion.Square
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.example.common.InputField
 import com.example.theme.ui.theme.MainColor
+import androidx.compose.ui.graphics.Path
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.example.theme.ui.theme.DefaultScreenPadding
 
 @Composable
 fun LoginScreen(
@@ -47,71 +54,28 @@ fun LoginScreen(
         derivedStateOf { loginViewModel.isValidateData() }
     }
 
+    fun validateFieldByKey(key: String): Boolean {
+        return when (key) {
+            "email" -> loginViewModel.validateEmail()
+            "password" -> loginViewModel.validatePassword()
+            else -> false
+        }
+    }
+
     LaunchedEffect(loginState.isSuccess) {
         if (loginState.isSuccess == true) {
             onLoginSuccess()
         }
     }
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        InputField(
-            label = stringResource(R.string.email_label),
-            value = loginData.email,
-            onValueChange = { loginViewModel.updateLoginField("email", it) },
-            onBlur = { loginViewModel.validateEmail() },
-            error = errorState.email
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        InputField(
-            label = stringResource(R.string.password_label),
-            value = loginData.password,
-            onValueChange = { loginViewModel.updateLoginField("password", it) },
-            onBlur = { loginViewModel.validatePassword() },
-            error = errorState.password,
-            visualTransformation = PasswordVisualTransformation()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = { loginViewModel.executeLogin() },
-            enabled = isFormValid && !loginState.isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MainColor)
-        ) {
-            Text(
-                text = stringResource(R.string.sign_in_label),
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
-
-        TextButton(
-            onClick = onShowRegister,
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = MainColor
-            )
-        ) {
-            Text(stringResource(R.string.not_found_account_label))
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(
-        onShowRegister = {},
-        onLoginSuccess = {}
+    LoginContent(
+        loginData = loginData,
+        errorState = errorState,
+        isFormValid = isFormValid,
+        isLoading = loginState.isLoading,
+        onLogin = { loginViewModel.executeLogin() },
+        onShowRegister = onShowRegister,
+        updateLoginField = { key, value -> loginViewModel.updateLoginField(key, value) },
+        validateField = { key -> validateFieldByKey(key) }
     )
 }

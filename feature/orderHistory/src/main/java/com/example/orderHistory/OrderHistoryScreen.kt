@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,24 +58,9 @@ fun OrderHistoryScreen(
             )
         },
     ) { padding ->
-        when {
-            state.isLoading -> {
-                OrderHistorySkeleton(padding)
-            }
-            orders.isNotEmpty() -> {
-                OrderHistoryContent(
-                    padding = padding,
-                    orders = orders,
-                    navController = navController
-                )
-            }
-            else -> {
-                EmptyOrderHistory(
-                    padding = padding,
-                    onGoHome = {}
-                )
-            }
-        }
+        if(state.isLoading) OrderHistorySkeleton(padding)
+        else if(orders.isNotEmpty()) OrderHistoryContent(padding = padding, orders = orders, navController = navController)
+        else EmptyOrderHistory(padding = padding, onGoHome = { navController.navigate(Screen.Home.route) })
     }
 }
 

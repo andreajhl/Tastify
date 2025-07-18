@@ -102,9 +102,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     androidTestImplementation(libs.androidx.espresso.core)
 
-
-    implementation(project(":feature:navigation"))
-    implementation(project(":feature:home"))
-    implementation(project(":feature:profile"))
-    implementation(project(":feature:orderHistory"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:theme"))
 }

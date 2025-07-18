@@ -25,12 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.navigation.Screen
+import com.example.theme.ui.theme.DefaultScreenPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderDetailScreen(
     navController: NavHostController,
-    openDrawer: () -> Unit,
     orderId: String,
 ) {
     val orderDetailViewModel: OrderDetailViewModel = hiltViewModel()
@@ -53,7 +54,7 @@ fun OrderDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate("order_history")
+                        navController.navigate(Screen.OrderHistory.route)
                     }) {
                         Icon(
                             Icons.Default.ArrowBack,
@@ -64,18 +65,13 @@ fun OrderDetailScreen(
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(start = 24.dp, end = 24.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (orderData == null || orderState.isLoading) {
-                OrderDetailSkeleton()
-            } else {
-                OrderDetailContent(order = orderData!!)
-            }
+        if (orderState.isLoading || orderData == null) {
+            OrderDetailSkeleton(padding = padding)
+        } else {
+            OrderDetailContent(
+                order = orderData!!,
+                padding = padding
+            )
         }
     }
 }
@@ -87,7 +83,6 @@ fun OrderDetailScreenPreview() {
     val fakeNavController = rememberNavController()
 
     OrderDetailScreen(
-        openDrawer = {},
         orderId = "123456",
         navController = fakeNavController
     )

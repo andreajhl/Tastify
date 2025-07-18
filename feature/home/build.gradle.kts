@@ -99,6 +99,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core:db"))
     implementation(project(":core:theme"))
+    implementation(project(":core:navigation"))
     implementation(project(":feature:cart"))
     implementation(project(":feature:common"))
     implementation(project(":feature:productList"))

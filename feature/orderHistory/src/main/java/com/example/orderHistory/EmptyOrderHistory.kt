@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.theme.ui.theme.DefaultScreenPadding
 import com.example.theme.ui.theme.MainColor
 
 @Composable
@@ -33,7 +34,7 @@ fun EmptyOrderHistory(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(32.dp),
+            .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

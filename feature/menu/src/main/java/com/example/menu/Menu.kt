@@ -1,31 +1,49 @@
 package com.example.menu
 
+import android.provider.CalendarContract.Colors
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.navigation.Screen
+import com.example.theme.ui.theme.LightColor
+import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.TertiaryColor
 
 @Composable
 fun Menu(
     navController: NavHostController,
     drawerState: DrawerState,
     onSelectItem: () -> Unit,
+    onLogout: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -43,9 +61,9 @@ fun Menu(
                         icon = {
                             Icon(
                                 imageVector = screen.icon,
-                                contentDescription = screen.title,
-                                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                            )},
+                                contentDescription = screen.title
+                            )
+                        },
                         label = { Text(screen.title) },
                         selected = isSelected,
                         onClick = {
@@ -57,9 +75,40 @@ fun Menu(
                                 }
                                 onSelectItem()
                             }
-                        }
+                        },
+                        shape = RectangleShape,
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = LightColor,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurface
+                        )
                     )
                 }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                HorizontalDivider()
+
+                NavigationDrawerItem(
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
+                    label = {
+                        Text(
+                            text = stringResource(R.string.log_out),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
+                        )
+                    },
+                    selected = false,
+                    onClick = { onLogout() },
+                    shape = RectangleShape,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedContainerColor = TertiaryColor,
+                        unselectedContainerColor = MainColor,
+                        unselectedIconColor = Color.White,
+                        unselectedTextColor = Color.White
+                    )
+                )
             }
         }
     ) {
@@ -77,6 +126,7 @@ fun MenuPreview() {
         navController = navController,
         drawerState = drawerState,
         onSelectItem = {},
+        onLogout = {},
         content = {
             Text(
                 text = "Contenido principal",

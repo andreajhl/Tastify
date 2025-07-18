@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.theme.ui.theme.DefaultScreenPadding
 
 @Composable
 fun OrderHistorySkeleton(
@@ -24,7 +25,7 @@ fun OrderHistorySkeleton(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(start = 24.dp, end = 24.dp),
+            .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         items(

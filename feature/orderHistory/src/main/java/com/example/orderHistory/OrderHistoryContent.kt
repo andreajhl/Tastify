@@ -16,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemEntity
 import com.example.db.entities.OrderItemProduct
+import com.example.navigation.Screen
+import com.example.theme.ui.theme.DefaultScreenPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +30,7 @@ fun OrderHistoryContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(start = 24.dp, end = 24.dp),
+            .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         items(
@@ -41,7 +43,8 @@ fun OrderHistoryContent(
                 totalItems = currentOrder.items.size,
                 date = currentOrder.order.timestamp,
                 onClick = { id ->
-                    navController.navigate("order/${currentOrder.order.id}")
+                    val route = Screen.OrderDetail.route.replace("{orderId}", currentOrder.order.id)
+                    navController.navigate(route)
                 }
             )
         }

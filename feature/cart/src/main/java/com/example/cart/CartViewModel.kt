@@ -18,7 +18,6 @@ interface CartContract {
     fun subtractToCart(productId: String, quantity: Int)
     fun removeItemCart(productId: String, callback: (Int) -> Unit)
     fun clearCart()
-    fun getTotalPrice(): Double
     fun getTotalItems(): Int
     fun toggleShowCart()
 }
@@ -57,10 +56,6 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch {
             cartRepository.removeItem(productId, callback)
         }
-    }
-
-    override fun getTotalPrice(): Double {
-        return cartRepository.getTotalPrice()
     }
 
     override fun getTotalItems(): Int {

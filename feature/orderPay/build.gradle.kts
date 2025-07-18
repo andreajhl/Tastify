@@ -95,6 +95,7 @@ dependencies {
     implementation(project(":core:db"))
     implementation(project(":core:session"))
     implementation(project(":core:theme"))
+    implementation(project(":core:navigation"))
     implementation(project(":library:utils"))
     implementation(project(":feature:common"))
     implementation(project(":feature:productList"))

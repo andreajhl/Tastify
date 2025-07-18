@@ -11,7 +11,7 @@ import com.example.common.ToggleButtonGroup
 import com.example.common.ToggleOption
 
 @Composable
-fun FilterSectionScreen(
+fun FilterSection(
     titleId: Int,
     options:  List<ToggleOption>,
     appliedFilters: Map<String, Boolean>,
@@ -31,7 +31,7 @@ fun FilterSectionScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun FilterSectionScreenPreview() {
+fun FilterSectionPreview() {
     val options = listOf(
         ToggleOption("vegetarian", "Vegetariano"),
         ToggleOption("gluten_free", "Sin gluten")
@@ -42,7 +42,7 @@ fun FilterSectionScreenPreview() {
     )
 
     Column {
-        FilterSectionScreen(
+        FilterSection(
             titleId = R.string.untitled,
             options = options,
             appliedFilters = selectedMap,

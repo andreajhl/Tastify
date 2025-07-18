@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,11 +29,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.navigation.Screen
+import com.example.theme.ui.theme.DefaultScreenPadding
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderPayScreen(navController: NavHostController) {
+    val coroutineScope = rememberCoroutineScope()
+
     val orderPayViewModel: OrderPayViewModel = hiltViewModel()
 
     val errorState by orderPayViewModel.errorMsg.collectAsState()
@@ -40,6 +45,23 @@ fun OrderPayScreen(navController: NavHostController) {
     val payState by orderPayViewModel.payState.collectAsState()
 
     var isBackVisible by remember { mutableStateOf(false) }
+
+    fun handleBlur(field: String) {
+        return when (field) {
+            "cardNumber" -> orderPayViewModel.validateCardNumber()
+            "ownerName" -> orderPayViewModel.validateOwnerName()
+            "expiryDate" -> orderPayViewModel.validateExpiryDate()
+            "securityCode" -> orderPayViewModel.validateSecurityCode()
+            else -> {}
+        } as Unit
+    }
+
+    fun handlePayClick() {
+        coroutineScope.launch {
+            orderPayViewModel.paymentExecute()
+            navController.navigate(Screen.Home.route)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -53,7 +75,7 @@ fun OrderPayScreen(navController: NavHostController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate("home")
+                        navController.navigate(Screen.Home.route)
                     }) {
                         Icon(
                             Icons.Default.ArrowBack,
@@ -68,7 +90,7 @@ fun OrderPayScreen(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp),
+                .padding(DefaultScreenPadding),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             OrderPayContent(
@@ -78,35 +100,10 @@ fun OrderPayScreen(navController: NavHostController) {
                 isBackVisible = isBackVisible,
                 onBackFocusChanged = { isBackVisible = it },
                 isValidateData = { orderPayViewModel.isValidateData() },
-                onValueChange = { field, value ->
-                    orderPayViewModel.updatePayDataField(
-                        field,
-                        value
-                    )
-                },
-                onBlur = { field ->
-                    when (field) {
-                        "cardNumber" -> orderPayViewModel.validateCardNumber()
-                        "ownerName" -> orderPayViewModel.validateOwnerName()
-                        "expiryDate" -> orderPayViewModel.validateExpiryDate()
-                        "securityCode" -> orderPayViewModel.validateSecurityCode()
-                    }
-                },
-                onPayClick = {
-                    orderPayViewModel.viewModelScope.launch {
-                        orderPayViewModel.paymentExecute()
-                        navController.navigate("home")
-                    }
-                }
+                onValueChange = { field, value -> orderPayViewModel.updatePayDataField(field, value) },
+                onBlur = { field -> handleBlur(field) },
+                onPayClick = { handlePayClick() }
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PayOrderScreenPreview() {
-    val fakeNavController = rememberNavController()
-
-    OrderPayScreen(fakeNavController)
 }
