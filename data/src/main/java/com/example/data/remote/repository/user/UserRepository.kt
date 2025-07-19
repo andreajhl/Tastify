@@ -1,8 +1,6 @@
 package com.example.data.remote.repository.user
 
-import com.example.data.remote.dtos.user.UserLoginDto
 import com.example.data.remote.dtos.user.UserDto
-import com.example.db.entities.UserEntity
 import retrofit2.Response
 
 interface UserRepository {

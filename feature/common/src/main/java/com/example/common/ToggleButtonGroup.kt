@@ -3,16 +3,15 @@ package com.example.common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import kotlin.Boolean
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.theme.ui.theme.AppAndroidTheme
+import androidx.compose.ui.unit.dp
+import com.example.theme.AppAndroidTheme
 
 data class ToggleOption(
     val label: String,

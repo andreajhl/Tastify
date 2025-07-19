@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.common.InputField
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 
 @Composable
 fun RegisterBottomContent(

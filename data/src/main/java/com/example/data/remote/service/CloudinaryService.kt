@@ -1,18 +1,17 @@
 package com.example.data.remote.service
 
-import android.content.*
-import android.graphics.Bitmap
-import android.net.*
-import android.util.*
-import kotlinx.coroutines.*
-import okhttp3.*
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.cloudinary.json.*
-import java.io.File
-import java.io.FileOutputStream
-import javax.inject.*
+import org.json.JSONObject
+import javax.inject.Inject
 
 class CloudinaryService @Inject constructor() {
     private val cloudName = "drioaxhhw"

@@ -1,7 +1,5 @@
 package com.example.data.remote.dtos.order
 
-import java.util.Date
-
 data class OrderDto(
     val id: String,
     val userId: String,

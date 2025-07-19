@@ -3,7 +3,6 @@ package com.example.productList
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.dtos.product.ProductUpdateDto
 import com.example.data.remote.repository.product.ProductRepository
 import com.example.db.entities.ProductEntity
 import dagger.hilt.android.lifecycle.HiltViewModel

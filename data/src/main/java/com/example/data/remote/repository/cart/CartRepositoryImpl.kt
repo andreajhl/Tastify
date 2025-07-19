@@ -3,9 +3,9 @@ package com.example.data.remote.repository.cart
 import com.example.db.daos.CartDao
 import com.example.db.entities.CartItemEntity
 import com.example.db.entities.ProductEntity
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
 class CartRepositoryImpl @Inject constructor(
     private val cartDao: CartDao

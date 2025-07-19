@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.remote.repository.order.OrderRepository
-import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemProduct
-import com.example.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface OrderDetailContract {
     val orderDetailData: StateFlow<OrderItemProduct?>

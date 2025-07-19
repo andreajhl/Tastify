@@ -1,11 +1,10 @@
 package com.example.cart
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.db.entities.ProductEntity
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,15 +1,12 @@
 package com.example.data.remote.repository.order
 
-import android.util.Log
 import com.example.data.remote.api.OrderApi
 import com.example.data.remote.dtos.order.OrderCreateDto
-import com.example.data.remote.dtos.order.OrderDto
 import com.example.db.daos.OrderDao
 import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemEntity
 import com.example.db.entities.OrderItemProduct
-import jakarta.inject.Inject
-import kotlin.collections.isNotEmpty
+import javax.inject.Inject
 
 class OrderRepositoryImpl @Inject constructor(
     private val api: OrderApi,

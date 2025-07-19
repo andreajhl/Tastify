@@ -1,11 +1,10 @@
 package com.example.data.remote.repository.product
 
-import android.util.Log
 import com.example.data.remote.api.ProductsApi
 import com.example.data.remote.dtos.product.ProductUpdateDto
 import com.example.db.daos.ProductDao
 import com.example.db.entities.ProductEntity
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
     private val dao: ProductDao,

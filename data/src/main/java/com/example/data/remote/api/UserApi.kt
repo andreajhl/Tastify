@@ -1,6 +1,5 @@
 package com.example.data.remote.api
 
-import com.example.data.remote.dtos.user.UserLoginDto
 import com.example.data.remote.dtos.user.UserDto
 import retrofit2.Response
 import retrofit2.http.Body

@@ -15,18 +15,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 
 @Composable
 fun ProductCardSkeleton() {
-    val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-    val placeholderColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+    val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+    val placeholderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
 
     val shimmer = PlaceholderHighlight.shimmer(
         highlightColor = highlightColor

@@ -29,7 +29,7 @@ import com.example.library.utils.formatCardNumber
 import com.example.library.utils.getCardColor
 import com.example.library.utils.getCardGradient
 import com.example.library.utils.getCardType
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 
 @Composable
 fun CreditCard(

@@ -2,7 +2,6 @@ package com.example.profile
 
 import android.app.Application
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,10 +12,10 @@ import com.example.data.remote.repository.user.UserRepository
 import com.example.data.remote.service.CloudinaryService
 import com.example.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface ProfileContract {
     fun loadProfile()

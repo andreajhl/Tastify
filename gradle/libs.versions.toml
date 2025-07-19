@@ -11,29 +11,25 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxSerializationJson = "1.6.3"
-lifecycleRuntimeKtx = "2.6.1"
-activityCompose = "1.8.0"
-composeBom = "2025.06.00"
+composeBom = "2025.07.00"
 appcompat = "1.7.1"
 material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
-materialVersion = "1.9.0-beta01"
 okhttp = "4.12.0"
-retrofit2KotlinxSerializationConverter = "0.8.0"
-runtimeLivedata = "1.8.2"
-lifecycleViewmodelCompose = "2.9.1"
+runtimeLivedata = "1.8.3"
+lifecycleViewmodelCompose = "2.9.2"
 kotlinStdlib = "2.1.21"
-navigationFragmentKtx = "2.9.0"
-lifecycleViewmodelKtx = "2.9.1"
-navigationUiKtx = "2.9.0"
+navigationFragmentKtx = "2.9.2"
+lifecycleViewmodelKtx = "2.9.2"
+navigationUiKtx = "2.9.2"
 retrofit = "3.0.0"
 annotation = "1.9.1"
-lifecycleLivedataKtx = "2.9.1"
+lifecycleLivedataKtx = "2.9.2"
 legacySupportV4 = "1.0.0"
 recyclerview = "1.4.0"
 retrofitVersion = "2.9.0"
-roomRuntime = "2.7.1"
+roomRuntime = "2.7.2"
 ui = "1.8.3"
 coilCompose = "2.4.0"
 glide = "4.16.0"
@@ -42,7 +38,6 @@ cloudinaryAndroidCore = "2.3.1"
 roomCompiler = "2.7.2"
 ksp = "2.0.21-1.0.27"
 loggingInterceptor = "4.12.0"
-
 
 [libraries]
 accompanist-placeholder-material = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanistPlaceholderMaterial" }
@@ -67,7 +62,6 @@ androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -88,10 +82,8 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
 cloudinary-android-core = { group = "com.cloudinary", name = "cloudinary-android-core", version.ref = "cloudinaryAndroidCore" }
-retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -99,4 +91,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
-ksp = { id ="com.google.devtools.ksp", version.ref = "ksp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

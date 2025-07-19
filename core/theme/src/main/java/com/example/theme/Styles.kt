@@ -1,8 +1,8 @@
-package com.example.theme.ui.theme
+package com.example.theme
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 val PrimaryLight = Color(0xFF179ABB)
 val OnPrimaryLight = Color.White

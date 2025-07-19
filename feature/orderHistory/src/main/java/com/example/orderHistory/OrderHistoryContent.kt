@@ -17,8 +17,8 @@ import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemEntity
 import com.example.db.entities.OrderItemProduct
 import com.example.navigation.Screen
-import com.example.theme.ui.theme.AppAndroidTheme
-import com.example.theme.ui.theme.DefaultScreenPadding
+import com.example.theme.AppAndroidTheme
+import com.example.theme.DefaultScreenPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

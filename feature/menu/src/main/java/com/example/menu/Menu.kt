@@ -1,8 +1,5 @@
 package com.example.menu
 
-import android.provider.CalendarContract.Colors
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,7 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.navigation.Screen
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 
 @Composable
 fun Menu(
@@ -101,8 +98,7 @@ fun Menu(
                     colors = NavigationDrawerItemDefaults.colors(
                         selectedContainerColor = MaterialTheme.colorScheme.tertiary,
                         unselectedContainerColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurface
+                        unselectedTextColor = Color.White
                     )
                 )
             }
@@ -118,7 +114,7 @@ fun MenuPreview() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
 
-    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
         Menu(
             navController = navController,
             drawerState = drawerState,

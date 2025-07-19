@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.menu.Menu
 import com.example.navigation.Screen
 import com.example.session.SessionManager
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

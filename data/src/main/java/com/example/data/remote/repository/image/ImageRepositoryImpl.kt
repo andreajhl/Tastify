@@ -3,7 +3,7 @@ package com.example.data.remote.repository.image
 import android.content.Context
 import android.net.Uri
 import com.example.data.remote.service.CloudinaryService
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class ImageRepositoryImpl @Inject constructor(private val service: CloudinaryService) :
     ImageRepository {

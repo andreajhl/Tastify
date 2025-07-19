@@ -42,6 +42,11 @@ android {
     }
 }
 
+tasks.named("build") {
+    dependsOn("ktlintCheck")
+    dependsOn("detekt")
+}
+
 dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)

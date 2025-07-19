@@ -16,17 +16,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.theme.ui.theme.AppAndroidTheme
+import com.example.theme.AppAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderCardSkeleton() {
     val cardColor = MaterialTheme.colorScheme.surface
-    val skeletonColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-    val secondarySkeletonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+    val skeletonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+    val secondarySkeletonColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
 
     Card(
         modifier = Modifier.fillMaxWidth(),

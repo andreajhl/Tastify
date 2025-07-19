@@ -6,9 +6,9 @@ import com.example.data.remote.repository.cart.CartRepository
 import com.example.data.remote.repository.cart.CartState
 import com.example.db.entities.ProductEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface CartContract {
     val cart: StateFlow<CartState>

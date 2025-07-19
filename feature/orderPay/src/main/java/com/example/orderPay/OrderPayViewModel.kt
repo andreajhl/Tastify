@@ -11,10 +11,10 @@ import com.example.data.remote.repository.order.OrderRepository
 import com.example.data.remote.repository.product.ProductRepository
 import com.example.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface OrderPayContract {
     val payState: StateFlow<RequestState>

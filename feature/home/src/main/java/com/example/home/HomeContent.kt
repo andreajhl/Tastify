@@ -24,7 +24,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,8 +39,8 @@ import com.example.db.entities.ProductEntity
 import com.example.navigation.Screen
 import com.example.productFilter.ProductFilter
 import com.example.productList.ProductListScreen
-import com.example.theme.ui.theme.AppAndroidTheme
-import com.example.theme.ui.theme.DefaultScreenPadding
+import com.example.theme.AppAndroidTheme
+import com.example.theme.DefaultScreenPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
