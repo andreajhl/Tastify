@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun EmptyCart(
@@ -38,18 +38,18 @@ fun EmptyCart(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Top
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = toggleShowCart) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(R.string.cart_button)
+                    contentDescription = stringResource(R.string.cart_button),
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -86,32 +86,30 @@ fun EmptyCart(
                     Text(
                         text = "Your Cart is ",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Text(
                         text = "Empty",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        color = MainColor,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 
                 Text(
                     text = "Add items to get started",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun EmptyCartPreview() {
-
-    MaterialTheme {
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         EmptyCart(toggleShowCart = {})
     }
 }

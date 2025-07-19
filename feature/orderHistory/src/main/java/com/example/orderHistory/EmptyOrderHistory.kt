@@ -1,6 +1,7 @@
 package com.example.orderHistory
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,8 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
-import com.example.theme.ui.theme.MainColor
 
 @Composable
 fun EmptyOrderHistory(
@@ -49,7 +50,7 @@ fun EmptyOrderHistory(
         Text(
             text = "You have no orders yet",
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -58,13 +59,13 @@ fun EmptyOrderHistory(
             onClick = onGoHome,
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MainColor,
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Text(
                 text = "Go back to home",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
@@ -73,8 +74,10 @@ fun EmptyOrderHistory(
 @Preview(showBackground = true)
 @Composable
 fun EmptyOrderHistoryPreview() {
-    EmptyOrderHistory(
-        onGoHome = {},
-        padding = PaddingValues(12.dp)
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        EmptyOrderHistory(
+            onGoHome = {},
+            padding = PaddingValues(12.dp)
+        )
+    }
 }

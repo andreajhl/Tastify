@@ -1,6 +1,5 @@
 package com.example.productFilter
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,10 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.AppAndroidTheme
 import kotlin.String
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +51,7 @@ fun ProductFilter(
             onClick = { toggleShowFilters() },
             modifier = Modifier
                 .clip(RoundedCornerShape(30.dp))
-                .background(MainColor)
+                .background(MaterialTheme.colorScheme.primary)
                 .border(1.dp, Color.Transparent, RoundedCornerShape(30.dp))
         ) {
             Image(
@@ -64,9 +63,9 @@ fun ProductFilter(
         if (showFilter) {
             ModalBottomSheet(
                 onDismissRequest = { toggleShowFilters() },
-                sheetState = sheetState
+                sheetState = sheetState,
+                containerColor = MaterialTheme.colorScheme.surface
             ) {
-
                 FilterModalScreen(
                     dietaryMap = dietaryMap,
                     categoryMap = categoryMap,
@@ -101,12 +100,14 @@ fun ProductFilterPreview() {
         "burger" to false
     )
 
-    ProductFilter(
-        dietaryMap = dietaryMap,
-        categoryMap = categoryMap,
-        dietaryFilters = dietaryFilters,
-        categoryFilters = categoryFilters,
-        onSearchChange = {},
-        onFilterChange = { _, _ -> },
-    )
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        ProductFilter(
+            dietaryMap = dietaryMap,
+            categoryMap = categoryMap,
+            dietaryFilters = dietaryFilters,
+            categoryFilters = categoryFilters,
+            onSearchChange = {},
+            onFilterChange = { _, _ -> },
+        )
+    }
 }

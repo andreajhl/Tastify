@@ -10,13 +10,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -66,17 +66,20 @@ fun ProfileImageButton(
         }
     }
 
+    val backgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+    val iconTintColor = MaterialTheme.colorScheme.onSurface
+
     IconButton(
         onClick = { showDialog = true },
         modifier = Modifier
             .size(28.dp)
-            .background(Color.DarkGray.copy(alpha = 0.7f), shape = CircleShape)
+            .background(backgroundColor, shape = CircleShape)
     ) {
         Image(
             painter = painterResource(id = R.drawable.camera_plus_icon),
             contentDescription = "Edit picture",
             modifier = Modifier.size(16.dp),
-            colorFilter = ColorFilter.tint(Color.White)
+            colorFilter = ColorFilter.tint(iconTintColor)
         )
     }
 

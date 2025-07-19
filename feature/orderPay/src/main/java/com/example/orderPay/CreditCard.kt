@@ -29,9 +29,10 @@ import com.example.library.utils.formatCardNumber
 import com.example.library.utils.getCardColor
 import com.example.library.utils.getCardGradient
 import com.example.library.utils.getCardType
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
-fun CreditCardScreen(
+fun CreditCard(
     cardNumber: String,
     ownerName: String,
     expiryDate: String,
@@ -150,13 +151,15 @@ fun CreditCardScreen(
 @Preview(showBackground = true)
 @Composable
 fun CreditCardBackPreview() {
-    Box(modifier = Modifier.padding(12.dp)) {
-        CreditCardScreen(
-            cardNumber = "4234 5678 9012 3456",
-            ownerName = "Andrea Hernández",
-            expiryDate = "12/29",
-            cvv = "123",
-            isBackVisible = false
-        )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        Box(modifier = Modifier.padding(12.dp)) {
+            CreditCard(
+                cardNumber = "4234 5678 9012 3456",
+                ownerName = "Andrea Hernández",
+                expiryDate = "12/29",
+                cvv = "123",
+                isBackVisible = false
+            )
+        }
     }
 }

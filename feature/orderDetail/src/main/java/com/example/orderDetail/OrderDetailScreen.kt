@@ -75,15 +75,3 @@ fun OrderDetailScreen(
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun OrderDetailScreenPreview() {
-    val fakeNavController = rememberNavController()
-
-    OrderDetailScreen(
-        orderId = "123456",
-        navController = fakeNavController
-    )
-}

@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -34,9 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.navigation.Screen
-import com.example.theme.ui.theme.LightColor
-import com.example.theme.ui.theme.MainColor
-import com.example.theme.ui.theme.TertiaryColor
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun Menu(
@@ -78,7 +74,7 @@ fun Menu(
                         },
                         shape = RectangleShape,
                         colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = LightColor,
+                            selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             unselectedIconColor = MaterialTheme.colorScheme.onSurface,
                             unselectedTextColor = MaterialTheme.colorScheme.onSurface
                         )
@@ -103,10 +99,10 @@ fun Menu(
                     onClick = { onLogout() },
                     shape = RectangleShape,
                     colors = NavigationDrawerItemDefaults.colors(
-                        selectedContainerColor = TertiaryColor,
-                        unselectedContainerColor = MainColor,
-                        unselectedIconColor = Color.White,
-                        unselectedTextColor = Color.White
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary,
+                        unselectedContainerColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
             }
@@ -122,16 +118,18 @@ fun MenuPreview() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
 
-    Menu(
-        navController = navController,
-        drawerState = drawerState,
-        onSelectItem = {},
-        onLogout = {},
-        content = {
-            Text(
-                text = "Contenido principal",
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-    )
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        Menu(
+            navController = navController,
+            drawerState = drawerState,
+            onSelectItem = {},
+            onLogout = {},
+            content = {
+                Text(
+                    text = "Contenido principal",
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        )
+    }
 }

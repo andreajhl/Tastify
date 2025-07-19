@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
 
 @Composable
@@ -40,5 +41,7 @@ fun OrderHistorySkeleton(
 @Preview(showBackground = true)
 @Composable
 fun OrderHistorySkeletonPreview() {
-    OrderHistorySkeleton(padding = PaddingValues(12.dp))
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        OrderHistorySkeleton(padding = PaddingValues(12.dp))
+    }
 }

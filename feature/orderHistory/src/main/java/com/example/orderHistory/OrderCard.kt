@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.library.utils.formatTimestampToDate
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,15 +27,14 @@ fun OrderCard(
     totalPrice: Double,
     totalItems: Int,
     date: Long,
-    onClick: (String) -> Unit,
-){
+    onClick: (String) -> Unit
+) {
     val orderId = id.takeLast(6)
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         onClick = { onClick(id) },
         shape = RoundedCornerShape(12.dp),
@@ -50,9 +50,9 @@ fun OrderCard(
             ) {
                 Text(
                     text = stringResource(R.string.order_card_title, orderId),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-
             }
 
             Row(
@@ -63,11 +63,12 @@ fun OrderCard(
                     Text(
                         text = stringResource(R.string.order_card_price),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = "$$totalPrice",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -75,11 +76,12 @@ fun OrderCard(
                     Text(
                         text = stringResource(R.string.order_card_items),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = "$totalItems",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -87,11 +89,12 @@ fun OrderCard(
                     Text(
                         text = stringResource(R.string.order_card_date),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = formatTimestampToDate(date),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -102,11 +105,13 @@ fun OrderCard(
 @Preview(showBackground = true)
 @Composable
 fun OrderCardPreview() {
-    OrderCard(
-        id = "1j84hb23",
-        totalPrice = 13.3,
-        totalItems = 13,
-        date = 1720891200000L,
-        onClick = {}
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        OrderCard(
+            id = "1j84hb23",
+            totalPrice = 13.3,
+            totalItems = 13,
+            date = 1720891200000L,
+            onClick = {}
+        )
+    }
 }

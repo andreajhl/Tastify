@@ -39,11 +39,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.theme.ui.theme.DisableTextColor
-import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
-fun CartItem (
+fun CartItem(
     name: String,
     imageUrl: String,
     quantity: Int,
@@ -52,7 +51,7 @@ fun CartItem (
     incrementItem: () -> Unit,
     subtractItem: () -> Unit,
     removeItem: () -> Unit
-){
+) {
     val swipeState = rememberSwipeToDismissBoxState(
         positionalThreshold = { totalDistance -> totalDistance * 0.1f },
         confirmValueChange = {
@@ -76,8 +75,8 @@ fun CartItem (
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        if (swipeState.targetValue == EndToStart) Color.Red
-                        else Color.White
+                        if (swipeState.targetValue == EndToStart) MaterialTheme.colorScheme.error
+                        else MaterialTheme.colorScheme.surface
                     ),
                 contentAlignment = Alignment.CenterEnd
             ) {
@@ -85,7 +84,7 @@ fun CartItem (
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Eliminar item",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onError,
                         modifier = Modifier
                             .padding(12.dp)
                             .wrapContentSize(Alignment.CenterEnd),
@@ -97,7 +96,7 @@ fun CartItem (
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.surface),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -112,21 +111,22 @@ fun CartItem (
                 onError = { println("Error cargando imagen") }
             )
 
-            Column() {
+            Column {
                 Text(
                     text = name,
                     modifier = Modifier.width(200.dp),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = "$${price * quantity}",
-                    color = Color.Gray,
-                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
@@ -139,14 +139,13 @@ fun CartItem (
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
-                    onClick = { subtractItem() },
-                    modifier = Modifier
-                        .size(18.dp),
+                    onClick = subtractItem,
+                    modifier = Modifier.size(18.dp),
                     shape = CircleShape,
                     contentPadding = PaddingValues(bottom = 5.dp),
                     colors = ButtonDefaults.textButtonColors(
-                        containerColor = MainColor,
-                        contentColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Text(
@@ -157,25 +156,26 @@ fun CartItem (
                 }
 
                 Text(
-                    text = "${quantity}",
+                    text = "$quantity",
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .widthIn(min = 24.dp)
+                        .widthIn(min = 24.dp),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 TextButton(
-                    onClick = { incrementItem() },
+                    onClick = incrementItem,
                     modifier = Modifier.size(18.dp),
                     shape = CircleShape,
                     enabled = enableAddButton,
                     contentPadding = PaddingValues(bottom = 5.dp),
                     colors = ButtonDefaults.textButtonColors(
-                        containerColor = MainColor,
-                        contentColor = Color.White,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                         disabledContainerColor = Color.Transparent,
-                        disabledContentColor = DisableTextColor,
+                        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
                 ) {
                     Text(
@@ -192,14 +192,16 @@ fun CartItem (
 @Preview(showBackground = true)
 @Composable
 fun CartItemPreview() {
-    CartItem(
-        name = "Falafel",
-        price = 1100.0,
-        quantity = 10,
-        imageUrl = "https://www.aceitesdeolivadeespana.com/wp-content/uploads/2021/01/receta-falafel.jpg",
-        incrementItem = {},
-        subtractItem = {},
-        removeItem = {},
-        enableAddButton = false
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        CartItem(
+            name = "Falafel",
+            price = 1100.0,
+            quantity = 10,
+            imageUrl = "https://www.aceitesdeolivadeespana.com/wp-content/uploads/2021/01/receta-falafel.jpg",
+            incrementItem = {},
+            subtractItem = {},
+            removeItem = {},
+            enableAddButton = false
+        )
+    }
 }

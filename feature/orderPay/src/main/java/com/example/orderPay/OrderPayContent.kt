@@ -1,6 +1,5 @@
 package com.example.orderPay
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -23,7 +23,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.common.InputField
-import com.example.theme.ui.theme.MainColor
+import com.example.library.utils.ExpiryDateVisualTransformation
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun OrderPayContent(
@@ -37,21 +38,12 @@ fun OrderPayContent(
     isValidateData: () -> Boolean,
     onPayClick: () -> Unit
 ) {
-    fun formatExpiryDate(input: String): String {
-        val digits = input.filter { it.isDigit() }.take(4)
-        return when {
-            digits.length >= 3 -> "${digits.take(2)}/${digits.drop(2)}"
-            digits.isNotEmpty() -> digits
-            else -> ""
-        }
-    }
-
     val isFormValid by remember(state, errors) {
         derivedStateOf { isValidateData() }
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        CreditCardScreen(
+        CreditCard(
             cardNumber = state.cardNumber,
             ownerName = state.ownerName,
             expiryDate = state.expiryDate,
@@ -63,7 +55,10 @@ fun OrderPayContent(
             label = stringResource(R.string.card_number_input_label),
             value = state.cardNumber,
             modifier = Modifier.fillMaxWidth(),
-            onValueChange = { onValueChange("cardNumber", it) },
+            onValueChange = {
+                val digits = it.filter { c -> c.isDigit() }
+                onValueChange("cardNumber", digits)
+            },
             onBlur = { onBlur("cardNumber") },
             error = if (errors.cardNumber == true) stringResource(R.string.card_number_error_label) else ""
         )
@@ -84,10 +79,13 @@ fun OrderPayContent(
             InputField(
                 label = stringResource(R.string.expiry_input_label),
                 value = state.expiryDate,
-                pattern = { formatExpiryDate(it) },
+                visualTransformation = ExpiryDateVisualTransformation,
                 keyboardType = KeyboardType.Number,
                 modifier = Modifier.weight(1f),
-                onValueChange = { onValueChange("expiryDate", it) },
+                onValueChange = {
+                    val digits = it.filter { c -> c.isDigit() }.take(4)
+                    onValueChange("expiryDate", digits)
+                },
                 onBlur = { onBlur("expiryDate") },
                 error = if (errors.expiryDate == true) stringResource(R.string.expiry_error_label) else ""
             )
@@ -99,26 +97,34 @@ fun OrderPayContent(
                 modifier = Modifier
                     .weight(1f)
                     .onFocusChanged { onBackFocusChanged(it.isFocused) },
-                onValueChange = { onValueChange("securityCode", it) },
+                onValueChange = {
+                    val digits = it.filter { c -> c.isDigit() }.take(3)
+                    onValueChange("securityCode", digits)
+                },
                 onBlur = { onBlur("securityCode") },
                 error = if (errors.securityCode == true) stringResource(R.string.security_code_error_label) else ""
             )
         }
-    }
 
-    Button(
-        onClick = onPayClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(45.dp),
-        enabled = isFormValid && !loading,
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MainColor)
-    ) {
-        Text(stringResource(R.string.pay_label))
+        Button(
+            onClick = onPayClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(45.dp),
+            enabled = isFormValid && !loading,
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        ) {
+            Text(
+                text = stringResource(R.string.pay_label),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun OrderPayContentPreview() {
@@ -131,22 +137,24 @@ fun OrderPayContentPreview() {
 
     val fakeErrors = OrderPayErrorState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        OrderPayContent(
-            loading = false,
-            state = fakeState,
-            errors = fakeErrors,
-            isBackVisible = false,
-            onBackFocusChanged = {},
-            onValueChange = { _, _ -> },
-            onBlur = {},
-            isValidateData = { true },
-            onPayClick = {}
-        )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            OrderPayContent(
+                loading = false,
+                state = fakeState,
+                errors = fakeErrors,
+                isBackVisible = false,
+                onBackFocusChanged = {},
+                onValueChange = { _, _ -> },
+                onBlur = {},
+                isValidateData = { true },
+                onPayClick = {}
+            )
+        }
     }
 }

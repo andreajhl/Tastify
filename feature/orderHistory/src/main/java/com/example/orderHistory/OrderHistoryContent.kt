@@ -17,6 +17,7 @@ import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemEntity
 import com.example.db.entities.OrderItemProduct
 import com.example.navigation.Screen
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,9 +83,11 @@ fun OrderHistoryContentPreview() {
         )
     )
 
-    OrderHistoryContent(
-        padding = PaddingValues(12.dp),
-        orders = fakeOrders,
-        navController = fakeNavController
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        OrderHistoryContent(
+            padding = PaddingValues(12.dp),
+            orders = fakeOrders,
+            navController = fakeNavController
+        )
+    }
 }

@@ -1,11 +1,13 @@
 package com.example.orderHistory
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -38,6 +40,7 @@ fun OrderHistoryScreen(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = {
@@ -62,15 +65,4 @@ fun OrderHistoryScreen(
         else if(orders.isNotEmpty()) OrderHistoryContent(padding = padding, orders = orders, navController = navController)
         else EmptyOrderHistory(padding = padding, onGoHome = { navController.navigate(Screen.Home.route) })
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OrderHistoryScreenPreview() {
-    val fakeNavController = rememberNavController()
-
-    OrderHistoryScreen(
-        onOpenDrawer = {},
-        navController = fakeNavController
-    )
 }

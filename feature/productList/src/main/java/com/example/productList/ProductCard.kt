@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.data.Category
 import com.example.data.Dietary
-import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun ProductCard(
@@ -50,15 +50,18 @@ fun ProductCard(
     addToCart: (String) -> Unit,
 ) {
     val enable = quantity > 0
+    val activeContainer = MaterialTheme.colorScheme.surface
+    val inactiveContainer = MaterialTheme.colorScheme.surfaceVariant
+    val disabledContainerColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
 
     ElevatedCard(
-        elevation = CardDefaults.cardElevation(defaultElevation = if(enable) 6.dp else 0.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (enable) 6.dp else 0.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = if(enable) Color.White else Color(0xFFF3F3F3)
+            containerColor = if (enable) activeContainer else inactiveContainer
         ),
         modifier = Modifier
             .fillMaxSize()
-            .alpha(if(enable) 1f else 0.5f),
+            .alpha(if (enable) 1f else 0.5f),
     ) {
         Box(
             modifier = Modifier
@@ -93,15 +96,17 @@ fun ProductCard(
                 enabled = enable,
                 contentPadding = PaddingValues(top = 5.dp),
                 colors = ButtonDefaults.textButtonColors(
-                    containerColor = MainColor,
-                    contentColor = Color.White,
-                    disabledContainerColor = Color(0xFFDCDBDB)
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = disabledContainerColor,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             ) {
                 Text(
                     text = "+",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -111,12 +116,12 @@ fun ProductCard(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = stringResource(Category.getLabel(category)) ,
+                text = stringResource(Category.getLabel(category)),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Row(
@@ -131,13 +136,15 @@ fun ProductCard(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     ),
-                    modifier = Modifier.fillMaxWidth(0.7f)
+                    modifier = Modifier.fillMaxWidth(0.7f),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "$$price",
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 14.sp),
                     textAlign = TextAlign.End,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -159,15 +166,17 @@ fun ProductCardScreenPreview() {
             addToCart = {}
         )
 
-        ProductCard(
-            id = "1",
-            title = "Hamburguesa Doble",
-            price = 12.99,
-            quantity = 0,
-            glutenFree = true,
-            imageUrl = "https://via.placeholder.com/300", // imagen dummy
-            category = "fast_food",
-            addToCart = {}
-        )
+        AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+            ProductCard(
+                id = "1",
+                title = "Hamburguesa Doble",
+                price = 12.99,
+                quantity = 0,
+                glutenFree = true,
+                imageUrl = "https://via.placeholder.com/300", // imagen dummy
+                category = "fast_food",
+                addToCart = {}
+            )
+        }
     }
 }

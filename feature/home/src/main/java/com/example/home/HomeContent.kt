@@ -14,6 +14,7 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -39,8 +40,8 @@ import com.example.db.entities.ProductEntity
 import com.example.navigation.Screen
 import com.example.productFilter.ProductFilter
 import com.example.productList.ProductListScreen
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
-import com.example.theme.ui.theme.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,24 +71,35 @@ fun HomeContent(
                     Text(
                         text = stringResource(R.string.home_title),
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onOpenDrawer) {
-                        Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.home_menu))
+                        Icon(
+                            Icons.Default.Menu,
+                            contentDescription = stringResource(R.string.home_menu),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 },
                 actions = {
                     Box {
                         IconButton(onClick = onToggleCart) {
-                            Icon(Icons.Default.ShoppingCart, contentDescription = stringResource(R.string.home_cart))
+                            Icon(
+                                Icons.Default.ShoppingCart,
+                                contentDescription = stringResource(R.string.home_cart),
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
                         }
                         if (totalItems > 0) {
                             Badge(
-                                modifier = Modifier.align(Alignment.TopEnd).offset(x = (-6).dp, y = 6.dp),
-                                containerColor = MainColor,
-                                contentColor = Color.White
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .offset(x = (-6).dp, y = 6.dp),
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
                             ) {
                                 Text(totalItems.toString())
                             }
@@ -98,7 +110,9 @@ fun HomeContent(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding).fillMaxSize(),
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Carousel()
@@ -123,7 +137,8 @@ fun HomeContent(
         if (cartState.showCart) {
             ModalBottomSheet(
                 onDismissRequest = onToggleCart,
-                sheetState = sheetState
+                sheetState = sheetState,
+                containerColor = MaterialTheme.colorScheme.surface
             ) {
                 CartDrawerContent(
                     totalPrice = cartState.totalPrice,
@@ -185,23 +200,25 @@ fun HomeContentPreview() {
     val fakeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val fakeNavController = rememberNavController()
 
-    HomeContent(
-        onOpenDrawer = {},
-        totalItems = 0,
-        cartState = fakeCartState,
-        productList = fakeProducts,
-        dietaryFilters = fakeDietaryFilters,
-        categoryFilters = fakeCategoryFilters,
-        onSearchChange = {},
-        onFilterChange = { _, _ -> },
-        onAddToCart = {},
-        onToggleCart = {},
-        sheetState = fakeSheetState,
-        navController = fakeNavController,
-        getProductStock = { 5 },
-        onRemoveItemCart = { _, _ -> },
-        onSubtractFromCart = { _, _ -> },
-        onRestoreProduct = { _, _ -> },
-        onAddProduct = { _, _ -> }
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        HomeContent(
+            onOpenDrawer = {},
+            totalItems = 0,
+            cartState = fakeCartState,
+            productList = fakeProducts,
+            dietaryFilters = fakeDietaryFilters,
+            categoryFilters = fakeCategoryFilters,
+            onSearchChange = {},
+            onFilterChange = { _, _ -> },
+            onAddToCart = {},
+            onToggleCart = {},
+            sheetState = fakeSheetState,
+            navController = fakeNavController,
+            getProductStock = { 5 },
+            onRemoveItemCart = { _, _ -> },
+            onSubtractFromCart = { _, _ -> },
+            onRestoreProduct = { _, _ -> },
+            onAddProduct = { _, _ -> }
+        )
+    }
 }

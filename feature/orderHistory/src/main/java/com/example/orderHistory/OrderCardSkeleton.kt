@@ -13,20 +13,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderCardSkeleton() {
+    val cardColor = MaterialTheme.colorScheme.surface
+    val skeletonColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    val secondarySkeletonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = Color.White
+            containerColor = cardColor
         ),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -39,7 +44,7 @@ fun OrderCardSkeleton() {
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
                     .height(20.dp)
-                    .background(Color.LightGray, RoundedCornerShape(4.dp))
+                    .background(skeletonColor, RoundedCornerShape(4.dp))
             )
 
             Row(
@@ -54,13 +59,13 @@ fun OrderCardSkeleton() {
                             modifier = Modifier
                                 .width(60.dp)
                                 .height(10.dp)
-                                .background(Color.Gray.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+                                .background(secondarySkeletonColor, RoundedCornerShape(4.dp))
                         )
                         Box(
                             modifier = Modifier
                                 .width(40.dp)
                                 .height(16.dp)
-                                .background(Color.Gray.copy(alpha = 0.5f), RoundedCornerShape(4.dp))
+                                .background(skeletonColor, RoundedCornerShape(4.dp))
                         )
                     }
                 }
@@ -72,5 +77,7 @@ fun OrderCardSkeleton() {
 @Preview(showBackground = true)
 @Composable
 fun OrderCardSkeletonPreview() {
-    OrderCardSkeleton()
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        OrderCardSkeleton()
+    }
 }

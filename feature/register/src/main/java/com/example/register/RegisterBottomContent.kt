@@ -9,13 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,7 +19,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.common.InputField
-import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun RegisterBottomContent(
@@ -41,7 +37,11 @@ fun RegisterBottomContent(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(stringResource(R.string.register_title), style = MaterialTheme.typography.headlineSmall)
+        Text(
+            text = stringResource(R.string.register_title),
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -101,9 +101,15 @@ fun RegisterBottomContent(
                 .fillMaxWidth()
                 .height(45.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MainColor)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
         ) {
-            Text(stringResource(R.string.sign_up))
+            Text(
+                text = stringResource(R.string.sign_up),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }
@@ -127,13 +133,15 @@ fun RegisterBottomContentPreview() {
         repeatPassword = false
     )
 
-    RegisterBottomContent(
-        registerData = fakeRegisterData,
-        registerError = fakeRegisterError,
-        isFormValid = true,
-        isLoading = false,
-        onRegister = {},
-        updateField = { _, _ -> },
-        validateField = { true }
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        RegisterBottomContent(
+            registerData = fakeRegisterData,
+            registerError = fakeRegisterError,
+            isFormValid = true,
+            isLoading = false,
+            onRegister = {},
+            updateField = { _, _ -> },
+            validateField = { true }
+        )
+    }
 }

@@ -24,13 +24,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.db.entities.ProductEntity
-import com.example.theme.ui.theme.MainColor
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,20 +68,20 @@ fun CartContent(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(onClick = toggleShowCart) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.cart_button)
+                        contentDescription = stringResource(R.string.cart_button),
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
@@ -90,11 +89,12 @@ fun CartContent(
                     text = stringResource(R.string.cart_title),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             LazyColumn(
                 modifier = Modifier.padding(top = 20.dp),
@@ -122,23 +122,34 @@ fun CartContent(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(stringResource(R.string.cart_total_price), style = MaterialTheme.typography.titleMedium)
-                Text("$${totalPrice}", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    stringResource(R.string.cart_total_price),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    "$${totalPrice}",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
 
             Button(
-                onClick = { goToPay() },
+                onClick = goToPay,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MainColor)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
                 Text(
                     stringResource(R.string.cart_pay),
@@ -157,7 +168,7 @@ fun CartContentPreview() {
         ProductEntity("2", "Salad", "", 1200.0, "healthy_food", "", 1, true, true, true)
     )
 
-    MaterialTheme {
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         CartContent(
             goToPay = {},
             toggleShowCart = {},

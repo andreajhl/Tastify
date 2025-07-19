@@ -9,17 +9,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.common.ToggleButtonGroup
 import com.example.common.ToggleOption
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun FilterSection(
     titleId: Int,
-    options:  List<ToggleOption>,
+    options: List<ToggleOption>,
     appliedFilters: Map<String, Boolean>,
-    onSelectOption:  (Map<String, Boolean>) -> Unit
+    onSelectOption: (Map<String, Boolean>) -> Unit
 ) {
     Text(
         text = stringResource(titleId),
-        style = MaterialTheme.typography.titleMedium
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurface
     )
 
     ToggleButtonGroup(
@@ -41,12 +43,14 @@ fun FilterSectionPreview() {
         "gluten_free" to false
     )
 
-    Column {
-        FilterSection(
-            titleId = R.string.untitled,
-            options = options,
-            appliedFilters = selectedMap,
-            onSelectOption = {}
-        )
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        Column {
+            FilterSection(
+                titleId = R.string.untitled,
+                options = options,
+                appliedFilters = selectedMap,
+                onSelectOption = {}
+            )
+        }
     }
 }

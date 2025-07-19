@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.db.entities.ProductEntity
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @Composable
 fun ProductListScreen(
@@ -99,8 +100,10 @@ fun ProductListPreview() {
         )
     )
 
-    ProductListScreen(
-        productList = fakeItems,
-        addToCart = {}
-    )
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        ProductListScreen(
+            productList = fakeItems,
+            addToCart = {}
+        )
+    }
 }

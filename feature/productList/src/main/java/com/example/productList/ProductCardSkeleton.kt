@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -17,20 +18,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 
 @Composable
 fun ProductCardSkeleton() {
+    val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    val placeholderColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+
     val shimmer = PlaceholderHighlight.shimmer(
-        highlightColor = Color.White.copy(alpha = 0.6f)
+        highlightColor = highlightColor
     )
 
     ElevatedCard(
-        elevation = CardDefaults.cardElevation(defaultElevation =  2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +54,7 @@ fun ProductCardSkeleton() {
                     .clip(RoundedCornerShape(12.dp))
                     .placeholder(
                         visible = true,
-                        color = Color.LightGray.copy(alpha = 0.4f),
+                        color = placeholderColor,
                         highlight = shimmer
                     )
             )
@@ -61,7 +66,7 @@ fun ProductCardSkeleton() {
                     .clip(RoundedCornerShape(8.dp))
                     .placeholder(
                         visible = true,
-                        color = Color.LightGray.copy(alpha = 0.4f),
+                        color = placeholderColor,
                         highlight = shimmer
                     )
             )
@@ -73,7 +78,7 @@ fun ProductCardSkeleton() {
                     .clip(RoundedCornerShape(8.dp))
                     .placeholder(
                         visible = true,
-                        color = Color.LightGray.copy(alpha = 0.4f),
+                        color = placeholderColor,
                         highlight = shimmer
                     )
             )
@@ -84,5 +89,7 @@ fun ProductCardSkeleton() {
 @Preview(showBackground = true)
 @Composable
 fun ProductItemSkeletonPreview() {
-    ProductCardSkeleton()
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        ProductCardSkeleton()
+    }
 }

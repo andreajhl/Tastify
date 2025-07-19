@@ -9,6 +9,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
@@ -18,8 +19,12 @@ import com.google.accompanist.placeholder.shimmer
 fun OrderDetailSkeleton(
     padding: PaddingValues
 ) {
+    val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    val placeholderColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+    val cardColor = MaterialTheme.colorScheme.background
+
     val shimmer = PlaceholderHighlight.shimmer(
-        highlightColor = Color.White.copy(alpha = 0.6f)
+        highlightColor = highlightColor
     )
 
     Column(
@@ -34,12 +39,11 @@ fun OrderDetailSkeleton(
                 .fillMaxWidth()
                 .padding(16.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.elevatedCardColors(containerColor = Color.White),
+            colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .padding(16.dp),
+                modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
@@ -49,15 +53,14 @@ fun OrderDetailSkeleton(
                         .clip(RoundedCornerShape(4.dp))
                         .placeholder(
                             visible = true,
-                            color = Color.LightGray.copy(alpha = 0.4f),
+                            color = placeholderColor,
                             highlight = shimmer
                         )
                 )
 
                 repeat(3) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Box(
@@ -67,7 +70,7 @@ fun OrderDetailSkeleton(
                                 .clip(RoundedCornerShape(4.dp))
                                 .placeholder(
                                     visible = true,
-                                    color = Color.LightGray.copy(alpha = 0.4f),
+                                    color = placeholderColor,
                                     highlight = shimmer
                                 )
                         )
@@ -78,7 +81,7 @@ fun OrderDetailSkeleton(
                                 .clip(RoundedCornerShape(4.dp))
                                 .placeholder(
                                     visible = true,
-                                    color = Color.LightGray.copy(alpha = 0.4f),
+                                    color = placeholderColor,
                                     highlight = shimmer
                                 )
                         )
@@ -96,7 +99,7 @@ fun OrderDetailSkeleton(
                             .clip(RoundedCornerShape(4.dp))
                             .placeholder(
                                 visible = true,
-                                color = Color.LightGray.copy(alpha = 0.4f),
+                                color = placeholderColor,
                                 highlight = shimmer
                             )
                     )
@@ -107,7 +110,7 @@ fun OrderDetailSkeleton(
                             .clip(RoundedCornerShape(4.dp))
                             .placeholder(
                                 visible = true,
-                                color = Color.LightGray.copy(alpha = 0.4f),
+                                color = placeholderColor,
                                 highlight = shimmer
                             )
                     )
@@ -120,7 +123,7 @@ fun OrderDetailSkeleton(
                         .clip(RoundedCornerShape(4.dp))
                         .placeholder(
                             visible = true,
-                            color = Color.LightGray.copy(alpha = 0.4f),
+                            color = placeholderColor,
                             highlight = shimmer
                         )
                 )
@@ -133,5 +136,7 @@ fun OrderDetailSkeleton(
 @Preview(showBackground = true)
 @Composable
 fun OrderDetailSkeletonPreview() {
-    OrderDetailSkeleton(padding = PaddingValues(12.dp))
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        OrderDetailSkeleton(padding = PaddingValues(12.dp))
+    }
 }

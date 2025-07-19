@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.common.InputField
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
 
 @Composable
@@ -136,11 +137,13 @@ fun ProfileContentPreview() {
         phone = "+54 11 1234-5678"
     )
 
-    ProfileContent(
-        padding = PaddingValues(0.dp),
-        profileState = fakeProfileState,
-        isEditing = true,
-        onUpdateField = { _, _ -> },
-        onImageSelected = {}
-    )
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        ProfileContent(
+            padding = PaddingValues(0.dp),
+            profileState = fakeProfileState,
+            isEditing = true,
+            onUpdateField = { _, _ -> },
+            onImageSelected = {}
+        )
+    }
 }

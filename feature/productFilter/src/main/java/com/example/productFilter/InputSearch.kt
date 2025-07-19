@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -22,8 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.theme.ui.theme.MainColor
-import com.example.theme.ui.theme.TertiaryColor
+import com.example.theme.ui.theme.AppAndroidTheme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
@@ -47,7 +47,7 @@ fun InputSearch(
         placeholder = {
             Text(
                 text = stringResource(R.string.search_placeholder),
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 14.sp
             )
         },
@@ -57,15 +57,18 @@ fun InputSearch(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search icon",
-                tint = MainColor
+                tint = MaterialTheme.colorScheme.primary
             )
         },
         textStyle = TextStyle(fontSize = 14.sp),
         singleLine = true,
         minLines = 1,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = TertiaryColor,
-            unfocusedBorderColor = MainColor
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
     )
 }
@@ -73,5 +76,7 @@ fun InputSearch(
 @Preview(showBackground = true)
 @Composable
 fun InputSearchPreview() {
-    InputSearch(onChange = {})
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        InputSearch(onChange = {})
+    }
 }

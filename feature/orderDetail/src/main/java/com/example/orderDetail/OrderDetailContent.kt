@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,8 +25,8 @@ import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemEntity
 import com.example.db.entities.OrderItemProduct
 import com.example.library.utils.formatTimestampToDate
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
-import com.example.theme.ui.theme.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +34,10 @@ fun OrderDetailContent(
     order: OrderItemProduct,
     padding: PaddingValues
 ) {
+    val cardContainerColor = MaterialTheme.colorScheme.surface
+    val headerBackgroundColor = MaterialTheme.colorScheme.primary
+    val headerTextColor = MaterialTheme.colorScheme.onPrimary
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,27 +48,28 @@ fun OrderDetailContent(
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.elevatedCardColors(containerColor = Color.White),
+            colors = CardDefaults.elevatedCardColors(containerColor = cardContainerColor),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MainColor),
+                        .background(headerBackgroundColor),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                         text = "Order #${order.order.id.takeLast(6)}",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        color = headerTextColor
                     )
                     Text(
                         modifier = Modifier.padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
                         text = formatTimestampToDate(order.order.timestamp),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                        color = Color.White
+                        color = headerTextColor
                     )
                 }
 
@@ -78,16 +82,18 @@ fun OrderDetailContent(
                     ) {
                         Text(
                             text = "${item.productName} x${item.quantity}",
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "$${item.price * item.quantity}",
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
 
-                HorizontalDivider()
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
                 Row(
                     modifier = Modifier
@@ -97,13 +103,13 @@ fun OrderDetailContent(
                 ) {
                     Text(
                         text = "Total:",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "$${order.order.total}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -139,5 +145,7 @@ fun OrderDetailContentPreview() {
         )
     )
 
-    OrderDetailContent(order = fakeOrder, padding = PaddingValues(12.dp))
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
+        OrderDetailContent(order = fakeOrder, padding = PaddingValues(12.dp))
+    }
 }

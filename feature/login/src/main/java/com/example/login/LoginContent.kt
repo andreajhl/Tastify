@@ -20,16 +20,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.common.InputField
-import com.example.theme.ui.theme.MainColor
 import androidx.compose.ui.graphics.Path
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.theme.ui.theme.AppAndroidTheme
 import com.example.theme.ui.theme.DefaultScreenPadding
 
 @Composable
@@ -43,10 +42,12 @@ fun LoginContent(
     updateLoginField: (String, String) -> Unit,
     validateField: (String) -> Boolean
 ) {
+    val primaryColor = MaterialTheme.colorScheme.primary
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Top
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -75,7 +76,7 @@ fun LoginContent(
 
                 drawPath(
                     path = path,
-                    color = MainColor
+                    color = primaryColor
                 )
             }
             Image(
@@ -108,13 +109,16 @@ fun LoginContent(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { onLogin() },
+                onClick = onLogin,
                 enabled = isFormValid && !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MainColor)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
                 Text(
                     text = stringResource(R.string.sign_in_label),
@@ -125,7 +129,9 @@ fun LoginContent(
             TextButton(
                 onClick = onShowRegister,
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.textButtonColors(contentColor = MainColor)
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
             ) {
                 Text(stringResource(R.string.not_found_account_label))
             }
@@ -146,14 +152,16 @@ fun LoginContentPreview() {
         password = ""
     )
 
-    LoginContent(
-        loginData = fakeLoginData,
-        errorState = fakeErrorState,
-        isFormValid = true,
-        isLoading = false,
-        onLogin = {},
-        onShowRegister = {},
-        updateLoginField = { _, _ -> },
-        validateField = { true }
-    )
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+        LoginContent(
+            loginData = fakeLoginData,
+            errorState = fakeErrorState,
+            isFormValid = true,
+            isLoading = false,
+            onLogin = {},
+            onShowRegister = {},
+            updateLoginField = { _, _ -> },
+            validateField = { true }
+        )
+    }
 }

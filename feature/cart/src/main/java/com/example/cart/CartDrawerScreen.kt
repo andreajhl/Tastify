@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.db.entities.ProductEntity
+import com.example.theme.ui.theme.AppAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,7 +22,7 @@ fun CartDrawerContent(
     getProductStock: (String) -> Int
 ) {
 
-    if(cartItems.isNotEmpty()) {
+    if(cartItems.isEmpty()) {
         EmptyCart(toggleShowCart = toggleShowCart)
         return
     }
@@ -48,7 +49,7 @@ fun CartDrawerContentPreview() {
         ProductEntity("2", "Salad", "", 1200.0, "healthy_food", "", 1, true, true, true)
     )
 
-    MaterialTheme {
+    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
         CartDrawerContent(
             goToPay = {},
             toggleShowCart = {},

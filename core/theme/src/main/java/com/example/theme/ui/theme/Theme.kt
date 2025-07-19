@@ -10,16 +10,28 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = MainColor,
-    secondary = LightColor,
-    tertiary = TertiaryColor
+val LightColorScheme = lightColorScheme(
+    primary = PrimaryLight,
+    onPrimary = OnPrimaryLight,
+    secondary = SecondaryLight,
+    tertiary = TertiaryLight,
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+    outline = OutlineLight,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = MainColor,
-    secondary = LightColor,
-    tertiary = TertiaryColor
+val DarkColorScheme = darkColorScheme(
+    primary = PrimaryDark,
+    onPrimary = OnPrimaryDark,
+    secondary = SecondaryDark,
+    tertiary = TertiaryDark,
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+    outline = OutlineDark,
 )
 
 @Composable
