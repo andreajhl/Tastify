@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun CameraOrGalleryDialog(
@@ -14,20 +15,20 @@ fun CameraOrGalleryDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Seleccionar opción") },
+        title = { Text(stringResource(R.string.camera_title)) },
         text = {
             Column {
                 TextButton(onClick = {
                     onCameraSelected()
                     onDismiss()
                 }) {
-                    Text("Abrir cámara")
+                    Text(stringResource(R.string.open_camera))
                 }
                 TextButton(onClick = {
                     onGallerySelected()
                     onDismiss()
                 }) {
-                    Text("Elegir desde galería")
+                    Text(stringResource(R.string.open_galery))
                 }
             }
         },

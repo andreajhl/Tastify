@@ -12,4 +12,8 @@
     <string name="edit">Edit</string>
     <string name="profile_picture">Profile picture</string>
     <string name="edit_picture">Edit picture</string>
+
+    <string name="camera_title">Select option:</string>
+    <string name="open_camera">Open camera</string>
+    <string name="open_galery">Choose from gallery</string>
 </resources>
