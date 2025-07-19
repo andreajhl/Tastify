@@ -6,5 +6,6 @@ import com.example.db.entities.ProductEntity
 interface ProductRepository {
     suspend fun getAll(): List<ProductEntity>
     suspend fun getAllRemote(): List<ProductEntity>
-    suspend fun updateProduct(id: String, body: ProductUpdateDto): ProductEntity?
+    suspend fun updateProductLocal(id: String, quantityToSubtract: Int)
+    suspend fun updateProductRemote(id: String, body: ProductUpdateDto): ProductEntity?
 }

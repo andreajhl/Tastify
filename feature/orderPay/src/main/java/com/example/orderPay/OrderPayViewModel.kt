@@ -1,15 +1,25 @@
 package com.example.orderPay
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.example.data.remote.dtos.order.OrderCreateDto
 import com.example.data.remote.dtos.order.OrderItemDto
 import com.example.data.remote.dtos.product.ProductUpdateDto
 import com.example.data.remote.repository.cart.CartRepository
 import com.example.data.remote.repository.order.OrderRepository
 import com.example.data.remote.repository.product.ProductRepository
+import com.example.data.worker.OrderSyncWorker
+import com.example.data.worker.ProductSyncWorker
 import com.example.session.SessionManager
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,7 +65,8 @@ class OrderPayViewModel @Inject constructor(
     private val productService: ProductRepository,
     private val orderService: OrderRepository,
     private val cartRepository: CartRepository,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val app: Application
 ): ViewModel(), OrderPayContract {
     private val _payData = MutableStateFlow(OrderPayData())
     private val _payState = MutableStateFlow(RequestState())
@@ -145,7 +156,7 @@ class OrderPayViewModel @Inject constructor(
                     )
                 }
 
-                orderService.createOrder(
+                val order = orderService.createOrderLocal(
                     OrderCreateDto(
                         userId = sessionManager.getUserId()!!,
                         items = orderItems,
@@ -154,12 +165,46 @@ class OrderPayViewModel @Inject constructor(
                     )
                 )
 
+                val constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+
+                if (order != null) {
+                    val workRequest = OneTimeWorkRequestBuilder<OrderSyncWorker>()
+                        .setInputData(workDataOf("ORDER_ID" to order.id))
+                        .setConstraints(constraints)
+                        .build()
+
+                    WorkManager.getInstance(getApplication(app).applicationContext)
+                        .enqueueUniqueWork(
+                            "OrderSync_${order.id}",
+                            ExistingWorkPolicy.REPLACE,
+                            workRequest
+                        )
+                }
+
                 cartItems.values.forEach { product ->
-                    val updateQuantity = ProductUpdateDto(
-                        product.quantity,
-                        "subtract"
-                    )
-                    productService.updateProduct(product.id, updateQuantity)
+                    val quantityToSubtract = product.quantity
+
+                    productService.updateProductLocal(product.id, quantityToSubtract)
+
+                    val workRequest = OneTimeWorkRequestBuilder<ProductSyncWorker>()
+                        .setInputData(
+                            workDataOf(
+                                "PRODUCT_ID" to product.id,
+                                "QUANTITY" to quantityToSubtract,
+                                "OPERATION" to "subtract"
+                            )
+                        )
+                        .setConstraints(constraints)
+                        .build()
+
+                    WorkManager.getInstance(getApplication(app).applicationContext)
+                        .enqueueUniqueWork(
+                            "ProductSync_${product.id}",
+                            ExistingWorkPolicy.REPLACE,
+                            workRequest
+                        )
                 }
 
                 cartRepository.clearCart()

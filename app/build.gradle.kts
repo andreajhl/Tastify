@@ -77,7 +77,12 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Worker
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+
     // Módulos del proyecto
+    implementation(project(":data"))
     implementation(project(":core:theme"))
     implementation(project(":core:session"))
     implementation(project(":core:network"))

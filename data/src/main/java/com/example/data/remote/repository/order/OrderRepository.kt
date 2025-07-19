@@ -6,7 +6,8 @@ import com.example.db.entities.OrderItemProduct
 
 interface OrderRepository {
     suspend fun getAllRemote(id: String): List<OrderItemProduct>
-    suspend fun createOrder(request: OrderCreateDto): OrderEntity?
+    suspend fun createOrderLocal(request: OrderCreateDto): OrderEntity?
     suspend fun getAll(): List<OrderItemProduct>
     suspend fun getOrder(id: String): OrderItemProduct?
+    suspend fun createOrderRemote(orderId: String, userId: String): Boolean
 }

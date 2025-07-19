@@ -2,6 +2,7 @@ package com.example.data.remote.repository.order
 
 import com.example.data.remote.api.OrderApi
 import com.example.data.remote.dtos.order.OrderCreateDto
+import com.example.data.remote.dtos.order.OrderItemDto
 import com.example.db.daos.OrderDao
 import com.example.db.entities.OrderEntity
 import com.example.db.entities.OrderItemEntity
@@ -73,26 +74,53 @@ class OrderRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun createOrder(request: OrderCreateDto): OrderEntity? {
-        val res = api.createOrder(request)
+    override suspend fun createOrderLocal(request: OrderCreateDto): OrderEntity? {
+        val localOrderId = java.util.UUID.randomUUID().toString()
 
-        if (res.isSuccessful && res.body() != null) {
-            val order = res.body()!!
+        val entity = OrderEntity(
+            id = localOrderId,
+            total = request.total,
+            timestamp = System.currentTimeMillis()
+        )
 
-            val entity = OrderEntity(
-                id = order.id,
-                total = order.total,
-                timestamp = order.timestamp
+        orderDao.createOrder(entity)
+
+        val items = request.items.map { itemDto ->
+            OrderItemEntity(
+                orderId = localOrderId,
+                productName = itemDto.productName ?: "",
+                price = itemDto.price ?: 0.0,
+                quantity = itemDto.quantity ?: 0
             )
-
-            orderDao.createOrder(entity)
-            return entity
         }
 
-        return null
+        orderDao.createOrderItems(items)
+
+        return entity
     }
 
     override suspend fun getAll(): List<OrderItemProduct> {
         return orderDao.getAllOrdersWithItems()
+    }
+
+    override suspend fun createOrderRemote(orderId: String, userId: String): Boolean {
+        val orderWithItems = orderDao.getOrderWithItems(orderId)
+
+        val request = OrderCreateDto(
+            userId = userId,
+            total = orderWithItems.order.total,
+            items = orderWithItems.items.map { item ->
+                OrderItemDto(
+                    id = item.id.toString(),
+                    productName = item.productName,
+                    price = item.price,
+                    quantity = item.quantity,
+                )
+            },
+            timestamp = System.currentTimeMillis()
+        )
+
+        val response = api.createOrder(request)
+        return response.isSuccessful
     }
 }

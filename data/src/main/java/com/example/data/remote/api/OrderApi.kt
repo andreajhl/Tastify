@@ -17,5 +17,5 @@ interface OrderApi {
     suspend fun getOrderById(@Path("id") id: String): Response<OrderDto>
 
     @POST("orders")
-    suspend fun createOrder(@Body request: OrderCreateDto): Response<OrderEntity>
+    suspend fun createOrder(@Body request: OrderCreateDto): Response<OrderDto>
 }

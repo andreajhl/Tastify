@@ -33,13 +33,24 @@ class ProductRepositoryImpl @Inject constructor(
                 )
             }
 
+            dao.clearProducts()
             dao.insertAll(entities)
         }
 
         return dao.getAll()
     }
 
-    override suspend fun updateProduct(id: String, body: ProductUpdateDto): ProductEntity? {
+    override suspend fun updateProductLocal(id: String, quantityToSubtract: Int) {
+        val product = dao.getProductById(id)
+
+        if(product !== null) {
+            val updatedQuantity = (product.quantity - quantityToSubtract).coerceAtLeast(0)
+            val updatedProduct = product.copy(quantity = updatedQuantity)
+            dao.updateProduct(updatedProduct)
+        }
+    }
+
+    override suspend fun updateProductRemote(id: String, body: ProductUpdateDto): ProductEntity? {
         val res = api.updateProduct(id, body);
 
         if (res.body() != null) {
@@ -65,5 +76,4 @@ class ProductRepositoryImpl @Inject constructor(
 
         return null
     }
-
 }

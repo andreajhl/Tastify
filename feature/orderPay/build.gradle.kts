@@ -80,6 +80,10 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Worker
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+
     // Kotlin stdlib
     implementation(libs.kotlin.stdlib)
 

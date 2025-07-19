@@ -1,7 +1,7 @@
 plugins {
+    kotlin("kapt")
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
@@ -68,6 +68,10 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation(project(":core:db"))
+    // Worker
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
 
+    implementation(project(":core:db"))
+    implementation(project(":core:session"))
 }

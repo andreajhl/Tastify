@@ -9,6 +9,5 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(private val api: AuthApi) : AuthRepository {
     override suspend fun login(request: AuthDto): Response<UserLoginDto> = api.login(request)
-
     override suspend fun register(request: RegisterDto): Response<UserLoginDto> = api.register(request)
 }
