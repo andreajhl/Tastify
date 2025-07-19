@@ -97,7 +97,14 @@ class OrderPayViewModel @Inject constructor(
 
     override fun validateExpiryDate(): Boolean {
         val expiryDate = _payData.value.expiryDate.trim()
-        val isValid = expiryDate.matches(Regex("^\\d{2}/\\d{2}$"))
+        val regex = Regex("^\\d{4}$")
+
+        var isValid = false
+
+        if (expiryDate.matches(regex)) {
+            val month = expiryDate.substring(0, 2).toIntOrNull()
+            isValid = month != null && month in 1..12
+        }
 
         _errorMsg.value = _errorMsg.value.copy(expiryDate = !isValid)
 
@@ -124,6 +131,8 @@ class OrderPayViewModel @Inject constructor(
         val cartItems = cartRepository.cartState.value.items
 
         viewModelScope.launch {
+            cartRepository.toggleShowCart()
+
             _payState.value = _payState.value.copy(isLoading = true)
 
             try {

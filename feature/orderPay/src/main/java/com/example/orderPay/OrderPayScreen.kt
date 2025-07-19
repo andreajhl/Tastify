@@ -47,13 +47,12 @@ fun OrderPayScreen(navController: NavHostController) {
     var isBackVisible by remember { mutableStateOf(false) }
 
     fun handleBlur(field: String) {
-        return when (field) {
+        when (field) {
             "cardNumber" -> orderPayViewModel.validateCardNumber()
             "ownerName" -> orderPayViewModel.validateOwnerName()
             "expiryDate" -> orderPayViewModel.validateExpiryDate()
             "securityCode" -> orderPayViewModel.validateSecurityCode()
-            else -> {}
-        } as Unit
+        }
     }
 
     fun handlePayClick() {
