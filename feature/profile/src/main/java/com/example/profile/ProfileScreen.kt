@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun ProfileScreen(onOpenDrawer: () -> Unit) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
     val profileState by profileViewModel.profile.collectAsState()
+
     val isEditing = profileViewModel.isEditing
 
     LaunchedEffect(Unit) {

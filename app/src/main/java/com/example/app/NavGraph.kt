@@ -50,11 +50,7 @@ fun NavGraph(
         ) { backStackEntry ->
             val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
 
-            OrderDetailScreen(
-                navController,
-                openDrawer,
-                orderId
-            )
+            OrderDetailScreen( navController, orderId)
         }
     }
 }
