@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.example.menu.Menu
+import com.example.navigation.Screen
 import com.example.session.SessionManager
 import com.example.theme.ui.theme.AppAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +30,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppAndroidTheme {
+            AppAndroidTheme(
+                darkTheme = isSystemInDarkTheme(),
+                dynamicColor = false
+            ) {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                     val coroutineScope = rememberCoroutineScope()
@@ -49,7 +54,10 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         drawerState = drawerState,
                         onSelectItem = { onSelectItem() },
-                        onLogout = { session.clearSession() }
+                        onLogout = {
+                            session.clearSession()
+                            navController.navigate(Screen.Login.route)
+                        }
                     ) {
                         Box(Modifier.fillMaxSize()) {
                             Scaffold(
