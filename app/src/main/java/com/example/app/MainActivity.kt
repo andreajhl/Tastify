@@ -71,6 +71,10 @@ class MainActivity : ComponentActivity() {
                         coroutineScope.launch { drawerState.open() }
                     }
 
+                    fun closeDrawer() {
+                        coroutineScope.launch { drawerState.close() }
+                    }
+
                     fun onSelectItem() {
                         coroutineScope.launch { drawerState.close() }
                     }
@@ -80,8 +84,11 @@ class MainActivity : ComponentActivity() {
                         drawerState = drawerState,
                         onSelectItem = { onSelectItem() },
                         onLogout = {
+                            closeDrawer()
                             session.clearSession()
-                            navController.navigate(Screen.Login.route)
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(0)
+                            }
                         }
                     ) {
                         Box(Modifier.fillMaxSize()) {
@@ -104,7 +111,7 @@ class MainActivity : ComponentActivity() {
         scope.launch {
             SnackbarManager.messages.collect { snackbarMessage ->
                 val result = snackbarHostState.showSnackbar(
-                    duration = SnackbarDuration.Indefinite,
+                    duration = SnackbarDuration.Long,
                     message = snackbarMessage.message,
                     actionLabel = snackbarMessage.actionLabel
                 )
