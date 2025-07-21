@@ -43,9 +43,9 @@ fun OrderDetailSkeleton(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onPrimary)
             .padding(padding)
-            .padding(DefaultScreenPadding)
-            .background(MaterialTheme.colorScheme.onPrimary),
+            .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Card(

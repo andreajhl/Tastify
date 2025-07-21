@@ -68,7 +68,7 @@ fun CartContent(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.onPrimary,)
+            .background(MaterialTheme.colorScheme.onPrimary)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

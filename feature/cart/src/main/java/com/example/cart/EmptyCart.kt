@@ -34,7 +34,7 @@ fun EmptyCart(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.onPrimary),
         verticalArrangement = Arrangement.Top
     ) {
         Row(

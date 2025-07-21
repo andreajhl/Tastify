@@ -64,6 +64,7 @@ fun OrderHistoryContentPreview() {
         OrderItemProduct(
             order = OrderEntity(
                 id = "order_1",
+                userId = "user1",
                 total = 150.0,
                 timestamp = System.currentTimeMillis()
             ),

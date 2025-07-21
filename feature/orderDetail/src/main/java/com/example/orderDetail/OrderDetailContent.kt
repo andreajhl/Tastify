@@ -41,9 +41,9 @@ fun OrderDetailContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onPrimary)
             .padding(padding)
-            .padding(DefaultScreenPadding)
-            .background(MaterialTheme.colorScheme.onPrimary),
+            .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Card(
@@ -125,6 +125,7 @@ fun OrderDetailContentPreview() {
     val fakeOrder = OrderItemProduct(
         order = OrderEntity(
             id = "123456",
+            userId = "user1",
             total = 99.99,
             timestamp = System.currentTimeMillis()
         ),
