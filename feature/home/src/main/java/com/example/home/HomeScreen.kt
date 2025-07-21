@@ -66,6 +66,7 @@ fun HomeScreen(
         totalItems = totalItems,
         cartState = cartState,
         productList = productList,
+        productListState = productListState,
         dietaryFilters = dietaryFilters.value,
         categoryFilters = categoryFilters.value,
         onSearchChange = { query -> productListViewModel.searchProduct(query) },

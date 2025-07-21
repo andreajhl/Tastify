@@ -38,6 +38,7 @@ import com.example.library.utils.Dietary
 import com.example.navigation.Screen
 import com.example.productFilter.ProductFilter
 import com.example.productList.ProductListScreen
+import com.example.productList.ProductListState
 import com.example.remotes.repository.cart.CartState
 import com.example.theme.AppAndroidTheme
 import com.example.theme.DefaultScreenPadding
@@ -48,6 +49,7 @@ fun HomeContent(
     onOpenDrawer: () -> Unit,
     totalItems: Int,
     cartState: CartState,
+    productListState: ProductListState,
     productList: List<ProductEntity>,
     dietaryFilters: Map<String, Boolean>,
     categoryFilters: Map<String, Boolean>,
@@ -128,8 +130,9 @@ fun HomeContent(
                     onFilterChange = onFilterChange
                 )
                 ProductListScreen(
-                    productList,
-                    addToCart = onAddToCart
+                    addToCart = onAddToCart,
+                    productList = productList,
+                    productListState = productListState
                 )
             }
         }
@@ -205,6 +208,7 @@ fun HomeContentPreview() {
             totalItems = 0,
             cartState = fakeCartState,
             productList = fakeProducts,
+            productListState = ProductListState(isLoading = false),
             dietaryFilters = fakeDietaryFilters,
             categoryFilters = fakeCategoryFilters,
             onSearchChange = {},
