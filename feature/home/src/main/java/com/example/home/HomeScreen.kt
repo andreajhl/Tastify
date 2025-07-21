@@ -8,9 +8,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.cart.CartViewModel
+import com.example.library.utils.SnackbarManager
+import com.example.library.utils.SnackbarType
 import com.example.productFilter.ProductFilterViewModel
 import com.example.productList.ProductListViewModel
 
@@ -21,14 +24,18 @@ fun HomeScreen(
     onOpenDrawer: () -> Unit,
     navController: NavHostController
 ) {
+    val context = LocalContext.current
+
     val cartViewModel: CartViewModel = hiltViewModel()
     val productListViewModel: ProductListViewModel = hiltViewModel()
     val productFilterViewModel: ProductFilterViewModel = hiltViewModel()
 
     val cartState by cartViewModel.cart.collectAsState()
     val productList by productListViewModel.productList.collectAsState()
+    val productListState by productListViewModel.productListState.collectAsState()
     val dietaryFilters = productFilterViewModel.dietaryFilters.collectAsState()
     val categoryFilters = productFilterViewModel.categoryFilters.collectAsState()
+
 
     val totalItems = remember(cartState) { cartViewModel.getTotalItems() }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -40,6 +47,18 @@ fun HomeScreen(
 
     LaunchedEffect(dietaryFilters.value, categoryFilters.value) {
         productListViewModel.filterProducts(categoryFilters.value, dietaryFilters.value)
+    }
+
+
+    LaunchedEffect(productListState) {
+        if (productListState.isError == true) {
+            SnackbarManager.showMessage(
+                actionLabel = context.getString(R.string.product_list_failed_action),
+                message = context.getString(R.string.product_list_failed),
+                onAction = { productListViewModel.getProducts() },
+                type = SnackbarType.ERROR
+            )
+        }
     }
 
     HomeContent(

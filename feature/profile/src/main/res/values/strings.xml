@@ -13,6 +13,8 @@
     <string name="profile_picture">Profile picture</string>
     <string name="edit_picture">Edit picture</string>
 
+    <string name="profile_update_failed">Could not update your profile. Please try again.</string>
+    <string name="profile_update_failed_action">Retry</string>
     <string name="camera_title">Select option:</string>
     <string name="open_camera">Open camera</string>
     <string name="open_galery">Choose from gallery</string>

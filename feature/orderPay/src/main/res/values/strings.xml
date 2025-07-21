@@ -16,4 +16,6 @@
     <string name="security_code_input_label">CVV</string>
     <string name="security_code_error_label">Invalid code</string>
     <string name="pay_label">Complete purchase</string>
+    <string name="payment_failed">Could not process your payment. Please try again.</string>
+    <string name="payment_failed_action">Retry</string>
 </resources>

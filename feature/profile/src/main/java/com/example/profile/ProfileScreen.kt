@@ -17,21 +17,37 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.library.utils.SnackbarManager
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(onOpenDrawer: () -> Unit) {
+    val context = LocalContext.current
+
     val profileViewModel: ProfileViewModel = hiltViewModel()
-    val profileState by profileViewModel.profile.collectAsState()
+
+    val profileData by profileViewModel.profileData.collectAsState()
+    val profileState by profileViewModel.profileState.collectAsState()
 
     val isEditing = profileViewModel.isEditing
 
     LaunchedEffect(Unit) {
         profileViewModel.loadProfile()
+    }
+
+    LaunchedEffect(profileState) {
+        if (profileState.isError == true) {
+            SnackbarManager.showMessage(
+                actionLabel = context.getString(R.string.profile_update_failed_action),
+                message = context.getString(R.string.profile_update_failed),
+                onAction = { profileViewModel.saveProfileChanges() }
+            )
+        }
     }
 
     Scaffold(
@@ -62,7 +78,7 @@ fun ProfileScreen(onOpenDrawer: () -> Unit) {
     ) { padding ->
         ProfileContent(
             padding = padding,
-            profileState = profileState,
+            profileData = profileData,
             isEditing = isEditing,
             onUpdateField = { key, value -> profileViewModel.updateLoginField(key, value) },
             onImageSelected = { uri -> profileViewModel.updateProfilePicture(uri) }

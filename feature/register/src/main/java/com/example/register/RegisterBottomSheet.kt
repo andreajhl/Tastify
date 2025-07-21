@@ -11,7 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.library.utils.SnackbarManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,6 +21,8 @@ fun RegisterBottomSheet(
     onDismiss: () -> Unit,
     onRegisterSuccess: () -> Unit
 ) {
+    val context = LocalContext.current
+
     val registerViewModel: RegisterViewModel = hiltViewModel()
 
     val registerError by registerViewModel.errorMsg.collectAsState()
@@ -43,10 +47,18 @@ fun RegisterBottomSheet(
         }
     }
 
-    LaunchedEffect(registerState.isSuccess) {
+    LaunchedEffect(registerState) {
         if (registerState.isSuccess == true) {
             showSheet = false
             onRegisterSuccess()
+        }
+
+        if (registerState.isError == true) {
+            SnackbarManager.showMessage(
+                actionLabel = context.getString(R.string.register_failed_action),
+                message = context.getString(R.string.register_failed),
+                onAction = { registerViewModel.executeRegister() }
+            )
         }
     }
 

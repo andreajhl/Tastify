@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Login</string>
+    <string name="login_failed">Could not log in. Please try again.</string>
+    <string name="login_failed_action">Retry</string>
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
     <string name="sign_in_label">Sign In</string>

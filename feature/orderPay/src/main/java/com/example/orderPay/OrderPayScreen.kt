@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,10 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.library.utils.SnackbarManager
 import com.example.navigation.Screen
 import com.example.theme.DefaultScreenPadding
 import kotlinx.coroutines.launch
@@ -32,6 +35,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderPayScreen(navController: NavHostController) {
+    val context = LocalContext.current
+
     val coroutineScope = rememberCoroutineScope()
 
     val orderPayViewModel: OrderPayViewModel = hiltViewModel()
@@ -55,6 +60,16 @@ fun OrderPayScreen(navController: NavHostController) {
         coroutineScope.launch {
             orderPayViewModel.paymentExecute()
             navController.navigate(Screen.Home.route)
+        }
+    }
+
+    LaunchedEffect(payState) {
+        if (payState.isError == true) {
+            SnackbarManager.showMessage(
+                actionLabel = context.getString(R.string.payment_failed_action),
+                message = context.getString(R.string.payment_failed),
+                onAction = { handlePayClick() }
+            )
         }
     }
 

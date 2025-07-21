@@ -15,25 +15,39 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.library.utils.SnackbarManager
 import com.example.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderHistoryScreen(
     onOpenDrawer: () -> Unit,
-    navController: NavHostController,
-    ) {
+    navController: NavHostController
+) {
+    val context = LocalContext.current
+
     val orderHistoryViewModel: OrderHistoryViewModel = hiltViewModel()
 
     val orders by orderHistoryViewModel.orderHistoryData.collectAsState()
-    val state by orderHistoryViewModel.orderHistoryState.collectAsState()
+    val orderState by orderHistoryViewModel.orderHistoryState.collectAsState()
 
     LaunchedEffect(Unit) {
         orderHistoryViewModel.getOrderHistory()
+    }
+
+    LaunchedEffect(orderState) {
+        if (orderState.isError == true) {
+            SnackbarManager.showMessage(
+                actionLabel = context.getString(R.string.order_history_failed_action),
+                message = context.getString(R.string.order_history_failed),
+                onAction = { orderHistoryViewModel.getOrderHistory() }
+            )
+        }
     }
 
     Scaffold(
@@ -58,7 +72,7 @@ fun OrderHistoryScreen(
             )
         },
     ) { padding ->
-        if(state.isLoading) OrderHistorySkeleton(padding)
+        if (orderState.isLoading) OrderHistorySkeleton(padding)
         else if(orders.isNotEmpty()) OrderHistoryContent(padding = padding, orders = orders, navController = navController)
         else EmptyOrderHistory(padding = padding, onGoHome = { navController.navigate(Screen.Home.route) })
     }

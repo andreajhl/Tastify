@@ -3,4 +3,6 @@
     <string name="home_title">Tastify</string>
     <string name="home_menu">Menu</string>
     <string name="home_cart">Cart</string>
+    <string name="product_list_failed">Could not load products. Please try again.</string>
+    <string name="product_list_failed_action">Retry</string>
 </resources>

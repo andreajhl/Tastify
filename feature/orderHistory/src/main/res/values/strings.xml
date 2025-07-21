@@ -5,4 +5,6 @@
     <string name="order_card_price">Price</string>
     <string name="order_card_items">Items</string>
     <string name="order_card_date">Date</string>
+    <string name="order_history_failed">Could not load your order history. Please try again.</string>
+    <string name="order_history_failed_action">Retry</string>
 </resources>

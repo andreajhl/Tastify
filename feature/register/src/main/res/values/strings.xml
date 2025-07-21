@@ -11,4 +11,6 @@
     <string name="input_password_error">Password must be at least 6 characters and contain a number</string>
     <string name="input_repeat_password_error">Passwords do not match</string>
     <string name="sign_up">Sign Up</string>
+    <string name="register_failed">Could not register your account. Please try again.</string>
+    <string name="register_failed_action">Retry</string>
 </resources>
