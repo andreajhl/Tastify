@@ -31,7 +31,8 @@ fun OrderDetailSkeleton(
     padding: PaddingValues
 ) {
     val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-    val placeholderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
+    val placeholderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+
     val cardColor = MaterialTheme.colorScheme.background
 
     val shimmer = PlaceholderHighlight.shimmer(

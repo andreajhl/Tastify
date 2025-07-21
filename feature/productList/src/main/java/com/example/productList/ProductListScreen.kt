@@ -15,10 +15,11 @@ import com.example.theme.AppAndroidTheme
 
 @Composable
 fun ProductListScreen(
+    productListState: ProductListState,
     productList: List<ProductEntity>,
     addToCart: (String) -> Unit
 ) {
-    if (productList.isEmpty()) {
+    if (true) {
         ProductListSkeleton()
         return
     }
@@ -75,35 +76,12 @@ fun ProductListPreview() {
             hasDrink = false,
             glutenFree = false,
             vegetarian = false,
-        ),
-        ProductEntity(
-            id = "3",
-            name = "Sushi Vegano",
-            description = "Rolls de palta y pepino",
-            price = 18.0,
-            category = "international_food",
-            imageUrl = "https://i.blogs.es/982e96/sushi-vegano-receta/1366_2000.jpg",
-            quantity = 5,
-            hasDrink = true,
-            glutenFree = true,
-            vegetarian = true,
-        ),
-        ProductEntity(
-            id = "4",
-            name = "Tacos",
-            description = "Tacos mexicanos de pollo",
-            price = 15.0,
-            category = "fast_food",
-            imageUrl = "https://cdn7.kiwilimon.com/recetaimagen/37041/640x426/39083.jpg.webp",
-            quantity = 4,
-            hasDrink = false,
-            glutenFree = false,
-            vegetarian = false,
         )
     )
 
     AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         ProductListScreen(
+            productListState = ProductListState(isLoading = false),
             productList = fakeItems,
             addToCart = {}
         )

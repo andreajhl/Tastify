@@ -25,7 +25,7 @@ import com.google.accompanist.placeholder.shimmer
 @Composable
 fun ProductCardSkeleton() {
     val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-    val placeholderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
+    val placeholderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
 
     val shimmer = PlaceholderHighlight.shimmer(
         highlightColor = highlightColor

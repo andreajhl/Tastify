@@ -24,8 +24,8 @@ import com.example.theme.AppAndroidTheme
 @Composable
 fun OrderCardSkeleton() {
     val cardColor = MaterialTheme.colorScheme.surface
-    val skeletonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-    val secondarySkeletonColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
+    val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+    val placeholderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -43,7 +43,7 @@ fun OrderCardSkeleton() {
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
                     .height(20.dp)
-                    .background(skeletonColor, RoundedCornerShape(4.dp))
+                    .background(highlightColor, RoundedCornerShape(4.dp))
             )
 
             Row(
@@ -58,13 +58,13 @@ fun OrderCardSkeleton() {
                             modifier = Modifier
                                 .width(60.dp)
                                 .height(10.dp)
-                                .background(secondarySkeletonColor, RoundedCornerShape(4.dp))
+                                .background(placeholderColor, RoundedCornerShape(4.dp))
                         )
                         Box(
                             modifier = Modifier
                                 .width(40.dp)
                                 .height(16.dp)
-                                .background(skeletonColor, RoundedCornerShape(4.dp))
+                                .background(highlightColor, RoundedCornerShape(4.dp))
                         )
                     }
                 }
