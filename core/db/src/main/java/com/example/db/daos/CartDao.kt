@@ -17,8 +17,12 @@ interface CartDao {
     suspend fun getItems(): List<CartItemProduct>
 
     @Transaction
-    @Query("SELECT * FROM cartItem WHERE id = :productId LIMIT 1")
-    suspend fun getItemById(productId: String): CartItemProduct?
+    @Query("SELECT * FROM cartItem WHERE userId = :userId")
+    suspend fun getItemByUserId(userId: String): List<CartItemProduct>
+
+    @Transaction
+    @Query("SELECT * FROM cartItem WHERE id = :productId AND userId = :userId LIMIT 1")
+    suspend fun getItemById(productId: String, userId: String): CartItemProduct?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(item: CartItemEntity)
@@ -29,6 +33,6 @@ interface CartDao {
     @Delete
     suspend fun deleteItem(item: CartItemEntity)
 
-    @Query("DELETE FROM cartItem")
-    suspend fun clear()
+    @Query("DELETE FROM cartItem WHERE userId = :userId")
+    suspend fun clear(userId: String)
 }

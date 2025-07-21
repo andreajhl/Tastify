@@ -10,6 +10,9 @@ data class OrderEntity(
     @ColumnInfo(name = "id")
     val id: String,
 
+    @ColumnInfo(name = "userId")
+    val userId: String,
+
     @ColumnInfo(name = "total")
     val total: Double,
 

@@ -5,6 +5,7 @@ import com.example.db.entities.CartItemEntity
 import com.example.db.entities.CartItemProduct
 import com.example.db.entities.ProductEntity
 import com.example.remotes.repository.cart.CartRepositoryImpl
+import com.example.session.SessionManager
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,21 +21,25 @@ import kotlin.test.assertEquals
 class CartRepositoryImplTest {
 
     private val cartDao: CartDao = mock()
+    private val sessionManager: SessionManager = mock()
     private lateinit var repository: CartRepositoryImpl
 
+    private val userId = "user1"
+
     val product = ProductEntity("1", "Pizza", "", 1000.0, "fast_food", "", 2, true, false, false)
-    val cartItem = CartItemEntity("1", 1, 1000.0)
+    val cartItem = CartItemEntity("1", userId, 1, 1000.0)
 
     @Before
     fun setup() {
-        repository = CartRepositoryImpl(cartDao)
+        whenever(sessionManager.getUserId()).thenReturn(userId)
+        repository = CartRepositoryImpl(cartDao, sessionManager)
     }
 
     @Test
     fun `loadCartFromDb updates cartState with items from dao`() = runTest {
         val cartItemWithProduct = CartItemProduct(cartItem, product)
 
-        whenever(cartDao.getItems()).thenReturn(listOf(cartItemWithProduct))
+        whenever(cartDao.getItemByUserId(userId)).thenReturn(listOf(cartItemWithProduct))
 
         repository.loadCartFromDb()
 
@@ -45,32 +50,46 @@ class CartRepositoryImplTest {
 
     @Test
     fun `addToCart inserts item when not exists`() = runTest {
-        whenever(cartDao.getItemById("1")).thenReturn(null)
-        whenever(cartDao.getItems()).thenReturn(emptyList())
+        whenever(cartDao.getItemById("1", userId)).thenReturn(null)
+        whenever(cartDao.getItemByUserId(userId)).thenReturn(emptyList())
 
         repository.addToCart(product, 1)
 
-        verify(cartDao).insertItem(cartItem)
-        verify(cartDao).getItems()
+        verify(cartDao).insertItem(
+            CartItemEntity(
+                productId = "1",
+                userId = userId,
+                quantity = 1,
+                price = 1000.0
+            )
+        )
+        verify(cartDao).getItemByUserId(userId)
     }
 
     @Test
     fun `subtractFromCart deletes item if quantity reaches 0`() = runTest {
         val cartItemWithProduct = CartItemProduct(cartItem, product)
 
-        whenever(cartDao.getItemById("1")).thenReturn(cartItemWithProduct)
-        whenever(cartDao.getItems()).thenReturn(emptyList())
+        whenever(cartDao.getItemById("1", userId)).thenReturn(cartItemWithProduct)
+        whenever(cartDao.getItemByUserId(userId)).thenReturn(emptyList())
 
         repository.subtractFromCart("1", 1)
 
-        verify(cartDao).deleteItem(cartItem)
+        verify(cartDao).deleteItem(
+            CartItemEntity(
+                productId = "1",
+                userId = userId,
+                quantity = 1,
+                price = 1000.0
+            )
+        )
     }
 
     @Test
     fun `clearCart clears dao and resets cartState`() = runTest {
         repository.clearCart()
 
-        verify(cartDao).clear()
+        verify(cartDao).clear(userId)
         val state = repository.cartState.value
         assertTrue(state.items.isEmpty())
         assertFalse(state.showCart)

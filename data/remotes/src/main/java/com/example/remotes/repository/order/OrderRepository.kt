@@ -7,7 +7,7 @@ import com.example.remotes.dtos.order.OrderCreateDto
 interface OrderRepository {
     suspend fun getOrdersRemote(id: String): List<OrderItemProduct>
     suspend fun createOrderLocal(request: OrderCreateDto): OrderEntity?
-    suspend fun getOrdersLocal(): List<OrderItemProduct>
+    suspend fun getOrdersLocal(id: String): List<OrderItemProduct>
     suspend fun getOrder(id: String): OrderItemProduct?
     suspend fun createOrderRemote(orderId: String, userId: String): Boolean
 }

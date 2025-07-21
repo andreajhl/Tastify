@@ -22,6 +22,7 @@ class OrderRepositoryImpl @Inject constructor(
             ordersDto.forEach { dto ->
                 val orderEntity = OrderEntity(
                     id = dto.id,
+                    userId = id,
                     total = dto.total,
                     timestamp = dto.timestamp
                 )
@@ -39,13 +40,17 @@ class OrderRepositoryImpl @Inject constructor(
                 orderDao.createOrderItems(items)
             }
 
-            return orderDao.getAllOrdersWithItems()
+            return orderDao.getOrdersWithItemsByUserId(id)
         }
 
         return emptyList()
     }
 
     override suspend fun getOrder(id: String): OrderItemProduct? {
+        val localOrder = orderDao.getOrderWithItems(id)
+
+        if (localOrder != null) return localOrder
+
         val res = api.getOrderById(id)
 
         if (res.body() != null) {
@@ -53,6 +58,7 @@ class OrderRepositoryImpl @Inject constructor(
 
             val orderEntity = OrderEntity(
                 id = orderDto.id,
+                userId = orderDto.userId,
                 total = orderDto.total,
                 timestamp = orderDto.timestamp
             )
@@ -79,6 +85,7 @@ class OrderRepositoryImpl @Inject constructor(
 
         val entity = OrderEntity(
             id = localOrderId,
+            userId = request.userId,
             total = request.total,
             timestamp = System.currentTimeMillis()
         )
@@ -99,12 +106,12 @@ class OrderRepositoryImpl @Inject constructor(
         return entity
     }
 
-    override suspend fun getOrdersLocal(): List<OrderItemProduct> {
-        return orderDao.getAllOrdersWithItems()
+    override suspend fun getOrdersLocal(id: String): List<OrderItemProduct> {
+        return orderDao.getOrdersWithItemsByUserId(id)
     }
 
     override suspend fun createOrderRemote(orderId: String, userId: String): Boolean {
-        val orderWithItems = orderDao.getOrderWithItems(orderId)
+        val orderWithItems = orderDao.getOrderWithItems(orderId) ?: return false
 
         val request = OrderCreateDto(
             userId = userId,
@@ -121,6 +128,13 @@ class OrderRepositoryImpl @Inject constructor(
         )
 
         val response = api.createOrder(request)
+
+        if (response.isSuccessful) {
+            val remoteOrderId = response.body()?.id
+            if (remoteOrderId != null) orderDao.updateOrderId(localId = orderId, remoteId = remoteOrderId)
+            return true
+        }
+
         return response.isSuccessful
     }
 }

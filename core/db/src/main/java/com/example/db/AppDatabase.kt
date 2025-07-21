@@ -23,6 +23,7 @@ import com.example.db.entities.UserEntity
     version = 1,
     exportSchema = false
 )
+
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun productDao(): ProductDao

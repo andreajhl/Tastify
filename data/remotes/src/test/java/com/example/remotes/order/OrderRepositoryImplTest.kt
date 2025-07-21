@@ -49,7 +49,7 @@ class OrderRepositoryImplTest {
         val expectedOrders = listOf(mock<OrderItemProduct>())
 
         whenever(orderApi.getOrdersByUserId("user1")).thenReturn(expectedResponse)
-        whenever(orderDao.getAllOrdersWithItems()).thenReturn(expectedOrders)
+        whenever(orderDao.getOrdersWithItemsByUserId("user1")).thenReturn(expectedOrders)
 
         val result = repository.getOrdersRemote("user1")
 
@@ -60,11 +60,26 @@ class OrderRepositoryImplTest {
 
     @Test
     fun `getOrder should store order in DB and return it`() = runTest {
-        val expectedResponse = Response.success(orderDto)
+        val orderDto = OrderDto(
+            id = "remoteOrderId",
+            userId = "user1",
+            total = 100.0,
+            timestamp = 123456789,
+            items = listOf(
+                OrderItemDto(
+                    id = "item1",
+                    productName = "Pizza",
+                    price = 50.0,
+                    quantity = 2
+                )
+            )
+        )
+
         val expectedOrder = mock<OrderItemProduct>()
 
-        whenever(orderApi.getOrderById("order1")).thenReturn(expectedResponse)
-        whenever(orderDao.getOrderWithItems("order1")).thenReturn(expectedOrder)
+        whenever(orderDao.getOrderWithItems("order1")).thenReturn(null)
+        whenever(orderApi.getOrderById("order1")).thenReturn(Response.success(orderDto))
+        whenever(orderDao.getOrderWithItems("remoteOrderId")).thenReturn(expectedOrder)
 
         val result = repository.getOrder("order1")
 
@@ -93,9 +108,9 @@ class OrderRepositoryImplTest {
     @Test
     fun `getOrdersLocal should return local orders`() = runTest {
         val expectedOrders = listOf(mock<OrderItemProduct>())
-        whenever(orderDao.getAllOrdersWithItems()).thenReturn(expectedOrders)
+        whenever(orderDao.getOrdersWithItemsByUserId("user1")).thenReturn(expectedOrders)
 
-        val result = repository.getOrdersLocal()
+        val result = repository.getOrdersLocal("user1")
 
         assertEquals(expectedOrders, result)
     }
@@ -103,7 +118,7 @@ class OrderRepositoryImplTest {
     @Test
     fun `createOrderRemote should call API and return true if successful`() = runTest {
         val orderItemProduct = OrderItemProduct(
-            order = OrderEntity("order1", 150.0, 12345L),
+            order = OrderEntity("order1", "user1", 150.0, 12345L),
             items = listOf(
                 OrderItemEntity(0, "order1", "Burger", 50.0, 3)
             )

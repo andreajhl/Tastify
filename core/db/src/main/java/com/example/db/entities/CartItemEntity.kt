@@ -11,6 +11,9 @@ data class CartItemEntity(
     @ColumnInfo(name = "id")
     val productId: String,
 
+    @ColumnInfo(name = "userId")
+    val userId: String,
+
     @ColumnInfo(name = "quantity")
     val quantity: Int,
 

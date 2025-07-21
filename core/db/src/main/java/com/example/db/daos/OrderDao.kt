@@ -29,9 +29,12 @@ interface OrderDao {
 
     @Transaction
     @Query("SELECT * FROM orders WHERE id = :orderId")
-    suspend fun getOrderWithItems(orderId: String): OrderItemProduct
+    suspend fun getOrderWithItems(orderId: String): OrderItemProduct?
 
     @Transaction
-    @Query("SELECT * FROM orders")
-    suspend fun getAllOrdersWithItems(): List<OrderItemProduct>
+    @Query("SELECT * FROM orders WHERE userId = :userId ORDER BY timestamp DESC")
+    suspend fun getOrdersWithItemsByUserId(userId: String): List<OrderItemProduct>
+
+    @Query("UPDATE orders SET id = :remoteId WHERE id = :localId")
+    suspend fun updateOrderId(localId: String, remoteId: String)
 }

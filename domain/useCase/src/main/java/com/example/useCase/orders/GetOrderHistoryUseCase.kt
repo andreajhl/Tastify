@@ -11,15 +11,15 @@ class GetOrderHistoryUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Result<List<OrderItemProduct>> {
         return try {
-            val localOrders = orderRepository.getOrdersLocal()
+            val userId = sessionManager.getUserId() ?: return Result.failure(
+                IllegalStateException("No user ID found")
+            )
+
+            val localOrders = orderRepository.getOrdersLocal(userId)
 
             if (localOrders.isNotEmpty()) {
                 Result.success(localOrders)
             } else {
-                val userId = sessionManager.getUserId() ?: return Result.failure(
-                    IllegalStateException("No user ID found")
-                )
-
                 val remoteOrders = orderRepository.getOrdersRemote(userId)
                 Result.success(remoteOrders)
             }

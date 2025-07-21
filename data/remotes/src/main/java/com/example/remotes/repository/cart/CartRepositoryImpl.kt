@@ -3,18 +3,21 @@ package com.example.remotes.repository.cart
 import com.example.db.daos.CartDao
 import com.example.db.entities.CartItemEntity
 import com.example.db.entities.ProductEntity
+import com.example.session.SessionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class CartRepositoryImpl @Inject constructor(
-    private val cartDao: CartDao
+    private val cartDao: CartDao,
+    private val sessionManager: SessionManager,
 ) : CartRepository {
     private val _cartState = MutableStateFlow(CartState())
     override val cartState: StateFlow<CartState> = _cartState
 
     override suspend fun loadCartFromDb() {
-        val itemsWithProduct = cartDao.getItems()
+        val userId = sessionManager.getUserId() ?: return
+        val itemsWithProduct = cartDao.getItemByUserId(userId)
 
         val itemsMap = itemsWithProduct.associate {
             it.product.id to it.product.copy(quantity = it.cartItem.quantity)
@@ -30,12 +33,14 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addToCart(product: ProductEntity, quantity: Int) {
-        val existingItem = cartDao.getItemById(product.id)
+        val userId = sessionManager.getUserId() ?: return
+        val existingItem = cartDao.getItemById(product.id, userId)
         val newQuantity = (existingItem?.cartItem?.quantity ?: 0) + quantity
 
         cartDao.insertItem(
             CartItemEntity(
                 productId = product.id,
+                userId = userId,
                 quantity = newQuantity,
                 price = product.price
             )
@@ -45,7 +50,8 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun subtractFromCart(productId: String, quantity: Int) {
-        val existingItem = cartDao.getItemById(productId)
+        val userId = sessionManager.getUserId() ?: return
+        val existingItem = cartDao.getItemById(productId, userId)
 
         if (existingItem != null) {
             val newQuantity = existingItem.cartItem.quantity - quantity
@@ -54,6 +60,7 @@ class CartRepositoryImpl @Inject constructor(
                 cartDao.deleteItem(
                     CartItemEntity(
                         productId = productId,
+                        userId = userId,
                         quantity = existingItem.cartItem.quantity,
                         price = existingItem.cartItem.price
 
@@ -63,6 +70,7 @@ class CartRepositoryImpl @Inject constructor(
                 cartDao.insertItem(
                     CartItemEntity(
                         productId = productId,
+                        userId = userId,
                         quantity = newQuantity,
                         price = existingItem.cartItem.price
                     )
@@ -74,12 +82,14 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeItem(productId: String, callback: (Int) -> Unit) {
-        val existingItem = cartDao.getItemById(productId)
+        val userId = sessionManager.getUserId() ?: return
+        val existingItem = cartDao.getItemById(productId, userId)
 
         existingItem?.let {
             cartDao.deleteItem(
                 CartItemEntity(
                     productId = productId,
+                    userId = userId,
                     quantity = existingItem.cartItem.quantity,
                     price = existingItem.cartItem.price
                 )
@@ -90,7 +100,9 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearCart() {
-        cartDao.clear()
+        val userId = sessionManager.getUserId() ?: return
+        cartDao.clear(userId)
+
         _cartState.value = CartState(
             items = emptyMap(),
             showCart = false,

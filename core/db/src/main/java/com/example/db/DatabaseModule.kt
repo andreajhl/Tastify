@@ -21,10 +21,7 @@ object DatabaseModule {
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
             appContext, AppDatabase::class.java, "peya-database"
-        )
-            .fallbackToDestructiveMigration(true)
-            .fallbackToDestructiveMigrationOnDowngrade(true)
-            .build()
+        ).build()
 
     }
 
