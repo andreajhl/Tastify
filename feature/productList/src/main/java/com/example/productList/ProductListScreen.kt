@@ -19,7 +19,7 @@ fun ProductListScreen(
     productList: List<ProductEntity>,
     addToCart: (String) -> Unit
 ) {
-    if (true) {
+    if (productListState.isLoading) {
         ProductListSkeleton()
         return
     }
