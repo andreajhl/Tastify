@@ -33,8 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.data.Category
-import com.example.data.Dietary
+import com.example.library.utils.Category
+import com.example.library.utils.Dietary
 import com.example.theme.AppAndroidTheme
 
 @Composable
@@ -153,7 +153,9 @@ fun ProductCard(
 @Preview(showBackground = true)
 @Composable
 fun ProductCardScreenPreview() {
-    Box(modifier = Modifier.padding(50.dp).height(300.dp)){
+    Box(modifier = Modifier
+        .padding(50.dp)
+        .height(300.dp)){
         ProductCard(
             id = "1",
             title = "Hamburguesa Doble",

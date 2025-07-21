@@ -92,9 +92,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
     // Módulos del proyecto
-    implementation(project(":data"))
+    implementation(project(":data:remotes"))
     implementation(project(":library:utils"))
     implementation(project(":core:db"))
     implementation(project(":core:theme"))

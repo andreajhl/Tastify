@@ -71,18 +71,10 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.hilt.android)
 
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-
-    // Worker
-    implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.androidx.hilt.work)
 
     // Kotlin stdlib
     implementation(libs.kotlin.stdlib)
@@ -93,9 +85,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
     // Módulos del proyecto
-    implementation(project(":data"))
+    implementation(project(":domain:useCase"))
     implementation(project(":core:db"))
     implementation(project(":core:session"))
     implementation(project(":core:theme"))
