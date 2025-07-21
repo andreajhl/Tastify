@@ -49,7 +49,7 @@ class ProductRepositoryImplTest {
     }
 
     @Test
-    fun `getProductListLocalRemote should fetch from API and update dao`() = runTest {
+    fun `getProductListRemote should fetch from API and update dao`() = runTest {
         val apiProducts = listOf(productDto)
 
         whenever(api.getProducts()).thenReturn(Response.success(apiProducts))
@@ -70,7 +70,7 @@ class ProductRepositoryImplTest {
             }
         )
 
-        val result = repository.getProductListLocalRemote()
+        val result = repository.getProductListRemote()
 
         verify(api).getProducts()
         verify(dao).clearProducts()

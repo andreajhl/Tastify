@@ -17,7 +17,7 @@ class ProductListSyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            repository.getProductListLocalRemote()
+            repository.getProductListRemote()
             Result.success()
         } catch (e: Exception) {
             Result.retry()

@@ -12,7 +12,7 @@ class ProductRepositoryImpl @Inject constructor(
 ) : ProductRepository {
     override suspend fun getProductListLocal(): List<ProductEntity> = dao.getAll()
 
-    override suspend fun getProductListLocalRemote(): List<ProductEntity> {
+    override suspend fun getProductListRemote(): List<ProductEntity> {
         val res = api.getProducts()
 
         if (res.body() != null && res.body()!!.isNotEmpty()) {

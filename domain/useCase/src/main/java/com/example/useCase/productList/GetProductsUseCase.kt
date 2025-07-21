@@ -15,7 +15,7 @@ class GetProductsUseCase @Inject constructor(
             if (localProducts.isNotEmpty()) {
                 Result.success(localProducts)
             } else {
-                val remoteProducts = productRepository.getProductListLocalRemote()
+                val remoteProducts = productRepository.getProductListRemote()
                 Result.success(remoteProducts)
             }
         } catch (e: Exception) {
