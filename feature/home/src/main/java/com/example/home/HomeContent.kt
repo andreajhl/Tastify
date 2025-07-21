@@ -41,7 +41,6 @@ import com.example.productList.ProductListScreen
 import com.example.productList.ProductListState
 import com.example.remotes.repository.cart.CartState
 import com.example.theme.AppAndroidTheme
-import com.example.theme.DefaultScreenPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +117,7 @@ fun HomeContent(
         ) {
             Carousel()
             Column(
-                modifier = Modifier.padding(DefaultScreenPadding),
+                modifier = Modifier.padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 ProductFilter(
