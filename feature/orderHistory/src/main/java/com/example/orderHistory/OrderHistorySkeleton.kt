@@ -1,11 +1,13 @@
 package com.example.orderHistory
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +24,7 @@ fun OrderHistorySkeleton(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onPrimary)
             .padding(padding)
             .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -38,7 +41,7 @@ fun OrderHistorySkeleton(
 @Preview(showBackground = true)
 @Composable
 fun OrderHistorySkeletonPreview() {
-    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         OrderHistorySkeleton(padding = PaddingValues(12.dp))
     }
 }

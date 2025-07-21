@@ -1,5 +1,6 @@
 package com.example.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,8 +112,9 @@ fun HomeContent(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
+                .background(MaterialTheme.colorScheme.onPrimary)
+                .fillMaxSize()
+                .padding(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Carousel()
@@ -139,7 +141,7 @@ fun HomeContent(
             ModalBottomSheet(
                 onDismissRequest = onToggleCart,
                 sheetState = sheetState,
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 CartDrawerContent(
                     totalPrice = cartState.totalPrice,

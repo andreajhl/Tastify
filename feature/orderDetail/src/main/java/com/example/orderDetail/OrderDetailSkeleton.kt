@@ -1,5 +1,6 @@
 package com.example.orderDetail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,8 @@ fun OrderDetailSkeleton(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(DefaultScreenPadding),
+            .padding(DefaultScreenPadding)
+            .background(MaterialTheme.colorScheme.onPrimary),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Card(

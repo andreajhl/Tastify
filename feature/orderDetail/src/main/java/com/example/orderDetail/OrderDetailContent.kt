@@ -42,7 +42,8 @@ fun OrderDetailContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(DefaultScreenPadding),
+            .padding(DefaultScreenPadding)
+            .background(MaterialTheme.colorScheme.onPrimary),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Card(

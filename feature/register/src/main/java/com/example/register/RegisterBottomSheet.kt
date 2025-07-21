@@ -1,6 +1,7 @@
 package com.example.register
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -65,6 +66,7 @@ fun RegisterBottomSheet(
     if (showSheet) {
         ModalBottomSheet(
             sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.onPrimary,
             onDismissRequest = {
                 showSheet = false
                 onDismiss()

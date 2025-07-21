@@ -34,11 +34,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.library.utils.resolveImageModel
 import com.example.theme.AppAndroidTheme
 
 @Composable
@@ -76,7 +79,7 @@ fun CartItem(
                     .fillMaxSize()
                     .background(
                         if (swipeState.targetValue == EndToStart) MaterialTheme.colorScheme.error
-                        else MaterialTheme.colorScheme.surface
+                        else MaterialTheme.colorScheme.onPrimary,
                     ),
                 contentAlignment = Alignment.CenterEnd
             ) {
@@ -101,7 +104,10 @@ fun CartItem(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             AsyncImage(
-                model = imageUrl,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(resolveImageModel(imageUrl))
+                    .crossfade(true)
+                    .build(),
                 contentDescription = name,
                 modifier = Modifier
                     .width(58.dp)

@@ -40,7 +40,7 @@ fun Carousel(
             .wrapContentHeight(),
         itemWidth = 186.dp,
         itemSpacing = 8.dp,
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        contentPadding = PaddingValues(end = 16.dp, start = 16.dp, top = 10.dp)
     ) { i ->
         val item = carouselItems[i % carouselItems.size]
 

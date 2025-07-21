@@ -1,6 +1,7 @@
 package com.example.orderHistory
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,6 +33,7 @@ fun EmptyOrderHistory(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onPrimary)
             .padding(padding)
             .padding(DefaultScreenPadding),
         verticalArrangement = Arrangement.Center,
@@ -72,7 +74,7 @@ fun EmptyOrderHistory(
 @Preview(showBackground = true)
 @Composable
 fun EmptyOrderHistoryPreview() {
-    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         EmptyOrderHistory(
             onGoHome = {},
             padding = PaddingValues(12.dp)
