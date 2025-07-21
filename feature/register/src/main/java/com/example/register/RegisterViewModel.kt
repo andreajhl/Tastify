@@ -1,12 +1,10 @@
 package com.example.register
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.dtos.auth.RegisterDto
-import com.example.data.remote.repository.auth.AuthRepository
 import com.example.library.utils.hashPasswordSHA256
-import com.example.session.SessionManager
+import com.example.remotes.dtos.auth.RegisterDto
+import com.example.useCase.register.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,8 +50,7 @@ data class RegisterDataErrorState(
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val sessionManager: SessionManager
+    private val registerUseCase: RegisterUseCase
 ) : ViewModel(), RegisterContract {
     private val _registerState = MutableStateFlow(RegisterState())
     private val _registerData = MutableStateFlow(RegisterDataState())
@@ -138,34 +135,19 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             _registerState.value = _registerState.value.copy(isLoading = true)
 
-            try {
-                val request = RegisterDto(
-                    name = _registerData.value.name,
-                    lastName = _registerData.value.lastName,
-                    email = _registerData.value.email,
-                    encryptedPassword = hashPasswordSHA256(_registerData.value.password)
-                )
+            val request = RegisterDto(
+                name = _registerData.value.name,
+                lastName = _registerData.value.lastName,
+                email = _registerData.value.email,
+                encryptedPassword = hashPasswordSHA256(_registerData.value.password)
+            )
 
-                val response = authRepository.register(request)
+            val result = registerUseCase(request)
 
-                if (response.isSuccessful && response.body() != null) {
-                    val userId = response.body()!!.id
-                    val email = response.body()!!.email
+            if(result) _registerState.value = _registerState.value.copy(isSuccess = true)
+            else _registerState.value = _registerState.value.copy(isError = true)
 
-                    sessionManager.setUserId(userId)
-                    sessionManager.setUserEmail(email)
-                    sessionManager.setLogged(true)
-                    _registerState.value = _registerState.value.copy(isSuccess = true)
-                } else {
-                    Log.e("Register", "Error: ${response.code()} - ${response.message()}")
-                }
-
-            } catch (e: Exception) {
-                Log.e("Register", "Exception: ${e.message}")
-                _registerState.value = _registerState.value.copy(isError = true)
-            } finally {
-                _registerState.value = _registerState.value.copy(isLoading = false)
-            }
+            _registerState.value = _registerState.value.copy(isLoading = false)
         }
     }
 }

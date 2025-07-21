@@ -1,11 +1,9 @@
 package com.example.orderHistory
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.repository.order.OrderRepository
 import com.example.db.entities.OrderItemProduct
-import com.example.session.SessionManager
+import com.example.useCase.orders.GetOrderHistoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,8 +23,7 @@ data class OrderHistoryState(
 )
 @HiltViewModel
 class OrderHistoryViewModel @Inject constructor(
-    private val orderService: OrderRepository,
-    private val sessionManager: SessionManager
+    private val getOrderHistoryUseCase: GetOrderHistoryUseCase
 ): ViewModel(), OrderHistoryContract {
     private var _orderHistoryData = MutableStateFlow<List<OrderItemProduct>>(emptyList())
     override val orderHistoryData = _orderHistoryData
@@ -38,25 +35,16 @@ class OrderHistoryViewModel @Inject constructor(
         viewModelScope.launch {
             _orderHistoryState.value = OrderHistoryState(isLoading = true)
 
-            try {
-                val local = orderService.getAll()
+            val result = getOrderHistoryUseCase()
 
-                if (local.isEmpty()) {
-                    val userId = sessionManager.getUserId()
-                    val remote = orderService.getAllRemote(userId!!)
-
-                    _orderHistoryData.value = remote
-                } else {
-                    _orderHistoryData.value = local
-                }
-
+            if (result.isSuccess) {
+                _orderHistoryData.value = result.getOrNull() ?: emptyList()
                 _orderHistoryState.value = _orderHistoryState.value.copy(isSuccess = true)
-            } catch (e: Exception) {
-                Log.e("OrderHistory", "Exception: ${e.message}")
+            } else {
                 _orderHistoryState.value = _orderHistoryState.value.copy(isError = true)
-            } finally {
-                _orderHistoryState.value = _orderHistoryState.value.copy(isLoading = false)
             }
+
+            _orderHistoryState.value = _orderHistoryState.value.copy(isLoading = false)
         }
     }
 }

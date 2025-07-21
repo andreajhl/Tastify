@@ -1,10 +1,9 @@
 package com.example.orderDetail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.repository.order.OrderRepository
 import com.example.db.entities.OrderItemProduct
+import com.example.useCase.orders.GetOrderDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +23,7 @@ data class OrderDetailState(
 )
 @HiltViewModel
 class OrderDetailViewModel @Inject constructor(
-    private val orderService: OrderRepository
+    private val getOrderDetailUseCase: GetOrderDetailUseCase
 ): ViewModel(), OrderDetailContract {
     private val _orderDetailData = MutableStateFlow<OrderItemProduct?>(null)
     override val orderDetailData: StateFlow<OrderItemProduct?> = _orderDetailData
@@ -36,20 +35,16 @@ class OrderDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _orderDetailState.value = OrderDetailState(isLoading = true)
 
-            try {
-                val remote = orderService.getOrder(id)
+            val result = getOrderDetailUseCase(id)
 
-                if (remote != null) {
-                    _orderDetailData.value = remote
-                }
-
+            if (result.isSuccess) {
+                _orderDetailData.value = result.getOrNull()
                 _orderDetailState.value = _orderDetailState.value.copy(isSuccess = true)
-            } catch (e: Exception) {
-                Log.e("OrderDetail", "Exception: ${e.message}")
+            } else {
                 _orderDetailState.value = _orderDetailState.value.copy(isError = true)
-            } finally {
-                _orderDetailState.value = _orderDetailState.value.copy(isLoading = false)
             }
+
+            _orderDetailState.value = _orderDetailState.value.copy(isLoading = false)
         }
     }
 }

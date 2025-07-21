@@ -2,9 +2,9 @@ package com.example.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.repository.cart.CartRepository
-import com.example.data.remote.repository.cart.CartState
 import com.example.db.entities.ProductEntity
+import com.example.remotes.repository.cart.CartRepository
+import com.example.remotes.repository.cart.CartState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

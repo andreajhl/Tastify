@@ -1,16 +1,15 @@
 package com.example.profile
 
-import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.dtos.user.UserDto
-import com.example.data.remote.repository.user.UserRepository
-import com.example.data.remote.service.CloudinaryService
-import com.example.session.SessionManager
+import com.example.model.Profile
+import com.example.useCase.profile.LoadProfileUseCase
+import com.example.useCase.profile.UpdateProfileDataUseCase
+import com.example.useCase.profile.UpdateProfilePictureUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,55 +21,39 @@ interface ProfileContract {
     fun toggleEditMode()
     fun updateProfilePicture(uri: Uri)
     fun updateLoginField(key: String, value: String)
+    fun saveProfileChanges()
     val isEditing: Boolean
-    val profile: StateFlow<ProfileState>
+    val profileData: StateFlow<Profile>
+    val profileState: StateFlow<ProfileState>
 }
 
 data class ProfileState(
-    val profileImageUri: String = "",
-    val name: String = "",
-    val lastName: String = "",
-    val address: String = "",
-    val streetNumber: String = "",
-    val apartment: String = "",
-    val floor: String = "",
-    val phone: String = ""
+    val isLoading: Boolean = false,
+    val isSuccess: Boolean = false,
+    val isError: Boolean? = null
 )
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    application: Application,
-    private val userRepository: UserRepository,
-    private val sessionManager: SessionManager,
-    private val cloudinaryService: CloudinaryService
+    private val loadProfileUseCase: LoadProfileUseCase,
+    private val updateProfilePictureUseCase: UpdateProfilePictureUseCase,
+    private val saveProfileChangesUseCase: UpdateProfileDataUseCase
 ) : ViewModel(), ProfileContract {
-    private val appContext = application.applicationContext
+    private val _profileData = MutableStateFlow(Profile())
+    override val profileData: StateFlow<Profile> get() = _profileData
 
-    private val _profile = MutableStateFlow(ProfileState())
-    override val profile: StateFlow<ProfileState> get() = _profile
+    private val _profileState = MutableStateFlow(ProfileState())
+    override val profileState: StateFlow<ProfileState> get() = _profileState
+
 
     override var isEditing by mutableStateOf(false)
 
     override fun loadProfile() {
         viewModelScope.launch {
-            val email = sessionManager.getUserEmail() ?: return@launch
+            val result = loadProfileUseCase()
 
-            val response = userRepository.getUserByEmail(email)
-            if (response.isSuccessful) {
-                val user = response.body()
-
-                user?.let {
-                    _profile.value = ProfileState(
-                        profileImageUri = it.userImageUrl.orEmpty(),
-                        name = it.name.orEmpty(),
-                        lastName = it.lastName.orEmpty(),
-                        address = it.address.orEmpty(),
-                        streetNumber = it.streetNumber?.toString().orEmpty(),
-                        apartment = it.apartment.orEmpty(),
-                        floor = it.floor?.toString().orEmpty(),
-                        phone = it.phone.orEmpty()
-                    )
-                }
+            result.onSuccess { profile ->
+                _profileData.value = profile
             }
         }
     }
@@ -83,38 +66,28 @@ class ProfileViewModel @Inject constructor(
 
     override fun updateProfilePicture(uri: Uri) {
         viewModelScope.launch {
-            val url = cloudinaryService.uploadImageToCloudinary(appContext, uri)
-
-            if (url != null) {
-                _profile.value = _profile.value.copy(profileImageUri = url)
+            val result = updateProfilePictureUseCase(uri)
+            result.onSuccess { url ->
+                _profileData.value = _profileData.value.copy(profileImageUri = url)
             }
         }
     }
 
-    private fun saveProfileChanges() {
+    override fun saveProfileChanges() {
+        _profileState.value = _profileState.value.copy(isLoading = true)
+
         viewModelScope.launch {
-            val userId = sessionManager.getUserId() ?: return@launch
-            val email = sessionManager.getUserEmail() ?: return@launch
+            val result = saveProfileChangesUseCase(_profileData.value)
 
-            val dto = UserDto(
-                id = userId,
-                email = email,
-                name = _profile.value.name,
-                lastName = _profile.value.lastName,
-                userImageUrl = _profile.value.profileImageUri,
-                address = _profile.value.address,
-                streetNumber = _profile.value.streetNumber.toIntOrNull(),
-                apartment = _profile.value.apartment,
-                floor = _profile.value.floor.toIntOrNull(),
-                phone = _profile.value.phone
-            )
+            if (result.isSuccess) _profileState.value = _profileState.value.copy(isSuccess = true)
+            else _profileState.value = _profileState.value.copy(isError = true)
 
-            userRepository.updateProfile(dto)
+            _profileState.value = _profileState.value.copy(isLoading = false)
         }
     }
 
     override fun updateLoginField(field: String, value: String) {
-        val currentState = _profile.value
+        val currentState = _profileData.value
         val updated = when (field) {
             "name" -> currentState.copy(name = value)
             "lastName" -> currentState.copy(lastName = value)
@@ -125,6 +98,6 @@ class ProfileViewModel @Inject constructor(
             "phone" -> currentState.copy(phone = value)
             else -> currentState
         }
-        _profile.value = updated
+        _profileData.value = updated
     }
 }

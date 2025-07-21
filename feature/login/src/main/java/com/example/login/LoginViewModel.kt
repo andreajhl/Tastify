@@ -1,12 +1,8 @@
 package com.example.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.dtos.auth.AuthDto
-import com.example.data.remote.repository.auth.AuthRepository
-import com.example.library.utils.hashPasswordSHA256
-import com.example.session.SessionManager
+import com.example.useCase.login.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,8 +39,7 @@ data class LoginState(
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val sessionManager: SessionManager
+    private val loginUseCase: LoginUseCase
 ) : ViewModel(), LoginContract {
 
     private val _loginData = MutableStateFlow(LoginData())
@@ -95,32 +90,18 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginState.value = _loginState.value.copy(isLoading = true)
 
-            try {
-                val request = AuthDto(
-                    email = _loginData.value.email,
-                    encryptedPassword = hashPasswordSHA256(_loginData.value.password)
-                )
+            val result = loginUseCase(
+                email = _loginData.value.email,
+                password = _loginData.value.password
+            )
 
-                val response = authRepository.login(request)
-
-                if (response.isSuccessful && response.body() != null) {
-                    val userId = response.body()!!.id
-                    val email = response.body()!!.email
-
-                    sessionManager.setUserId(userId)
-                    sessionManager.setUserEmail(email)
-                    sessionManager.setLogged(true)
-                    _loginState.value = _loginState.value.copy(isSuccess = true)
-                } else {
-                    Log.e("Login", "Error: ${response.code()} - ${response.message()}")
-                }
-
-            } catch (e: Exception) {
-                Log.e("Login", "Exception: ${e.message}")
+            if (result.isSuccess) {
+                _loginState.value = _loginState.value.copy(isSuccess = true)
+            } else {
                 _loginState.value = _loginState.value.copy(isError = true)
-            } finally {
-                _loginState.value = _loginState.value.copy(isLoading = false)
             }
+
+            _loginState.value = _loginState.value.copy(isLoading = false)
         }
     }
 }

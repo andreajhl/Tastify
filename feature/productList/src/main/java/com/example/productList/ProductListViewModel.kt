@@ -1,10 +1,9 @@
 package com.example.productList
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.repository.product.ProductRepository
 import com.example.db.entities.ProductEntity
+import com.example.useCase.productList.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +30,7 @@ interface ProductListContract {
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
-    private val productService: ProductRepository
+    private val getProductsUseCase: GetProductsUseCase
 ): ViewModel(), ProductListContract {
     private val _allProducts = MutableStateFlow<List<ProductEntity>>(emptyList())
     private val _productList = MutableStateFlow<List<ProductEntity>>(emptyList())
@@ -44,26 +43,19 @@ class ProductListViewModel @Inject constructor(
         viewModelScope.launch {
             _productListState.value = ProductListState(isLoading = true)
 
-            try {
-                val local = productService.getAll()
+            val result = getProductsUseCase()
 
-                if (local.isEmpty()) {
-                    val remote = productService.getAllRemote()
+            if (result.isSuccess) {
+                val products = result.getOrNull() ?: emptyList()
 
-                    _allProducts.value = remote
-                    _productList.value = remote
-                } else {
-                    _allProducts.value = local
-                    _productList.value = local
-                }
-
+                _allProducts.value = products
+                _productList.value = products
                 _productListState.value = _productListState.value.copy(isSuccess = true)
-            } catch (e: Exception) {
-                Log.e("ProductList", "Exception: ${e.message}")
+            } else {
                 _productListState.value = _productListState.value.copy(isError = true)
-            } finally {
-                _productListState.value = _productListState.value.copy(isLoading = false)
             }
+
+            _productListState.value = _productListState.value.copy(isLoading = false)
         }
     }
 

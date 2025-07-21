@@ -1,8 +1,8 @@
 package com.example.productFilter
 
 import androidx.lifecycle.ViewModel
-import com.example.data.Category
-import com.example.data.Dietary
+import com.example.library.utils.Category
+import com.example.library.utils.Dietary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
