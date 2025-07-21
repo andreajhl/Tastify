@@ -2,6 +2,8 @@ package com.example.orderPay
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.library.utils.isValidShortDate
+import com.example.library.utils.isValidText
 import com.example.useCase.orders.OrderPaymentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,8 +70,7 @@ class OrderPayViewModel @Inject constructor(
     }
 
     override fun validateOwnerName(): Boolean {
-        val ownerName = _payData.value.ownerName.trim()
-        val isValid = ownerName.length >= 2
+        val isValid = isValidText(_payData.value.ownerName)
 
         _errorMsg.value = _errorMsg.value.copy(ownerName = !isValid)
 
@@ -86,15 +87,7 @@ class OrderPayViewModel @Inject constructor(
     }
 
     override fun validateExpiryDate(): Boolean {
-        val expiryDate = _payData.value.expiryDate.trim()
-        val regex = Regex("^\\d{4}$")
-
-        var isValid = false
-
-        if (expiryDate.matches(regex)) {
-            val month = expiryDate.substring(0, 2).toIntOrNull()
-            isValid = month != null && month in 1..12
-        }
+        var isValid = isValidShortDate(_payData.value.expiryDate)
 
         _errorMsg.value = _errorMsg.value.copy(expiryDate = !isValid)
 

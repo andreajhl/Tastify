@@ -8,7 +8,7 @@
     <string name="security_code_label">CVV</string>
     <string name="security_code_placeholder_label">***</string>
     <string name="card_number_input_label">Card Number</string>
-    <string name="card_number_error_label">Invalid card number</string>
+    <string name="card_number_error_label">Card number must be 13 or 14 digits long</string>
     <string name="owner_input_label">Owner Name</string>
     <string name="owner_error_label">Invalid name</string>
     <string name="expiry_input_label">Expiry Date</string>

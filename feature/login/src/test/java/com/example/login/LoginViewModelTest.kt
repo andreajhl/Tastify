@@ -27,10 +27,10 @@ class LoginViewModelTest {
 
     @Test
     fun `executeLogin sets success state when use case returns success`() = runTest {
-        whenever(loginUseCase("test@example.com", "Password1")).thenReturn(Result.success(Unit))
+        whenever(loginUseCase("test@example.com", "Password1.")).thenReturn(Result.success(Unit))
 
         viewModel.updateLoginField("email", "test@example.com")
-        viewModel.updateLoginField("password", "Password1")
+        viewModel.updateLoginField("password", "Password1.")
 
         viewModel.executeLogin()
 
@@ -43,12 +43,12 @@ class LoginViewModelTest {
         whenever(
             loginUseCase(
                 "test@example.com",
-                "Password1"
+                "Password1."
             )
         ).thenReturn(Result.failure(Exception()))
 
         viewModel.updateLoginField("email", "test@example.com")
-        viewModel.updateLoginField("password", "Password1")
+        viewModel.updateLoginField("password", "Password1.")
 
         viewModel.executeLogin()
 
@@ -65,7 +65,7 @@ class LoginViewModelTest {
 
     @Test
     fun `validatePassword returns false for short password`() {
-        viewModel.updateLoginField("password", "123")
+        viewModel.updateLoginField("password", "Test12")
         val result = viewModel.validatePassword()
         assertFalse(result)
     }

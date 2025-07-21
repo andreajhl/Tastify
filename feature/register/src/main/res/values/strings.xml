@@ -8,7 +8,7 @@
     <string name="input_name_error">"Name must be at least 2 characters"</string>
     <string name="input_last_name_error">"Last names must be at least 2 characters"</string>
     <string name="input_email_error">Invalid email</string>
-    <string name="input_password_error">Password must be at least 6 characters and contain a number</string>
+    <string name="input_password_error">Password must be 8–15 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.</string>
     <string name="input_repeat_password_error">Passwords do not match</string>
     <string name="sign_up">Sign Up</string>
     <string name="register_failed">Could not register your account. Please try again.</string>

@@ -2,6 +2,9 @@ package com.example.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.library.utils.isValidEmail
+import com.example.library.utils.isValidPassword
+import com.example.library.utils.isValidText
 import com.example.useCase.login.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,8 +30,8 @@ data class LoginData(
 )
 
 data class LoginErrorState(
-    val email: String = "",
-    val password: String = ""
+    val email: Boolean? = null,
+    val password: Boolean? = null,
 )
 
 data class LoginState(
@@ -61,22 +64,18 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun validateEmail(): Boolean {
-        val email = _loginData.value.email
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
-        val isValid = emailRegex.matches(email)
-        _errorMsg.value = _errorMsg.value.copy(
-            email = if (!isValid) "Invalid email" else ""
-        )
+        val isValid = isValidEmail(_loginData.value.email)
+
+        _errorMsg.value = _errorMsg.value.copy(email = !isValid)
+
         return isValid
     }
 
     override fun validatePassword(): Boolean {
-        val password = _loginData.value.password
-        val passwordRegex = "^(?=.*\\d).{6,}$".toRegex()
-        val isValid = passwordRegex.matches(password)
-        _errorMsg.value = _errorMsg.value.copy(
-            password = if (!isValid) "Password must be at least 6 characters and contain a number" else ""
-        )
+        val isValid = isValidPassword(_loginData.value.password)
+
+        _errorMsg.value = _errorMsg.value.copy(password = !isValid)
+
         return isValid
     }
 

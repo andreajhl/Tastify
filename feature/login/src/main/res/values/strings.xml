@@ -3,7 +3,9 @@
     <string name="login_failed">Could not log in. Please try again.</string>
     <string name="login_failed_action">Retry</string>
     <string name="email_label">Email</string>
+    <string name="input_email_error">Invalid email</string>
     <string name="password_label">Password</string>
+    <string name="input_password_error">Password must be at least 6 characters</string>
     <string name="sign_in_label">Sign In</string>
     <string name="not_found_account_label">Don\'t have an account? Sign up</string>
 </resources>

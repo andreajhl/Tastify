@@ -18,3 +18,16 @@ fun isEquals(firstValue: String, secondValue: String): Boolean {
 fun isValidText(text: String): Boolean {
     return text.trim().isNotEmpty() && text.trim().length >= 3
 }
+
+fun isValidShortDate(shortDate: String): Boolean {
+    val date = shortDate.trim()
+    val regex = Regex("^\\d{4}$")
+
+    if (date.matches(regex)) {
+        val month = date.substring(0, 2).toIntOrNull()
+
+        return month != null && month in 1..12
+    }
+
+    return false
+}

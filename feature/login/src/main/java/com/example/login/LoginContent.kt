@@ -92,7 +92,7 @@ fun LoginContent(
                 value = loginData.email,
                 onValueChange = { updateLoginField("email", it) },
                 onBlur = { validateField("email") },
-                error = errorState.email
+                error = if (errorState.email == true) stringResource(R.string.input_email_error) else ""
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -102,7 +102,7 @@ fun LoginContent(
                 value = loginData.password,
                 onValueChange = { updateLoginField("password", it) },
                 onBlur = { validateField("password") },
-                error = errorState.password,
+                error = if (errorState.password == true) stringResource(R.string.input_password_error) else "",
                 visualTransformation = PasswordVisualTransformation()
             )
 
@@ -148,8 +148,8 @@ fun LoginContentPreview() {
     )
 
     val fakeErrorState = LoginErrorState(
-        email = "",
-        password = ""
+        email = false,
+        password = false
     )
 
     AppAndroidTheme(darkTheme = true, dynamicColor = false) {
