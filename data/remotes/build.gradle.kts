@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     kotlin("kapt")
     alias(libs.plugins.android.library)
@@ -8,6 +10,13 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+val cloudinaryUploadUrl = localProperties.getProperty("CLOUDINARY_UPLOAD_URL") ?: ""
+
 android {
     namespace = "com.example.remotes"
     compileSdk = 35
@@ -17,6 +26,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "CLOUDINARY_UPLOAD_URL", cloudinaryUploadUrl)
     }
 
     buildTypes {
@@ -54,26 +65,11 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.retrofit)
 
-    // Compose
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(platform(libs.androidx.compose.bom))
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Tests
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
 
     implementation(project(":core:db"))
     implementation(project(":core:session"))

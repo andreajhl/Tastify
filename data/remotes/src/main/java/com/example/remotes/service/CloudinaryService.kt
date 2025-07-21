@@ -3,6 +3,7 @@ package com.example.remotes.service
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.example.remotes.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -14,9 +15,8 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 class CloudinaryService @Inject constructor() {
-    private val cloudName = "drioaxhhw"
+    private val uploadUrl = BuildConfig.CLOUDINARY_UPLOAD_URL
     private val uploadPreset = "unsigned_android"
-    private val uploadUrl = "https://api.cloudinary.com/v1_1/$cloudName/image/upload"
     private val client = OkHttpClient()
 
     suspend fun uploadImageToCloudinary(context: Context, uri: Uri): String? {

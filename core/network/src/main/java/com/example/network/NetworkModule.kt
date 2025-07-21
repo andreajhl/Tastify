@@ -20,7 +20,7 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideUrl(): String = com.example.network.BuildConfig.API_BASE_URL
+    fun provideUrl(): String = BuildConfig.API_BASE_URL
 
     @Provides
     @Singleton
