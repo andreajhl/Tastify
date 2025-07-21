@@ -1,4 +1,4 @@
-package com.henry.core.model
+package com.example.model
 
 import org.junit.Test
 
