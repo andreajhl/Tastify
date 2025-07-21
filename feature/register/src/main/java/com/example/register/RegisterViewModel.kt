@@ -3,6 +3,10 @@ package com.example.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.library.utils.hashPasswordSHA256
+import com.example.library.utils.isEquals
+import com.example.library.utils.isValidEmail
+import com.example.library.utils.isValidPassword
+import com.example.library.utils.isValidText
 import com.example.remotes.dtos.auth.RegisterDto
 import com.example.useCase.register.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -74,8 +78,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     override fun validateName(): Boolean {
-        val fullName = _registerData.value.name.trim()
-        val isValid = fullName.length >= 2
+        val isValid = isValidText(_registerData.value.name)
 
         _errorMsg.value = _errorMsg.value.copy(name = !isValid)
 
@@ -83,8 +86,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     override fun validateLastName(): Boolean {
-        val fullName = _registerData.value.lastName.trim()
-        val isValid = fullName.length >= 2
+        val isValid = isValidText(_registerData.value.lastName)
 
         _errorMsg.value = _errorMsg.value.copy(lastName = !isValid)
 
@@ -92,10 +94,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     override fun validateEmail(): Boolean {
-        val email = _registerData.value.email
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
-
-        val isValid = emailRegex.matches(email)
+        val isValid = isValidEmail(_registerData.value.email)
 
         _errorMsg.value = _errorMsg.value.copy(email = !isValid)
 
@@ -103,10 +102,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     override fun validatePassword(): Boolean {
-        val password = _registerData.value.password
-        val passwordRegex = "^(?=.*\\d).{6,}$".toRegex()
-
-        val isValid = passwordRegex.matches(password)
+        val isValid = isValidPassword(_registerData.value.password)
 
         _errorMsg.value = _errorMsg.value.copy(password = !isValid)
 
@@ -114,7 +110,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     override fun validateRepeatPassword(): Boolean {
-        val isValid = _registerData.value.password == _registerData.value.repeatPassword
+        val isValid = isEquals(_registerData.value.password, _registerData.value.repeatPassword)
 
         _errorMsg.value = _errorMsg.value.copy(repeatPassword = !isValid)
 
