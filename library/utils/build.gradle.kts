@@ -48,24 +48,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.legacy.support.v4)
 
-    // Otros - imágenes, red, DI
-    implementation(libs.coil.compose)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.glide)
-    implementation(libs.hilt.android)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-
     // Kotlin stdlib
     implementation(libs.kotlin.stdlib)
-
-    // Tests
-    testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }
