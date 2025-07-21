@@ -1,6 +1,7 @@
 package com.example.productList
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,6 +27,7 @@ fun ProductListScreen(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PaddingValues(bottom = 20.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         items(

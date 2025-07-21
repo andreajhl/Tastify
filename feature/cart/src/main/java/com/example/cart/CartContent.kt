@@ -68,53 +68,52 @@ fun CartContent(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.SpaceBetween
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(onClick = toggleShowCart) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.cart_button),
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-
-                Text(
-                    text = stringResource(R.string.cart_title),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = toggleShowCart) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.cart_button),
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
 
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Text(
+                text = stringResource(R.string.cart_title),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
 
-            LazyColumn(
-                modifier = Modifier.padding(top = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(
-                    items = cartItems,
-                    key = { it.id }
-                ) { product ->
-                    CartItem(
-                        name = product.name,
-                        imageUrl = product.imageUrl,
-                        price = product.price,
-                        quantity = product.quantity,
-                        incrementItem = { incrementItem(product) },
-                        subtractItem = { subtractItem(product) },
-                        removeItem = { removeItem(product.id) },
-                        enableAddButton = enableAddButton(product.id)
-                    )
-                }
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+        LazyColumn(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(
+                items = cartItems,
+                key = { it.id }
+            ) { product ->
+                CartItem(
+                    name = product.name,
+                    imageUrl = product.imageUrl,
+                    price = product.price,
+                    quantity = product.quantity,
+                    incrementItem = { incrementItem(product) },
+                    subtractItem = { subtractItem(product) },
+                    removeItem = { removeItem(product.id) },
+                    enableAddButton = enableAddButton(product.id)
+                )
             }
         }
 

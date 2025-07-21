@@ -46,7 +46,7 @@ fun ProfileContent(
             contentAlignment = Alignment.BottomEnd
         ) {
             AsyncImage(
-                model = profileData.profileImageUri.ifEmpty { "https://i.imgur.com/GF7vZtT.png" },
+                model = profileData.profileImageUri,
                 contentDescription = stringResource(R.string.profile_picture),
                 modifier = Modifier
                     .size(100.dp)

@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -73,7 +74,7 @@ fun ProfileImageButton(
     IconButton(
         onClick = { showDialog = true },
         modifier = Modifier
-            .padding(0.dp)
+            .offset(x = 10.dp, y = 10.dp)
             .background(backgroundColor, shape = CircleShape)
     ) {
         Icon(
