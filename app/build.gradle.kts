@@ -80,15 +80,20 @@ dependencies {
     // Worker
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
+    kapt(libs.androidx.hilt.compiler)
 
     // Módulos del proyecto
-    implementation(project(":data"))
+    implementation(project(":library:utils"))
+    implementation(project(":data:remotes"))
+    implementation(project(":data:worker"))
+    implementation(project(":core:db"))
     implementation(project(":core:theme"))
     implementation(project(":core:session"))
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":feature:authentication"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:common"))
     implementation(project(":feature:profile"))
     implementation(project(":feature:orderHistory"))
     implementation(project(":feature:orderPay"))
