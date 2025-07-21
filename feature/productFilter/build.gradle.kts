@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.material.icons.extended)
 
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -76,10 +77,6 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.hilt.android)
 
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -94,9 +91,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(kotlin("test"))
+
 
     // Módulos del proyecto
-    implementation(project(":data"))
+    implementation(project(":data:remotes"))
     implementation(project(":library:utils"))
     implementation(project(":core:theme"))
     implementation(project(":core:db"))

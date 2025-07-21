@@ -1,22 +1,15 @@
-import java.util.Properties
-
 plugins {
+    kotlin("kapt")
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+    id("dagger.hilt.android.plugin")
 }
-
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localProperties.load(localPropertiesFile.inputStream())
-}
-val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: ""
 
 android {
-    namespace = "com.example.network"
+    namespace = "com.example.remotes"
     compileSdk = 35
 
     defaultConfig {
@@ -24,9 +17,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-
-        buildConfigField("String", "API_BASE_URL", apiBaseUrl)
     }
 
     buildTypes {
@@ -45,9 +35,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {
@@ -57,26 +44,38 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Cloudinary
     implementation(libs.cloudinary.android.core)
     implementation(libs.okhttp)
 
+    // Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.retrofit)
 
-    // Interceptor
-    implementation(libs.logging.interceptor)
-    implementation(libs.converter.gson)
+    // Compose
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(platform(libs.androidx.compose.bom))
+
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Tests
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
-// Módulos del proyecto
     implementation(project(":core:db"))
     implementation(project(":core:session"))
-    implementation(project(":data:remotes"))
-    implementation(project(":data:worker"))
+    testImplementation(kotlin("test"))
 }

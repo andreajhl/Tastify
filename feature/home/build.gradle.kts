@@ -96,7 +96,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Módulos del proyecto
-    implementation(project(":data"))
+    implementation(project(":data:remotes"))
     implementation(project(":core:db"))
     implementation(project(":core:theme"))
     implementation(project(":core:navigation"))
@@ -104,4 +104,5 @@ dependencies {
     implementation(project(":feature:common"))
     implementation(project(":feature:productList"))
     implementation(project(":feature:productFilter"))
+    implementation(project(":library:utils"))
 }

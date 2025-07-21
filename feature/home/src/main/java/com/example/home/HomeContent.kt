@@ -32,13 +32,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.cart.CartDrawerContent
 import com.example.common.Carousel
-import com.example.data.Category
-import com.example.data.Dietary
-import com.example.data.remote.repository.cart.CartState
 import com.example.db.entities.ProductEntity
+import com.example.library.utils.Category
+import com.example.library.utils.Dietary
 import com.example.navigation.Screen
 import com.example.productFilter.ProductFilter
 import com.example.productList.ProductListScreen
+import com.example.remotes.repository.cart.CartState
 import com.example.theme.AppAndroidTheme
 import com.example.theme.DefaultScreenPadding
 

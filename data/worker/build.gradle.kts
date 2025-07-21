@@ -1,22 +1,15 @@
-import java.util.Properties
-
 plugins {
+    kotlin("kapt")
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+    id("dagger.hilt.android.plugin")
 }
-
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localProperties.load(localPropertiesFile.inputStream())
-}
-val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: ""
 
 android {
-    namespace = "com.example.network"
+    namespace = "com.example.worker"
     compileSdk = 35
 
     defaultConfig {
@@ -24,9 +17,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-
-        buildConfigField("String", "API_BASE_URL", apiBaseUrl)
     }
 
     buildTypes {
@@ -45,9 +35,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {
@@ -57,26 +44,22 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.cloudinary.android.core)
-    implementation(libs.okhttp)
 
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.room.compiler)
-    implementation(libs.retrofit)
-
-    // Interceptor
-    implementation(libs.logging.interceptor)
-    implementation(libs.converter.gson)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Worker
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+    kapt(libs.androidx.hilt.compiler)
 
-// Módulos del proyecto
-    implementation(project(":core:db"))
-    implementation(project(":core:session"))
+
     implementation(project(":data:remotes"))
-    implementation(project(":data:worker"))
+    implementation(project(":core:session"))
+    implementation(project(":core:db"))
 }

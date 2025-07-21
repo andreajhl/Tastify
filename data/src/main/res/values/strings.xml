@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">productList</string>
-    <string name="fast_food">Fast food</string>
-    <string name="healthy_food">Healthy</string>
-    <string name="international_food">International</string>
-    <string name="gluten_free">Gluten free</string>
-    <string name="vegetarian">vegetarian</string>
-    <string name="unknown">N/A</string>
-</resources>

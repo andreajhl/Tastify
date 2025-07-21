@@ -1,17 +1,18 @@
 package com.example.network
 
-import com.example.data.remote.api.AuthApi
-import com.example.data.remote.api.OrderApi
-import com.example.data.remote.api.ProductsApi
-import com.example.data.remote.api.UserApi
-import dagger.*
-import dagger.hilt.*
-import dagger.hilt.components.*
-import okhttp3.*
-import okhttp3.logging.*
-import retrofit2.*
-import retrofit2.converter.gson.*
-import javax.inject.*
+import com.example.remotes.api.AuthApi
+import com.example.remotes.api.OrderApi
+import com.example.remotes.api.ProductsApi
+import com.example.remotes.api.UserApi
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 
 @Module

@@ -22,8 +22,8 @@ dependencyResolutionManagement {
 rootProject.name = "fastity"
 
 include(":app")
-include(":data")
 include(":core:db")
+include(":core:model")
 include(":core:theme")
 include(":core:session")
 include(":core:network")
@@ -42,3 +42,7 @@ include(":feature:productFilter")
 include(":feature:orderDetail")
 include(":feature:authentication")
 include(":core:navigation")
+include(":domain:useCase")
+include(":data:remotes")
+include(":data:worker")
+
