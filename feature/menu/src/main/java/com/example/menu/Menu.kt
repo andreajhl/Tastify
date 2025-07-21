@@ -62,7 +62,9 @@ fun Menu(
                         onClick = {
                             if (!isSelected) {
                                 navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
                                     launchSingleTop = true
                                     restoreState = true
                                 }
@@ -83,7 +85,9 @@ fun Menu(
                 HorizontalDivider()
 
                 NavigationDrawerItem(
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
                     label = {
                         Text(
                             text = stringResource(R.string.log_out),

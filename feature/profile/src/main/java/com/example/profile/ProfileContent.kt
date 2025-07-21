@@ -21,13 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.common.InputField
+import com.example.model.Profile
 import com.example.theme.AppAndroidTheme
 import com.example.theme.DefaultScreenPadding
 
 @Composable
 fun ProfileContent(
     padding: PaddingValues,
-    profileState: ProfileState,
+    profileData: Profile,
     isEditing: Boolean,
     onUpdateField: (String, String) -> Unit,
     onImageSelected: (Uri) -> Unit
@@ -45,7 +46,7 @@ fun ProfileContent(
             contentAlignment = Alignment.BottomEnd
         ) {
             AsyncImage(
-                model = profileState.profileImageUri.ifEmpty { "https://i.imgur.com/GF7vZtT.png" },
+                model = profileData.profileImageUri.ifEmpty { "https://i.imgur.com/GF7vZtT.png" },
                 contentDescription = stringResource(R.string.profile_picture),
                 modifier = Modifier
                     .size(100.dp)
@@ -60,7 +61,7 @@ fun ProfileContent(
 
         InputField(
             label = stringResource(R.string.input_name),
-            value = profileState.name,
+            value = profileData.name,
             onValueChange = { onUpdateField("name", it) },
             onBlur = {},
             error = "",
@@ -69,7 +70,7 @@ fun ProfileContent(
 
         InputField(
             label = stringResource(R.string.input_last_name),
-            value = profileState.lastName,
+            value = profileData.lastName,
             onValueChange = { onUpdateField("lastName", it) },
             onBlur = {},
             error = "",
@@ -78,7 +79,7 @@ fun ProfileContent(
 
         InputField(
             label = stringResource(R.string.input_adress),
-            value = profileState.address,
+            value = profileData.address,
             onValueChange = { onUpdateField("address", it) },
             onBlur = {},
             error = "",
@@ -91,7 +92,7 @@ fun ProfileContent(
         ) {
             InputField(
                 label = stringResource(R.string.input_height),
-                value = profileState.streetNumber,
+                value = profileData.streetNumber,
                 onValueChange = { onUpdateField("streetNumber", it) },
                 onBlur = {},
                 error = "",
@@ -101,7 +102,7 @@ fun ProfileContent(
 
             InputField(
                 label = stringResource(R.string.input_floor),
-                value = profileState.floor,
+                value = profileData.floor,
                 onValueChange = { onUpdateField("floor", it) },
                 onBlur = {},
                 error = "",
@@ -111,7 +112,7 @@ fun ProfileContent(
 
             InputField(
                 label = stringResource(R.string.input_apartment),
-                value = profileState.apartment,
+                value = profileData.apartment,
                 onValueChange = { onUpdateField("apartment", it) },
                 onBlur = {},
                 error = "",
@@ -122,7 +123,7 @@ fun ProfileContent(
 
         InputField(
             label = stringResource(R.string.input_phone),
-            value = profileState.phone,
+            value = profileData.phone,
             onValueChange = { onUpdateField("phone", it) },
             onBlur = {},
             error = "",
@@ -134,7 +135,7 @@ fun ProfileContent(
 @Preview(showBackground = true)
 @Composable
 fun ProfileContentPreview() {
-    val fakeProfileState = ProfileState(
+    val fakeProfileState = Profile(
         profileImageUri = "",
         name = "Andrea",
         lastName = "Hernandez",
@@ -147,8 +148,7 @@ fun ProfileContentPreview() {
 
     AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         ProfileContent(
-            padding = PaddingValues(0.dp),
-            profileState = fakeProfileState,
+            padding = PaddingValues(0.dp), profileData = fakeProfileState,
             isEditing = true,
             onUpdateField = { _, _ -> },
             onImageSelected = {}

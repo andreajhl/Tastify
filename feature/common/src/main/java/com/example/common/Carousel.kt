@@ -58,23 +58,5 @@ fun Carousel(
 @Preview(showBackground = true)
 @Composable
 fun CarouselPreview() {
-    val items = listOf(
-        CarouselItem(
-            id = 3,
-            imageResId = R.drawable.ic_launcher_background,
-            contentDescription = "Descuentos"
-        ),
-        CarouselItem(
-            id = 1,
-            imageResId = R.drawable.ic_launcher_background,
-            contentDescription = "Supermercado"
-        ),
-        CarouselItem(
-            id = 2,
-            imageResId = R.drawable.ic_launcher_background,
-            contentDescription = "Promo Pro"
-        ),
-    )
-
     Carousel()
 }

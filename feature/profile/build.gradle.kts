@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.foundation)
     implementation(platform(libs.androidx.compose.bom))
-
+    implementation(libs.androidx.material.icons.extended)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -75,10 +75,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.glide)
     implementation(libs.hilt.android)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -95,16 +91,21 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(kotlin("test"))
 
     // Módulos del proyecto
-    implementation(project(":data"))
     implementation(project(":core:theme"))
-    implementation(project(":core:session"))
+    implementation(project(":core:model"))
+    implementation(project(":domain:useCase"))
     implementation(project(":feature:common"))
+    implementation(project(":library:utils"))
 }
