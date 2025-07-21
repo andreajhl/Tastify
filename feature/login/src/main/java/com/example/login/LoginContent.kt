@@ -152,7 +152,7 @@ fun LoginContentPreview() {
         password = ""
     )
 
-    AppAndroidTheme(darkTheme = false, dynamicColor = false) {
+    AppAndroidTheme(darkTheme = true, dynamicColor = false) {
         LoginContent(
             loginData = fakeLoginData,
             errorState = fakeErrorState,
