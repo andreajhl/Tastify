@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.common.CustomSnackbar
 import com.example.library.utils.SnackbarManager
@@ -64,6 +65,10 @@ class MainActivity : ComponentActivity() {
                     val coroutineScope = rememberCoroutineScope()
                     val navController = rememberNavController()
 
+                    val currentBackStackEntry = navController.currentBackStackEntryAsState()
+                    val currentRoute = currentBackStackEntry.value?.destination?.route
+                    val shouldEnableDrawer = currentRoute != "login"
+
                     val context = LocalContext.current
                     val session = remember { SessionManager(context) }
 
@@ -82,6 +87,7 @@ class MainActivity : ComponentActivity() {
                     Menu(
                         navController = navController,
                         drawerState = drawerState,
+                        enableDrawer = shouldEnableDrawer,
                         onSelectItem = { onSelectItem() },
                         onLogout = {
                             closeDrawer()

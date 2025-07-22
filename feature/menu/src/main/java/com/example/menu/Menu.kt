@@ -37,12 +37,14 @@ fun Menu(
     drawerState: DrawerState,
     onSelectItem: () -> Unit,
     onLogout: () -> Unit,
+    enableDrawer: Boolean,
     content: @Composable () -> Unit
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = enableDrawer,
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.onPrimary
@@ -129,6 +131,7 @@ fun MenuPreview() {
             drawerState = drawerState,
             onSelectItem = {},
             onLogout = {},
+            enableDrawer = true,
             content = {
                 Text(
                     text = "Contenido principal",
